@@ -30,14 +30,23 @@ class Converter<SourceQuery, TargetMapper>: Query
     }
     
     func load(_ completion: @escaping (Result) -> Void) {
+        query.load { _ in }
     }
 }
 
 final class ConverterTests: XCTestCase {
-    func test_converter_doesNotMessageUponCreation() {
+    func test_converter_doesNotMessageUponCreation() throws {
         let (_, spy) = makeSUT()
         
         XCTAssertEqual(spy.messages, [])
+    }
+    
+    func test_load_callsLoad() throws {
+        let (sut, spy) = makeSUT()
+        
+        sut.load { _ in }
+        
+        XCTAssertEqual(spy.messages, [.load])
     }
     
     func makeSUT() -> (Converter<QuerySpy, QuerySpy>, QuerySpy) {
