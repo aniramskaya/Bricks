@@ -29,8 +29,8 @@ class InMemoryStorage<Stored>: SynchronousStorage {
     
     var stored: Stored?
     
-    func load() -> Stored? { return nil }
-    func save(_ value: Stored) {  }
+    func load() -> Stored? { return stored }
+    func save(_ value: Stored) { stored = value }
     func clear() {  }
 
 }
@@ -46,4 +46,24 @@ class SynchronousStorageTests: XCTestCase {
         
         XCTAssertNil(sut.load())
     }
+
+    func test_load_DeliversStoredValueFromNonEmptyStorage() {
+        let sut = InMemoryStorage<String>()
+        let value = UUID().uuidString
+        
+        sut.save(value)
+        
+        XCTAssertEqual(sut.load(), value)
+    }
+    
+    func test_load_HasNoSideEffectsOnNonEmptyStorage() {
+        let sut = InMemoryStorage<String>()
+        let value = UUID().uuidString
+        
+        sut.save(value)
+        
+        XCTAssertEqual(sut.load(), value)
+        XCTAssertEqual(sut.load(), value)
+    }
+
 }
