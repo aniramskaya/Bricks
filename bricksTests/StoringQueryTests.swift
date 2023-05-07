@@ -41,7 +41,7 @@ class StoringQueryTests: XCTestCase {
         XCTAssertEqual(spy.messages, [])
     }
     
-    func test_sut_deliversErrorOnWrappedQueryError() throws {
+    func test_load_deliversErrorOnWrappedQueryError() throws {
         let (sut, spy) = makeSUT()
         let error = anyNSError()
 
@@ -54,7 +54,7 @@ class StoringQueryTests: XCTestCase {
         XCTAssertEqual(spy.messages, [.loadQuery])
     }
  
-    func test_sut_deliversSuccessAndStoresOnWrappedQuerySuccess() throws {
+    func test_load_deliversSuccessAndStoresOnWrappedQuerySuccess() throws {
         let (sut, spy) = makeSUT()
         let result = UUID().uuidString
 
@@ -66,6 +66,21 @@ class StoringQueryTests: XCTestCase {
         
         XCTAssertEqual(spy.messages, [.loadQuery, .saveStorage(result)])
     }
+    
+    func test_load_doesNotCallCompletionWhenDeallocated() {
+        var (sut, spy): (StoringQuery<QuerySpy, QuerySpy>?, QuerySpy)  = makeSUT()
+        
+        var completionCallCount = 0
+        sut?.load { _ in
+            completionCallCount += 1
+        }
+        sut = nil
+        spy.completeLoading(with: .failure(anyNSError()))
+        
+        XCTAssertEqual(spy.messages, [.loadQuery,])
+        XCTAssertEqual(completionCallCount, 0)
+    }
+
 
     // MARK: Private
     

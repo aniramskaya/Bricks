@@ -40,7 +40,7 @@ final class ConverterTests: XCTestCase {
         XCTAssertEqual(spy.messages, [.load, .map(source)])
     }
     
-    func test_converter_doesNotCallCompletionAfterBeingDeallocated() {
+    func test_load_doesNotCallCompletionAfterBeingDeallocated() {
         var (sut, spy): (Converter<QuerySpy, TargetModel>?, QuerySpy)  = makeSUT()
         
         var completionCallCount = 0
