@@ -29,7 +29,8 @@ class Fallback<Primary: FailableQuery, Secondary: FailableQuery>: FailableQuery
             switch result {
             case .failure:
                 self.fallback.load(completion)
-            default: break
+            default:
+                completion(result)
             }
         }
     }
@@ -61,6 +62,9 @@ class FallbackTests: XCTestCase {
             },
             toCompleteWith: .failure(fallbackError)
         )
+        
+        XCTAssertEqual(primary.messages, [.load])
+        XCTAssertEqual(fallback.messages, [.load])
     }
     
     func test_load_whenPrimaryFailedFallbackSucceed_deliversFallbackSuccess() throws {
@@ -78,7 +82,30 @@ class FallbackTests: XCTestCase {
             },
             toCompleteWith: .success(fallbackResult)
         )
+
+        XCTAssertEqual(primary.messages, [.load])
+        XCTAssertEqual(fallback.messages, [.load])
     }
+
+    func test_load_whenPrimarySucceed_deliversPrimarySuccess() throws {
+        let primary = QuerySpy()
+        let fallback = QuerySpy()
+        let primaryResult = UUID().uuidString
+
+        let sut = Fallback(primary: primary, fallback: fallback)
+        expect(
+            sut: sut,
+            when: {
+                primary.completeLoading(with: .success(primaryResult))
+            },
+            toCompleteWith: .success(primaryResult)
+        )
+        
+        XCTAssertEqual(primary.messages, [.load])
+        XCTAssertEqual(fallback.messages, [])
+    }
+
+    
     
     private func expect(sut: Fallback<QuerySpy, QuerySpy>, when action: () -> Void, toCompleteWith expectedResult: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) {
         
