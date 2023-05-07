@@ -35,10 +35,16 @@ class Converter<SourceQuery, TargetMapper>: Query
 
 final class ConverterTests: XCTestCase {
     func test_converter_doesNotMessageUponCreation() {
-        let spy = QuerySpy()
-        let _ = Converter(query: spy, mapper: spy)
+        let (_, spy) = makeSUT()
         
         XCTAssertEqual(spy.messages, [])
+    }
+    
+    func makeSUT() -> (Converter<QuerySpy, QuerySpy>, QuerySpy) {
+        let spy = QuerySpy()
+        let converter = Converter(query: spy, mapper: spy)
+        
+        return (converter, spy)
     }
 }
 
