@@ -13,6 +13,7 @@
 		CC7431E52A07CD88004E0175 /* StoringQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431E42A07CD88004E0175 /* StoringQueryTests.swift */; };
 		CC7431EB2A07E22F004E0175 /* XCTestCase+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431EA2A07E22F004E0175 /* XCTestCase+Extensions.swift */; };
 		CC7431ED2A07E2AB004E0175 /* NSError+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431EC2A07E2AB004E0175 /* NSError+Extensions.swift */; };
+		CC7431EF2A07E37B004E0175 /* FallbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431EE2A07E37B004E0175 /* FallbackTests.swift */; };
 		CC86FB202A07A40300416227 /* bricks.docc in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB1F2A07A40300416227 /* bricks.docc */; };
 		CC86FB262A07A40300416227 /* bricks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC86FB1B2A07A40300416227 /* bricks.framework */; };
 		CC86FB2B2A07A40300416227 /* ConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB2A2A07A40300416227 /* ConverterTests.swift */; };
@@ -38,6 +39,7 @@
 		CC7431E42A07CD88004E0175 /* StoringQueryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoringQueryTests.swift; sourceTree = "<group>"; };
 		CC7431EA2A07E22F004E0175 /* XCTestCase+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Extensions.swift"; sourceTree = "<group>"; };
 		CC7431EC2A07E2AB004E0175 /* NSError+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSError+Extensions.swift"; sourceTree = "<group>"; };
+		CC7431EE2A07E37B004E0175 /* FallbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallbackTests.swift; sourceTree = "<group>"; };
 		CC86FB1B2A07A40300416227 /* bricks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = bricks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC86FB1E2A07A40300416227 /* bricks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bricks.h; sourceTree = "<group>"; };
 		CC86FB1F2A07A40300416227 /* bricks.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = bricks.docc; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 				CC86FB2A2A07A40300416227 /* ConverterTests.swift */,
 				CC7431E02A07C77B004E0175 /* InMemoryStorageTests.swift */,
 				CC7431E42A07CD88004E0175 /* StoringQueryTests.swift */,
+				CC7431EE2A07E37B004E0175 /* FallbackTests.swift */,
 			);
 			path = bricksTests;
 			sourceTree = "<group>";
@@ -247,6 +250,7 @@
 				CC7431ED2A07E2AB004E0175 /* NSError+Extensions.swift in Sources */,
 				CC7431EB2A07E22F004E0175 /* XCTestCase+Extensions.swift in Sources */,
 				CC7431E12A07C77B004E0175 /* InMemoryStorageTests.swift in Sources */,
+				CC7431EF2A07E37B004E0175 /* FallbackTests.swift in Sources */,
 				CC7431E52A07CD88004E0175 /* StoringQueryTests.swift in Sources */,
 				CC86FB2B2A07A40300416227 /* ConverterTests.swift in Sources */,
 			);
