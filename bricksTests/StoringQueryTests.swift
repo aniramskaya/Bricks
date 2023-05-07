@@ -36,15 +36,13 @@ class StoringQuery<WrappedQuery: FailableQuery, Storage: SynchronousStorage>: Fa
 
 class StoringQueryTests: XCTestCase {
     func test_sut_doesNotMessageUponCreation() throws {
-        let spy = QuerySpy()
-        let _ = StoringQuery(query: spy, storage: spy)
+        let (_, spy) = makeSUT()
         
         XCTAssertEqual(spy.messages, [])
     }
     
     func test_sut_deliversErrorOnWrappedQueryError() throws {
-        let spy = QuerySpy()
-        let sut = StoringQuery(query: spy, storage: spy)
+        let (sut, spy) = makeSUT()
         let error = anyNSError()
 
         expect(
@@ -57,8 +55,7 @@ class StoringQueryTests: XCTestCase {
     }
  
     func test_sut_deliversSuccessAndStoresOnWrappedQuerySuccess() throws {
-        let spy = QuerySpy()
-        let sut = StoringQuery(query: spy, storage: spy)
+        let (sut, spy) = makeSUT()
         let result = UUID().uuidString
 
         expect(
@@ -72,7 +69,14 @@ class StoringQueryTests: XCTestCase {
 
     // MARK: Private
     
-    func anyNSError() -> NSError {
+    private func makeSUT() -> (StoringQuery<QuerySpy, QuerySpy>, QuerySpy) {
+        let spy = QuerySpy()
+        let sut = StoringQuery(query: spy, storage: spy)
+
+        return (sut, spy)
+    }
+    
+    private func anyNSError() -> NSError {
         return NSError(domain: UUID().uuidString, code: Int.random(in: 1...1000))
     }
     
