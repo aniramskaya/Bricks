@@ -41,7 +41,7 @@ final class ConverterTests: XCTestCase {
     }
     
     func test_converter_doesNotCallCompletionAfterBeingDeallocated() {
-        var (sut, spy): (Converter<QuerySpy, QuerySpy>?, QuerySpy)  = makeSUT()
+        var (sut, spy): (Converter<QuerySpy, TargetModel>?, QuerySpy)  = makeSUT()
         
         var completionCallCount = 0
         sut?.load { _ in
@@ -56,9 +56,9 @@ final class ConverterTests: XCTestCase {
 
     // MARK: Private
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (Converter<QuerySpy, QuerySpy>, QuerySpy) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (Converter<QuerySpy, TargetModel>, QuerySpy) {
         let spy = QuerySpy()
-        let converter = Converter(query: spy, mapper: spy)
+        let converter = Converter(query: spy, map: spy.map)
         
         trackForMemoryLeaks(converter, file: file, line: line)
         trackForMemoryLeaks(spy, file: file, line: line)
@@ -91,7 +91,7 @@ struct TargetModel: Equatable {
     let value: String
 }
 
-class QuerySpy: Query, Mapper {
+class QuerySpy: Query {
     enum Message: Equatable {
         case load
         case map(SourceModel)
