@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Basic protocol which declares asynchronous load for any data
+/// An abstraction which declares asynchronous load for any data
 public protocol Query {
     associatedtype Result
 

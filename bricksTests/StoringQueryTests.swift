@@ -9,31 +9,6 @@ import Foundation
 import XCTest
 import bricks
 
-class StoringQuery<WrappedQuery: FailableQuery, Storage: SynchronousStorage>: FailableQuery where Storage.Stored == WrappedQuery.Success
-{
-    typealias Success = WrappedQuery.Success
-    typealias Failure = WrappedQuery.Failure
-    typealias Result = WrappedQuery.Result
-    
-    var query: WrappedQuery
-    var storage: Storage
-    
-    init(query: WrappedQuery, storage: Storage) {
-        self.query = query
-        self.storage = storage
-    }
-    
-    func load(_ completion: @escaping (WrappedQuery.Result) -> Void) {
-        query.load { [weak self] result in
-            guard let self else { return }
-            if let value = try? result.get() {
-                self.storage.save(value)
-            }
-            completion(result)
-        }
-    }
-}
-
 class StoringQueryTests: XCTestCase {
     func test_sut_doesNotMessageUponCreation() throws {
         let (_, spy) = makeSUT()
