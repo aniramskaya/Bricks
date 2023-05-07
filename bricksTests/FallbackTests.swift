@@ -48,12 +48,10 @@ class FallbackTests: XCTestCase {
     }
     
     func test_load_whenBothFailed_deliversFallbackError() throws {
-        let primary = QuerySpy()
-        let fallback = QuerySpy()
+        let (sut, primary, fallback) = makeSUT()
         let primaryError = NSError.any()
         let fallbackError = NSError.any()
 
-        let sut = Fallback(primary: primary, fallback: fallback)
         expect(
             sut: sut,
             when: {
@@ -68,12 +66,10 @@ class FallbackTests: XCTestCase {
     }
     
     func test_load_whenPrimaryFailedFallbackSucceed_deliversFallbackSuccess() throws {
-        let primary = QuerySpy()
-        let fallback = QuerySpy()
+        let (sut, primary, fallback) = makeSUT()
         let primaryError = NSError.any()
         let fallbackResult = UUID().uuidString
 
-        let sut = Fallback(primary: primary, fallback: fallback)
         expect(
             sut: sut,
             when: {
@@ -88,11 +84,9 @@ class FallbackTests: XCTestCase {
     }
 
     func test_load_whenPrimarySucceed_deliversPrimarySuccess() throws {
-        let primary = QuerySpy()
-        let fallback = QuerySpy()
+        let (sut, primary, fallback) = makeSUT()
         let primaryResult = UUID().uuidString
 
-        let sut = Fallback(primary: primary, fallback: fallback)
         expect(
             sut: sut,
             when: {
@@ -105,8 +99,6 @@ class FallbackTests: XCTestCase {
         XCTAssertEqual(fallback.messages, [])
     }
 
-    
-    
     private func expect(sut: Fallback<QuerySpy, QuerySpy>, when action: () -> Void, toCompleteWith expectedResult: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) {
         
         let exp = expectation(description: "Wait for async query to complete")
@@ -123,6 +115,16 @@ class FallbackTests: XCTestCase {
         }
         action()
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    // MARK: Private
+    
+    private func makeSUT() -> (Fallback<QuerySpy, QuerySpy>, QuerySpy, QuerySpy) {
+        let primary = QuerySpy()
+        let fallback = QuerySpy()
+        let sut = Fallback(primary: primary, fallback: fallback)
+        
+        return (sut, primary, fallback)
     }
 }
 
