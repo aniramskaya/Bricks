@@ -84,10 +84,12 @@ class StoringQueryTests: XCTestCase {
 
     // MARK: Private
     
-    private func makeSUT() -> (StoringQuery<QuerySpy, QuerySpy>, QuerySpy) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (StoringQuery<QuerySpy, QuerySpy>, QuerySpy) {
         let spy = QuerySpy()
         let sut = StoringQuery(query: spy, storage: spy)
 
+        trackForMemoryLeaks(spy, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, spy)
     }
     
