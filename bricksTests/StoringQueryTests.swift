@@ -9,9 +9,12 @@ import Foundation
 import XCTest
 import bricks
 
-class StoringQuery<Success, Failure: Error, WrappedQuery: FailableQuery, Storage: SynchronousStorage>: FailableQuery
-where WrappedQuery.Success == Success, WrappedQuery.Failure == Failure, Storage.Stored == Success
+class StoringQuery<WrappedQuery: FailableQuery, Storage: SynchronousStorage>: FailableQuery where Storage.Stored == WrappedQuery.Success
 {
+    typealias Success = WrappedQuery.Success
+    typealias Failure = WrappedQuery.Failure
+    typealias Result = WrappedQuery.Result
+    
     var query: WrappedQuery
     var storage: Storage
     
@@ -21,7 +24,8 @@ where WrappedQuery.Success == Success, WrappedQuery.Failure == Failure, Storage.
     }
     
     func load(_ completion: @escaping (WrappedQuery.Result) -> Void) {
-        query.load { _ in
+        query.load { result in
+            completion(result)
         }
     }
     
@@ -30,12 +34,48 @@ where WrappedQuery.Success == Success, WrappedQuery.Failure == Failure, Storage.
 class StoringQueryTests: XCTestCase {
     func test_sut_doesNotMessageUponCreation() throws {
         let spy = QuerySpy()
-        let sut = StoringQuery(query: spy, storage: spy)
+        let _ = StoringQuery(query: spy, storage: spy)
         
         XCTAssertEqual(spy.messages, [])
     }
     
+    func test_sut_deliversErrorOnWrappedQueryError() throws {
+        let spy = QuerySpy()
+        let sut = StoringQuery(query: spy, storage: spy)
+        let error = anyNSError()
+
+        expect(
+            sut: sut,
+            when: { spy.completeLoading(with: .failure(error)) },
+            toCompleteWith: .failure(error)
+        )
+        
+        XCTAssertEqual(spy.messages, [.loadQuery])
+    }
     
+    // MARK: Private
+    
+    func anyNSError() -> NSError {
+        return NSError(domain: UUID().uuidString, code: Int.random(in: 1...1000))
+    }
+    
+    private func expect(sut: StoringQuery<QuerySpy, QuerySpy>, when action: () -> Void, toCompleteWith expectedResult: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) {
+        
+        let exp = expectation(description: "Wait for async query to complete")
+        sut.load { result in
+            switch (result, expectedResult) {
+            case let (.success(received), .success(expected)):
+                XCTAssertEqual(received, expected, file: file, line: line)
+            case let (.failure(received), .failure(expected)):
+                XCTAssertEqual(received, expected, file: file, line: line)
+            default:
+                XCTFail("Expected \(expectedResult) got \(result) instead", file: file, line: line)
+            }
+            exp.fulfill()
+        }
+        action()
+        wait(for: [exp], timeout: 1.0)
+    }
 }
 
 private class QuerySpy: FailableQuery, SynchronousStorage {
