@@ -6,7 +6,7 @@
 //
 
 /// Basic protocol which declares asynchronous load for any data
-protocol Query {
+public protocol Query {
     associatedtype Result
 
     func load(_ completion: @escaping (Result) -> Void)

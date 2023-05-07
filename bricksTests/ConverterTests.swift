@@ -6,8 +6,7 @@
 //
 
 import XCTest
-@testable import bricks
-
+import bricks
 
 final class ConverterTests: XCTestCase {
     func test_converter_doesNotMessageUponCreation() throws {

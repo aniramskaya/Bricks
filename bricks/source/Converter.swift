@@ -7,28 +7,28 @@
 
 import Foundation
 
-protocol Mapper {
+public protocol Mapper {
     associatedtype Source
     associatedtype Target
     
     func map(_: Source) -> Target
 }
 
-class Converter<SourceQuery, TargetMapper>: Query
+public class Converter<SourceQuery, TargetMapper>: Query
     where SourceQuery: Query,
     TargetMapper: Mapper,
     TargetMapper.Source == SourceQuery.Result
 {
-    typealias Result = TargetMapper.Target
-    let query: SourceQuery
-    let mapper: TargetMapper
+    public typealias Result = TargetMapper.Target
+    private let query: SourceQuery
+    private let mapper: TargetMapper
     
-    init(query: SourceQuery, mapper: TargetMapper) {
+    public init(query: SourceQuery, mapper: TargetMapper) {
         self.query = query
         self.mapper = mapper
     }
     
-    func load(_ completion: @escaping (Result) -> Void) {
+    public func load(_ completion: @escaping (Result) -> Void) {
         query.load { [weak self] result in
             guard let self else { return }
             completion(self.mapper.map(result))
