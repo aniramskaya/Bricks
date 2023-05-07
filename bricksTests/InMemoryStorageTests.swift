@@ -34,20 +34,21 @@ class InMemoryStorage<Stored>: SynchronousStorage {
     func clear() {  }
 
 }
+
 class SynchronousStorageTests: XCTestCase {
-    func test_load_DeliversNilFromEmptyStorage() {
+    func test_load_heliversNilFromEmptyStorage() {
         let sut = InMemoryStorage<String>()
         
         XCTAssertNil(sut.load())
     }
     
-    func test_load_HasNoSideEffectsOnEmptyStorage() {
+    func test_load_hasNoSideEffectsOnEmptyStorage() {
         let sut = InMemoryStorage<String>()
         
         XCTAssertNil(sut.load())
     }
 
-    func test_load_DeliversStoredValueFromNonEmptyStorage() {
+    func test_load_deliversStoredValueFromNonEmptyStorage() {
         let sut = InMemoryStorage<String>()
         let value = UUID().uuidString
         
@@ -56,7 +57,7 @@ class SynchronousStorageTests: XCTestCase {
         XCTAssertEqual(sut.load(), value)
     }
     
-    func test_load_HasNoSideEffectsOnNonEmptyStorage() {
+    func test_load_hasNoSideEffectsOnNonEmptyStorage() {
         let sut = InMemoryStorage<String>()
         let value = UUID().uuidString
         
@@ -64,6 +65,19 @@ class SynchronousStorageTests: XCTestCase {
         
         XCTAssertEqual(sut.load(), value)
         XCTAssertEqual(sut.load(), value)
+    }
+
+    func test_save_replacesPreviousValue() {
+        let sut = InMemoryStorage<String>()
+        let value1 = UUID().uuidString
+        let value2 = UUID().uuidString
+
+        sut.save(value1)
+        XCTAssertEqual(sut.load(), value1)
+
+        
+        sut.save(value2)
+        XCTAssertEqual(sut.load(), value2)
     }
 
 }
