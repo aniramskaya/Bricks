@@ -11,6 +11,7 @@
 		CC7431E12A07C77B004E0175 /* InMemoryStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431E02A07C77B004E0175 /* InMemoryStorageTests.swift */; };
 		CC7431E32A07CA6B004E0175 /* InMemoryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431E22A07CA6B004E0175 /* InMemoryStorage.swift */; };
 		CC7431E52A07CD88004E0175 /* StoringQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431E42A07CD88004E0175 /* StoringQueryTests.swift */; };
+		CC7431EB2A07E22F004E0175 /* XCTestCase+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431EA2A07E22F004E0175 /* XCTestCase+Extensions.swift */; };
 		CC86FB202A07A40300416227 /* bricks.docc in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB1F2A07A40300416227 /* bricks.docc */; };
 		CC86FB262A07A40300416227 /* bricks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC86FB1B2A07A40300416227 /* bricks.framework */; };
 		CC86FB2B2A07A40300416227 /* ConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB2A2A07A40300416227 /* ConverterTests.swift */; };
@@ -34,6 +35,7 @@
 		CC7431E02A07C77B004E0175 /* InMemoryStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryStorageTests.swift; sourceTree = "<group>"; };
 		CC7431E22A07CA6B004E0175 /* InMemoryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryStorage.swift; sourceTree = "<group>"; };
 		CC7431E42A07CD88004E0175 /* StoringQueryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoringQueryTests.swift; sourceTree = "<group>"; };
+		CC7431EA2A07E22F004E0175 /* XCTestCase+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Extensions.swift"; sourceTree = "<group>"; };
 		CC86FB1B2A07A40300416227 /* bricks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = bricks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC86FB1E2A07A40300416227 /* bricks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bricks.h; sourceTree = "<group>"; };
 		CC86FB1F2A07A40300416227 /* bricks.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = bricks.docc; sourceTree = "<group>"; };
@@ -61,6 +63,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CC7431E92A07E215004E0175 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				CC7431EA2A07E22F004E0175 /* XCTestCase+Extensions.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		CC86FB112A07A40300416227 = {
 			isa = PBXGroup;
 			children = (
@@ -93,6 +103,7 @@
 		CC86FB292A07A40300416227 /* bricksTests */ = {
 			isa = PBXGroup;
 			children = (
+				CC7431E92A07E215004E0175 /* Helpers */,
 				CC86FB2A2A07A40300416227 /* ConverterTests.swift */,
 				CC7431E02A07C77B004E0175 /* InMemoryStorageTests.swift */,
 				CC7431E42A07CD88004E0175 /* StoringQueryTests.swift */,
@@ -230,6 +241,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC7431EB2A07E22F004E0175 /* XCTestCase+Extensions.swift in Sources */,
 				CC7431E12A07C77B004E0175 /* InMemoryStorageTests.swift in Sources */,
 				CC7431E52A07CD88004E0175 /* StoringQueryTests.swift in Sources */,
 				CC86FB2B2A07A40300416227 /* ConverterTests.swift in Sources */,

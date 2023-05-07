@@ -69,12 +69,6 @@ final class ConverterTests: XCTestCase {
         let uuid = UUID()
         return (SourceModel(value: uuid), TargetModel(value: uuid.uuidString))
     }
-    
-    private func trackForMemoryLeaks(_ object: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
-        addTeardownBlock { [weak object] in
-            XCTAssertNil(object, "Object has not been deallocated. Potential memory leak.", file: file, line: line)
-        }
-    }
 }
 
 private struct SourceModel: Equatable {
