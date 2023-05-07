@@ -15,7 +15,7 @@ public protocol Query {
 }
 
 /// ``Query`` whose **Result** is ``Swift.Result`` so it may fail and return an error.
-protocol FailableQuery: Query where Result == Swift.Result<Success, Failure> {
+public protocol FailableQuery: Query where Result == Swift.Result<Success, Failure> {
     associatedtype Success
     associatedtype Failure: Error
 }
