@@ -159,11 +159,14 @@ class FallbackTests: XCTestCase {
     
     // MARK: Private
     
-    private func makeSUT() -> (Fallback<QuerySpy, QuerySpy>, QuerySpy, QuerySpy) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (Fallback<QuerySpy, QuerySpy>, QuerySpy, QuerySpy) {
         let primary = QuerySpy()
         let fallback = QuerySpy()
         let sut = Fallback(primary: primary, fallback: fallback)
         
+        trackForMemoryLeaks(primary, file: file, line: line)
+        trackForMemoryLeaks(fallback, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, primary, fallback)
     }
 }
