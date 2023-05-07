@@ -30,7 +30,10 @@ class Converter<SourceQuery, TargetMapper>: Query
     }
     
     func load(_ completion: @escaping (Result) -> Void) {
-        query.load { _ in }
+        query.load { [weak self] result in
+            guard let self else { return }
+            completion(self.mapper.map(result))
+        }
     }
 }
 
@@ -49,11 +52,35 @@ final class ConverterTests: XCTestCase {
         XCTAssertEqual(spy.messages, [.load])
     }
     
-    func makeSUT() -> (Converter<QuerySpy, QuerySpy>, QuerySpy) {
+    func test_load_convertsModel() throws {
+        let (sut, spy) = makeSUT()
+        let (source, target) = makeCompatibleSourceTarget()
+        
+        let exp = expectation(description: "wait for loading complete")
+        var loadedResult: TargetModel?
+        sut.load { result in
+            loadedResult = result
+            exp.fulfill()
+        }
+        spy.completeLoading(with: source)
+        
+        wait(for: [exp], timeout: 1.0)
+        XCTAssertEqual(target, loadedResult)
+        XCTAssertEqual(spy.messages, [.load, .map(source)])
+    }
+
+    // MARK: Private
+    
+    private func makeSUT() -> (Converter<QuerySpy, QuerySpy>, QuerySpy) {
         let spy = QuerySpy()
         let converter = Converter(query: spy, mapper: spy)
         
         return (converter, spy)
+    }
+    
+    private func makeCompatibleSourceTarget() -> (SourceModel, TargetModel) {
+        let uuid = UUID()
+        return (SourceModel(value: uuid), TargetModel(value: uuid.uuidString))
     }
 }
 
@@ -61,7 +88,7 @@ struct SourceModel: Equatable {
     let value: UUID
 }
 
-struct TargetModel {
+struct TargetModel: Equatable {
     let value: String
 }
 
@@ -72,13 +99,22 @@ class QuerySpy: Query, Mapper {
     }
     
     var messages: [Message] = []
+    var completions: [(SourceModel) -> Void] = []
     
     func load(_ completion: @escaping (SourceModel) -> Void) {
         messages.append(.load)
+        completions.append(completion)
+        print(Date())
+    }
+    
+    func completeLoading(with result: SourceModel, at index: Int = 0) {
+        completions[index](result)
+        print(Date())
     }
     
     func map(_ source: SourceModel) -> TargetModel {
         messages.append(.map(source))
-        return TargetModel(value: "")
+        print(Date())
+        return TargetModel(value: source.value.uuidString)
     }
 }
