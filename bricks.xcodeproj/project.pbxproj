@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		CC7431DB2A07B7A9004E0175 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431DA2A07B7A9004E0175 /* Converter.swift */; };
 		CC7431E12A07C77B004E0175 /* InMemoryStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431E02A07C77B004E0175 /* InMemoryStorageTests.swift */; };
+		CC7431E32A07CA6B004E0175 /* InMemoryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431E22A07CA6B004E0175 /* InMemoryStorage.swift */; };
 		CC86FB202A07A40300416227 /* bricks.docc in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB1F2A07A40300416227 /* bricks.docc */; };
 		CC86FB262A07A40300416227 /* bricks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC86FB1B2A07A40300416227 /* bricks.framework */; };
 		CC86FB2B2A07A40300416227 /* ConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB2A2A07A40300416227 /* ConverterTests.swift */; };
@@ -30,6 +31,7 @@
 		CC7431D92A07B568004E0175 /* bricks.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = bricks.xctestplan; path = bricks.xcodeproj/bricks.xctestplan; sourceTree = "<group>"; };
 		CC7431DA2A07B7A9004E0175 /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
 		CC7431E02A07C77B004E0175 /* InMemoryStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryStorageTests.swift; sourceTree = "<group>"; };
+		CC7431E22A07CA6B004E0175 /* InMemoryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryStorage.swift; sourceTree = "<group>"; };
 		CC86FB1B2A07A40300416227 /* bricks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = bricks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC86FB1E2A07A40300416227 /* bricks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bricks.h; sourceTree = "<group>"; };
 		CC86FB1F2A07A40300416227 /* bricks.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = bricks.docc; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			children = (
 				CC86FB372A07A49A00416227 /* Query.swift */,
 				CC7431DA2A07B7A9004E0175 /* Converter.swift */,
+				CC7431E22A07CA6B004E0175 /* InMemoryStorage.swift */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC86FB382A07A49A00416227 /* Query.swift in Sources */,
+				CC7431E32A07CA6B004E0175 /* InMemoryStorage.swift in Sources */,
 				CC7431DB2A07B7A9004E0175 /* Converter.swift in Sources */,
 				CC86FB202A07A40300416227 /* bricks.docc in Sources */,
 			);

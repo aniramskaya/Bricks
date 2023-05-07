@@ -9,31 +9,6 @@ import Foundation
 import XCTest
 import bricks
 
-///  Synchronous storage
-protocol SynchronousStorage {
-    associatedtype Stored
-    
-    /// Retrieves stored value
-    func load() -> Stored?
-    
-    /// Saves value
-    func save(_: Stored)
-    
-    /// Removes stored value, if any
-    func clear()
-}
-
-// In-memory storage
-class InMemoryStorage<Stored>: SynchronousStorage {
-    typealias Stored = Stored
-    
-    var stored: Stored?
-    
-    func load() -> Stored? { return stored }
-    func save(_ value: Stored) { stored = value }
-    func clear() { stored = nil }
-}
-
 class SynchronousStorageTests: XCTestCase {
     func test_load_heliversNilFromEmptyStorage() {
         let sut = InMemoryStorage<String>()
