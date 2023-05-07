@@ -25,15 +25,24 @@ class Fallback<Primary: FailableQuery, Secondary: FailableQuery>: FailableQuery
     }
     
     func load(_ completion: @escaping (_ result: Result<Success, Failure>) -> Void) {
-        primary.load {[unowned self] result in
+        primary.load {[weak self] result in
+            guard let self else { return }
             switch result {
             case .failure:
-                self.fallback.load(completion)
+                self.loadFallback(completion)
             default:
                 completion(result)
             }
         }
     }
+    
+    private func loadFallback(_ completion: @escaping (_ result: Result<Success, Failure>) -> Void) {
+        fallback.load {[weak self] result in
+            guard self != nil else { return }
+            completion(result)
+        }
+    }
+    
 }
 
 class FallbackTests: XCTestCase {
@@ -97,6 +106,37 @@ class FallbackTests: XCTestCase {
         
         XCTAssertEqual(primary.messages, [.load])
         XCTAssertEqual(fallback.messages, [])
+    }
+    
+    func test_load_doesNotCallCompletionOnPrimaryWhenDeallocated() {
+        var (sut, spy, fallback): (Fallback<QuerySpy, QuerySpy>?, QuerySpy, _)  = makeSUT()
+        
+        var completionCallCount = 0
+        sut?.load { _ in
+            completionCallCount += 1
+        }
+        sut = nil
+        spy.completeLoading(with: .success(UUID().uuidString))
+        
+        XCTAssertEqual(spy.messages, [.load])
+        XCTAssertEqual(fallback.messages, [])
+        XCTAssertEqual(completionCallCount, 0)
+    }
+
+    func test_load_doesNotCallCompletionOnFallbackWhenDeallocated() {
+        var (sut, primary, fallback): (Fallback<QuerySpy, QuerySpy>?, QuerySpy, QuerySpy)  = makeSUT()
+        
+        var completionCallCount = 0
+        sut?.load { _ in
+            completionCallCount += 1
+        }
+        primary.completeLoading(with: .failure(NSError.any()))
+        sut = nil
+        fallback.completeLoading(with: .success(UUID().uuidString))
+        
+        XCTAssertEqual(primary.messages, [.load])
+        XCTAssertEqual(fallback.messages, [.load])
+        XCTAssertEqual(completionCallCount, 0)
     }
 
     private func expect(sut: Fallback<QuerySpy, QuerySpy>, when action: () -> Void, toCompleteWith expectedResult: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) {
