@@ -9,42 +9,6 @@ import Foundation
 import XCTest
 import bricks
 
-class Fallback<Primary: FailableQuery, Secondary: FailableQuery>: FailableQuery
-    where Primary.Success == Secondary.Success,
-        Primary.Failure == Secondary.Failure
-{
-    typealias Success = Primary.Success
-    typealias Failure = Primary.Failure
-    
-    private let primary: Primary
-    private let fallback: Secondary
-    
-    init(primary: Primary, fallback: Secondary) {
-        self.primary = primary
-        self.fallback = fallback
-    }
-    
-    func load(_ completion: @escaping (_ result: Result<Success, Failure>) -> Void) {
-        primary.load {[weak self] result in
-            guard let self else { return }
-            switch result {
-            case .failure:
-                self.loadFallback(completion)
-            default:
-                completion(result)
-            }
-        }
-    }
-    
-    private func loadFallback(_ completion: @escaping (_ result: Result<Success, Failure>) -> Void) {
-        fallback.load {[weak self] result in
-            guard self != nil else { return }
-            completion(result)
-        }
-    }
-    
-}
-
 class FallbackTests: XCTestCase {
     func test_fallback_doesNotMessageUponCreation() throws {
         let primary = QuerySpy()
