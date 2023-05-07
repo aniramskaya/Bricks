@@ -43,7 +43,7 @@ class StoringQueryTests: XCTestCase {
     
     func test_load_deliversErrorOnWrappedQueryError() throws {
         let (sut, spy) = makeSUT()
-        let error = anyNSError()
+        let error = NSError.any()
 
         expect(
             sut: sut,
@@ -75,7 +75,7 @@ class StoringQueryTests: XCTestCase {
             completionCallCount += 1
         }
         sut = nil
-        spy.completeLoading(with: .failure(anyNSError()))
+        spy.completeLoading(with: .failure(NSError.any()))
         
         XCTAssertEqual(spy.messages, [.loadQuery,])
         XCTAssertEqual(completionCallCount, 0)
@@ -89,10 +89,6 @@ class StoringQueryTests: XCTestCase {
         let sut = StoringQuery(query: spy, storage: spy)
 
         return (sut, spy)
-    }
-    
-    private func anyNSError() -> NSError {
-        return NSError(domain: UUID().uuidString, code: Int.random(in: 1...1000))
     }
     
     private func expect(sut: StoringQuery<QuerySpy, QuerySpy>, when action: () -> Void, toCompleteWith expectedResult: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) {
