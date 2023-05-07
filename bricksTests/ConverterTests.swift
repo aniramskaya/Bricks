@@ -56,16 +56,24 @@ final class ConverterTests: XCTestCase {
 
     // MARK: Private
     
-    private func makeSUT() -> (Converter<QuerySpy, QuerySpy>, QuerySpy) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (Converter<QuerySpy, QuerySpy>, QuerySpy) {
         let spy = QuerySpy()
         let converter = Converter(query: spy, mapper: spy)
         
+        trackForMemoryLeaks(converter, file: file, line: line)
+        trackForMemoryLeaks(spy, file: file, line: line)
         return (converter, spy)
     }
     
     private func makeCompatibleSourceTarget() -> (SourceModel, TargetModel) {
         let uuid = UUID()
         return (SourceModel(value: uuid), TargetModel(value: uuid.uuidString))
+    }
+    
+    private func trackForMemoryLeaks(_ object: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+        addTeardownBlock { [weak object] in
+            XCTAssertNil(object, "Object has not been deallocated. Potential memory leak.", file: file, line: line)
+        }
     }
 }
 
