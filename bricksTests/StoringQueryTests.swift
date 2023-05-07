@@ -24,11 +24,14 @@ class StoringQuery<WrappedQuery: FailableQuery, Storage: SynchronousStorage>: Fa
     }
     
     func load(_ completion: @escaping (WrappedQuery.Result) -> Void) {
-        query.load { result in
+        query.load { [weak self] result in
+            guard let self else { return }
+            if let value = try? result.get() {
+                self.storage.save(value)
+            }
             completion(result)
         }
     }
-    
 }
 
 class StoringQueryTests: XCTestCase {
@@ -52,7 +55,21 @@ class StoringQueryTests: XCTestCase {
         
         XCTAssertEqual(spy.messages, [.loadQuery])
     }
-    
+ 
+    func test_sut_deliversSuccessAndStoresOnWrappedQuerySuccess() throws {
+        let spy = QuerySpy()
+        let sut = StoringQuery(query: spy, storage: spy)
+        let result = UUID().uuidString
+
+        expect(
+            sut: sut,
+            when: { spy.completeLoading(with: .success(result)) },
+            toCompleteWith: .success(result)
+        )
+        
+        XCTAssertEqual(spy.messages, [.loadQuery, .saveStorage(result)])
+    }
+
     // MARK: Private
     
     func anyNSError() -> NSError {
