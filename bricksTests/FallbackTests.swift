@@ -16,14 +16,22 @@ class Fallback<Primary: FailableQuery, Secondary: FailableQuery>: FailableQuery
     typealias Success = Primary.Success
     typealias Failure = Primary.Failure
     
-    let primary: Primary
-    let fallback: Secondary
+    private let primary: Primary
+    private let fallback: Secondary
+    
     init(primary: Primary, fallback: Secondary) {
         self.primary = primary
         self.fallback = fallback
     }
     
     func load(_ completion: @escaping (_ result: Result<Success, Failure>) -> Void) {
+        primary.load {[unowned self] result in
+            switch result {
+            case .failure:
+                self.fallback.load(completion)
+            default: break
+            }
+        }
     }
 }
 
@@ -36,6 +44,41 @@ class FallbackTests: XCTestCase {
         
         XCTAssertEqual(primary.messages, [])
         XCTAssertEqual(fallback.messages, [])
+    }
+    
+    func test_load_whenBothFailed_deliversFallbackError() throws {
+        let primary = QuerySpy()
+        let fallback = QuerySpy()
+        let primaryError = NSError.any()
+        let fallbackError = NSError.any()
+
+        let sut = Fallback(primary: primary, fallback: fallback)
+        expect(
+            sut: sut,
+            when: {
+                primary.completeLoading(with: .failure(primaryError))
+                fallback.completeLoading(with: .failure(fallbackError))
+            },
+            toCompleteWith: .failure(fallbackError)
+        )
+    }
+    
+    private func expect(sut: Fallback<QuerySpy, QuerySpy>, when action: () -> Void, toCompleteWith expectedResult: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) {
+        
+        let exp = expectation(description: "Wait for async query to complete")
+        sut.load { result in
+            switch (result, expectedResult) {
+            case let (.success(received), .success(expected)):
+                XCTAssertEqual(received, expected, file: file, line: line)
+            case let (.failure(received), .failure(expected)):
+                XCTAssertEqual(received, expected, file: file, line: line)
+            default:
+                XCTFail("Expected \(expectedResult) got \(result) instead", file: file, line: line)
+            }
+            exp.fulfill()
+        }
+        action()
+        wait(for: [exp], timeout: 1.0)
     }
 }
 
