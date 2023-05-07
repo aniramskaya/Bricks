@@ -77,21 +77,21 @@ final class ConverterTests: XCTestCase {
     }
 }
 
-struct SourceModel: Equatable {
+private struct SourceModel: Equatable {
     let value: UUID
 }
 
-extension SourceModel {
+private extension SourceModel {
     static func any() -> SourceModel {
         return SourceModel(value: UUID())
     }
 }
 
-struct TargetModel: Equatable {
+private struct TargetModel: Equatable {
     let value: String
 }
 
-class QuerySpy: Query {
+private class QuerySpy: Query {
     enum Message: Equatable {
         case load
         case map(SourceModel)
@@ -103,17 +103,14 @@ class QuerySpy: Query {
     func load(_ completion: @escaping (SourceModel) -> Void) {
         messages.append(.load)
         completions.append(completion)
-        print(Date())
     }
     
     func completeLoading(with result: SourceModel, at index: Int = 0) {
         completions[index](result)
-        print(Date())
     }
     
     func map(_ source: SourceModel) -> TargetModel {
         messages.append(.map(source))
-        print(Date())
         return TargetModel(value: source.value.uuidString)
     }
 }
