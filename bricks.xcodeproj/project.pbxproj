@@ -25,6 +25,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CC7431D92A07B568004E0175 /* bricks.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = bricks.xctestplan; path = bricks.xcodeproj/bricks.xctestplan; sourceTree = "<group>"; };
 		CC86FB1B2A07A40300416227 /* bricks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = bricks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC86FB1E2A07A40300416227 /* bricks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bricks.h; sourceTree = "<group>"; };
 		CC86FB1F2A07A40300416227 /* bricks.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = bricks.docc; sourceTree = "<group>"; };
@@ -55,6 +56,7 @@
 		CC86FB112A07A40300416227 = {
 			isa = PBXGroup;
 			children = (
+				CC7431D92A07B568004E0175 /* bricks.xctestplan */,
 				CC86FB1D2A07A40300416227 /* bricks */,
 				CC86FB292A07A40300416227 /* bricksTests */,
 				CC86FB1C2A07A40300416227 /* Products */,

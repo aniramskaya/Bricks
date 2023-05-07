@@ -1,0 +1,27 @@
+{
+  "configurations" : [
+    {
+      "id" : "03C9698F-3685-4D84-BF91-8F472AB804FB",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "diagnosticCollectionPolicy" : "Never",
+    "testExecutionOrdering" : "random"
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:bricks.xcodeproj",
+        "identifier" : "CC86FB242A07A40300416227",
+        "name" : "bricksTests"
+      }
+    }
+  ],
+  "version" : 1
+}
