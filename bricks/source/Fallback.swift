@@ -7,6 +7,9 @@
 
 import Foundation
 
+/// Fallback wraps two queries.
+///
+/// If the primary query completes with success ``Fallback`` returns success. Otherwise it calls fallback query and returns its result in completion when completed.
 public class Fallback<Primary: FailableQuery, Secondary: FailableQuery>: FailableQuery
     where Primary.Success == Secondary.Success,
         Primary.Failure == Secondary.Failure

@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Failable query which stores loaded data in storage on success
 public class StoringQuery<WrappedQuery: FailableQuery, Storage: SynchronousStorage>: FailableQuery where Storage.Stored == WrappedQuery.Success
 {
     public typealias Success = WrappedQuery.Success
@@ -16,6 +17,10 @@ public class StoringQuery<WrappedQuery: FailableQuery, Storage: SynchronousStora
     private var query: WrappedQuery
     private var storage: Storage
     
+    /// Designated initializer. Creates Fallback with wrappee and Storage
+    /// - Parameters:
+    ///   - query: FailableQuery to wrap
+    ///   - storage: Storage to save succesfully loaded data
     public init(query: WrappedQuery, storage: Storage) {
         self.query = query
         self.storage = storage

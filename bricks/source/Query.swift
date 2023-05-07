@@ -11,6 +11,7 @@ import Foundation
 public protocol Query {
     associatedtype Result
 
+    /// Loads **Result** in an asynchronous manner with completion
     func load(_ completion: @escaping (Result) -> Void)
 }
 
