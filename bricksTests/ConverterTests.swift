@@ -39,6 +39,20 @@ final class ConverterTests: XCTestCase {
         XCTAssertEqual(target, loadedResult)
         XCTAssertEqual(spy.messages, [.load, .map(source)])
     }
+    
+    func test_converter_doesNotCallCompletionAfterBeingDeallocated() {
+        var (sut, spy): (Converter<QuerySpy, QuerySpy>?, QuerySpy)  = makeSUT()
+        
+        var completionCallCount = 0
+        sut?.load { _ in
+            completionCallCount += 1
+        }
+        sut = nil
+        spy.completeLoading(with: SourceModel.any())
+        
+        XCTAssertEqual(spy.messages, [.load,])
+        XCTAssertEqual(completionCallCount, 0)
+    }
 
     // MARK: Private
     
@@ -57,6 +71,12 @@ final class ConverterTests: XCTestCase {
 
 struct SourceModel: Equatable {
     let value: UUID
+}
+
+extension SourceModel {
+    static func any() -> SourceModel {
+        return SourceModel(value: UUID())
+    }
 }
 
 struct TargetModel: Equatable {
