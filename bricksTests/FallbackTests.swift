@@ -63,6 +63,23 @@ class FallbackTests: XCTestCase {
         )
     }
     
+    func test_load_whenPrimaryFailedFallbackSucceed_deliversFallbackSuccess() throws {
+        let primary = QuerySpy()
+        let fallback = QuerySpy()
+        let primaryError = NSError.any()
+        let fallbackResult = UUID().uuidString
+
+        let sut = Fallback(primary: primary, fallback: fallback)
+        expect(
+            sut: sut,
+            when: {
+                primary.completeLoading(with: .failure(primaryError))
+                fallback.completeLoading(with: .success(fallbackResult))
+            },
+            toCompleteWith: .success(fallbackResult)
+        )
+    }
+    
     private func expect(sut: Fallback<QuerySpy, QuerySpy>, when action: () -> Void, toCompleteWith expectedResult: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) {
         
         let exp = expectation(description: "Wait for async query to complete")
