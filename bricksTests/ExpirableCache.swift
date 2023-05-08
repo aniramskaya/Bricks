@@ -41,15 +41,13 @@ class ExpirableCache<Storage: SynchronousStorage>: FailableQuery {
 
 class ExpirableCacheTests: XCTestCase {
     func test_cache_doesNotMessageUponCreation() throws {
-        let spy = StorageSpy()
-        let _ = ExpirableCache<StorageSpy>(storage: spy, validationPolicy: spy)
+        let (_, spy) = makeSUT()
         
         XCTAssertEqual(spy.messages, [])
     }
     
     func test_load_deliversErrorOnExpiredCache() throws {
-        let spy = StorageSpy()
-        let sut = ExpirableCache<StorageSpy>(storage: spy, validationPolicy: spy)
+        let (sut, spy) = makeSUT()
         spy.isValid = false
         spy.timestamp = Date()
 
@@ -59,8 +57,7 @@ class ExpirableCacheTests: XCTestCase {
     }
 
     func test_load_deliversErrorOnEmptyCache() throws {
-        let spy = StorageSpy()
-        let sut = ExpirableCache<StorageSpy>(storage: spy, validationPolicy: spy)
+        let (sut, spy) = makeSUT()
         spy.isValid = true
         spy.timestamp = Date()
 
@@ -70,8 +67,7 @@ class ExpirableCacheTests: XCTestCase {
     }
 
     func test_load_deliversSuccessOnNonExpiredCache() throws {
-        let spy = StorageSpy()
-        let sut = ExpirableCache<StorageSpy>(storage: spy, validationPolicy: spy)
+        let (sut, spy) = makeSUT()
         let value = UUID().uuidString
         spy.value = value
         spy.isValid = true
@@ -80,6 +76,15 @@ class ExpirableCacheTests: XCTestCase {
         expect(sut: sut, toCompleteWith: .success(value))
         
         XCTAssertEqual(spy.messages, [.validate(spy.timestamp), .load])
+    }
+    
+    private func makeSUT() -> (ExpirableCache<StorageSpy>, StorageSpy) {
+        let spy = StorageSpy()
+        let sut = ExpirableCache<StorageSpy>(storage: spy, validationPolicy: spy)
+
+        trackForMemoryLeaks(spy)
+        trackForMemoryLeaks(sut)
+        return (sut, spy)
     }
 
     private func expect(sut: ExpirableCache<StorageSpy>, toCompleteWith expectedResult: Result<String, ExpirableCache<StorageSpy>.Error>, file: StaticString = #filePath, line: UInt = #line) {
