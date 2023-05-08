@@ -110,6 +110,8 @@ private class QuerySpy: FailableQuery, SynchronousStorage {
         completions[index](result)
     }
     
+    var timestamp: Date?
+    
     func load() -> String? {
         messages.append(.loadStorage)
         return nil

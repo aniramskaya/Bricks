@@ -11,6 +11,8 @@ import Foundation
 public protocol SynchronousStorage {
     associatedtype Stored
     
+    var timestamp: Date? { get }
+    
     /// Retrieves stored value
     func load() -> Stored?
     
@@ -24,11 +26,15 @@ public protocol SynchronousStorage {
 /// In-memory storage simply holds the data passed into `load` method
 public final class InMemoryStorage<Stored>: SynchronousStorage {
     private var stored: Stored?
+    public private(set) var timestamp: Date?
     
     public init() {}
     
     /// Retrieves stored value overriding the previous one
     public func load() -> Stored? { return stored }
-    public func save(_ value: Stored) { stored = value }
+    public func save(_ value: Stored) {
+        stored = value
+        timestamp = Date()
+    }
     public func clear() { stored = nil }
 }
