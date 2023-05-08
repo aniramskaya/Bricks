@@ -9,33 +9,6 @@ import Foundation
 import XCTest
 import bricks
 
-
-class ExpirableCache<Storage: SynchronousStorage>: FailableQuery {
-    enum Error: Swift.Error, Equatable {
-        case expired
-        case empty
-    }
-    
-    typealias Success = Storage.Stored
-    typealias Failure = ExpirableCache.Error
-    
-    var storage: Storage
-    var validationPolicy: TimestampValidationPolicy
-    
-    init(storage: Storage, validationPolicy: TimestampValidationPolicy) {
-        self.storage = storage
-        self.validationPolicy = validationPolicy
-    }
-    
-    func load(_ completion: @escaping (Result<Success, Failure>) -> Void) {
-        switch (validationPolicy.validate(storage.timestamp), storage.load()) {
-        case (true, .some(let value)): completion(.success(value))
-        case (true, .none): completion(.failure(.empty))
-        case (false, _): completion(.failure(.expired))
-        }
-    }
-}
-
 class ExpirableCacheTests: XCTestCase {
     func test_cache_doesNotMessageUponCreation() throws {
         let (_, spy) = makeSUT()
