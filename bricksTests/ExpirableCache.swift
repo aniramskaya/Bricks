@@ -16,6 +16,7 @@ protocol TimestampValidationPolicy {
 class ExpirableCache<Storage: SynchronousStorage>: FailableQuery {
     enum Error: Swift.Error, Equatable {
         case expired
+        case empty
     }
     
     typealias Success = Storage.Stored
@@ -30,10 +31,10 @@ class ExpirableCache<Storage: SynchronousStorage>: FailableQuery {
     }
     
     func load(_ completion: @escaping (Result<Success, Failure>) -> Void) {
-        if validationPolicy.validate(storage.timestamp), let stored = storage.load() {
-            completion(.success(stored))
-        } else {
-            completion(.failure(.expired))
+        switch (validationPolicy.validate(storage.timestamp), storage.load()) {
+        case (true, .some(let value)): completion(.success(value))
+        case (true, .none): completion(.failure(.empty))
+        case (false, _): completion(.failure(.expired))
         }
     }
 }
@@ -54,7 +55,18 @@ class ExpirableCacheTests: XCTestCase {
 
         expect(sut: sut, toCompleteWith: .failure(ExpirableCache.Error.expired))
         
-        XCTAssertEqual(spy.messages, [.validate(spy.timestamp)])
+        XCTAssertEqual(spy.messages, [.validate(spy.timestamp), .load])
+    }
+
+    func test_load_deliversErrorOnEmptyCache() throws {
+        let spy = StorageSpy()
+        let sut = ExpirableCache<StorageSpy>(storage: spy, validationPolicy: spy)
+        spy.isValid = true
+        spy.timestamp = Date()
+
+        expect(sut: sut, toCompleteWith: .failure(ExpirableCache.Error.empty))
+        
+        XCTAssertEqual(spy.messages, [.validate(spy.timestamp), .load])
     }
 
     func test_load_deliversSuccessOnNonExpiredCache() throws {
