@@ -30,8 +30,11 @@ class ExpirableCache<Storage: SynchronousStorage>: FailableQuery {
     }
     
     func load(_ completion: @escaping (Result<Success, Failure>) -> Void) {
-        _ = validationPolicy.validate(storage.timestamp)
-        completion(.failure(.empty))
+        if validationPolicy.validate(storage.timestamp), let stored = storage.load() {
+            completion(.success(stored))
+        } else {
+            completion(.failure(.empty))
+        }
     }
 }
 
@@ -43,7 +46,7 @@ class ExpirableCacheTests: XCTestCase {
         XCTAssertEqual(spy.messages, [])
     }
     
-    func test_load_deliversErorOnExpiredCache() throws {
+    func test_load_deliversErrorOnExpiredCache() throws {
         let spy = StorageSpy()
         let sut = ExpirableCache<StorageSpy>(storage: spy, validationPolicy: spy)
         spy.isValid = false
@@ -53,7 +56,20 @@ class ExpirableCacheTests: XCTestCase {
         
         XCTAssertEqual(spy.messages, [.validate(spy.timestamp)])
     }
-    
+
+    func test_load_deliversSuccessOnNonExpiredCache() throws {
+        let spy = StorageSpy()
+        let sut = ExpirableCache<StorageSpy>(storage: spy, validationPolicy: spy)
+        let value = UUID().uuidString
+        spy.value = value
+        spy.isValid = true
+        spy.timestamp = Date()
+
+        expect(sut: sut, toCompleteWith: .success(value))
+        
+        XCTAssertEqual(spy.messages, [.validate(spy.timestamp), .load])
+    }
+
     private func expect(sut: ExpirableCache<StorageSpy>, toCompleteWith expectedResult: Result<String, ExpirableCache<StorageSpy>.Error>, file: StaticString = #filePath, line: UInt = #line) {
         
         let exp = expectation(description: "Wait for async query to complete")
@@ -86,7 +102,7 @@ private class StorageSpy: SynchronousStorage, TimestampValidationPolicy {
     var messages: [Message] = []
     
     var timestamp: Date?
-    private var value: String?
+    var value: String?
     
     func load() -> String? {
         messages.append(.load)
