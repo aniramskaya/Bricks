@@ -22,7 +22,7 @@ public protocol SynchronousStorage {
 }
 
 /// In-memory storage simply holds the data passed into `load` method
-public class InMemoryStorage<Stored>: SynchronousStorage {
+public final class InMemoryStorage<Stored>: SynchronousStorage {
     private var stored: Stored?
     
     public init() {}

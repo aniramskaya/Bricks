@@ -8,7 +8,7 @@
 import Foundation
 
 /// Loads data using another **Query** and then converts the result to a **Target** type
-public class Converter<SourceQuery, Target>: Query where SourceQuery: Query
+public final class Converter<SourceQuery, Target>: Query where SourceQuery: Query
 {
     public typealias TargetMapper = (SourceQuery.Result) -> Target
     

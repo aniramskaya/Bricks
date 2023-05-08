@@ -8,7 +8,7 @@
 import Foundation
 
 /// Failable query which stores loaded data in storage on success
-public class StoringQuery<WrappedQuery: FailableQuery, Storage: SynchronousStorage>: FailableQuery where Storage.Stored == WrappedQuery.Success
+public final class StoringQuery<WrappedQuery: FailableQuery, Storage: SynchronousStorage>: FailableQuery where Storage.Stored == WrappedQuery.Success
 {
     public typealias Success = WrappedQuery.Success
     public typealias Failure = WrappedQuery.Failure
