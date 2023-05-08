@@ -21,9 +21,9 @@ class ExpirableCacheTests: XCTestCase {
         spy.isValid = false
         spy.timestamp = Date()
 
-        expect(sut: sut, toCompleteWith: .failure(ExpirableCache.Error.expired))
+        expect(sut: sut, toCompleteWith: .failure(ExpirableCacheError.expired))
         
-        XCTAssertEqual(spy.messages, [.validate(spy.timestamp), .load])
+        XCTAssertEqual(spy.messages, [.validate(spy.timestamp)])
     }
 
     func test_load_deliversErrorOnEmptyCache() throws {
@@ -31,7 +31,7 @@ class ExpirableCacheTests: XCTestCase {
         spy.isValid = true
         spy.timestamp = Date()
 
-        expect(sut: sut, toCompleteWith: .failure(ExpirableCache.Error.empty))
+        expect(sut: sut, toCompleteWith: .failure(StorageSpyError.empty))
         
         XCTAssertEqual(spy.messages, [.validate(spy.timestamp), .load])
     }
@@ -57,7 +57,7 @@ class ExpirableCacheTests: XCTestCase {
         return (sut, spy)
     }
 
-    private func expect(sut: ExpirableCache<StorageSpy>, toCompleteWith expectedResult: Result<String, ExpirableCache<StorageSpy>.Error>, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(sut: ExpirableCache<StorageSpy>, toCompleteWith expectedResult: Result<String, Swift.Error>, file: StaticString = #filePath, line: UInt = #line) {
         
         let exp = expectation(description: "Wait for async query to complete")
         sut.load { result in
@@ -65,7 +65,7 @@ class ExpirableCacheTests: XCTestCase {
             case let (.success(received), .success(expected)):
                 XCTAssertEqual(received, expected, file: file, line: line)
             case let (.failure(received), .failure(expected)):
-                XCTAssertEqual(received, expected, file: file, line: line)
+                XCTAssertEqual(received as NSError, expected as NSError, file: file, line: line)
             default:
                 XCTFail("Expected \(expectedResult) got \(result) instead", file: file, line: line)
             }
@@ -76,8 +76,13 @@ class ExpirableCacheTests: XCTestCase {
 
 }
 
-private class StorageSpy: SynchronousStorage, TimestampValidationPolicy {
+private enum StorageSpyError: Swift.Error {
+    case empty
+}
+
+private class StorageSpy: Storage, TimestampValidationPolicy {
     typealias Stored = String
+    
     
     enum Message: Equatable {
         case load
@@ -91,19 +96,25 @@ private class StorageSpy: SynchronousStorage, TimestampValidationPolicy {
     var timestamp: Date?
     var value: String?
     
-    func load() -> String? {
+    func load(completion: (Result<String, Error>) -> Void) {
         messages.append(.load)
-        return value
+        if let value {
+            completion(.success(value))
+        } else {
+            completion(.failure(StorageSpyError.empty))
+        }
     }
     
-    func save(_ value: String) {
+    func save(value: Stored, completion: (Error?) -> Void) {
         messages.append(.save(value))
         self.value = value
+        completion(nil)
     }
     
-    func clear() {
+    func clear(completion: (Error?) -> Void) {
         messages.append(.clear)
         value = nil
+        completion(nil)
     }
     
     var isValid = true

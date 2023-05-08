@@ -7,14 +7,13 @@
 
 import Foundation
 
-public final class ExpirableCache<Storage: SynchronousStorage>: FailableQuery {
-    public enum Error: Swift.Error, Equatable {
-        case expired
-        case empty
-    }
-    
+public enum ExpirableCacheError: Swift.Error, Equatable {
+    case expired
+}
+
+public final class ExpirableCache<Storage: bricks.Storage>: FailableQuery {
     public typealias Success = Storage.Stored
-    public typealias Failure = ExpirableCache.Error
+    public typealias Failure = Swift.Error
     
     private var storage: Storage
     private var validationPolicy: TimestampValidationPolicy
@@ -25,10 +24,10 @@ public final class ExpirableCache<Storage: SynchronousStorage>: FailableQuery {
     }
     
     public func load(completion: @escaping (Result<Success, Failure>) -> Void) {
-        switch (validationPolicy.validate(storage.timestamp), storage.load()) {
-        case (true, .some(let value)): completion(.success(value))
-        case (true, .none): completion(.failure(.empty))
-        case (false, _): completion(.failure(.expired))
+        if validationPolicy.validate(storage.timestamp) {
+            storage.load(completion: completion)
+        } else {
+            completion(.failure(ExpirableCacheError.expired))
         }
     }
 }
