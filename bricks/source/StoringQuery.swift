@@ -26,7 +26,7 @@ public final class StoringQuery<WrappedQuery: FailableQuery, Storage: Synchronou
         self.storage = storage
     }
     
-    public func load(_ completion: @escaping (WrappedQuery.Result) -> Void) {
+    public func load(completion: @escaping (WrappedQuery.Result) -> Void) {
         query.load { [weak self] result in
             guard let self else { return }
             if let value = try? result.get() {

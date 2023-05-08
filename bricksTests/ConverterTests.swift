@@ -94,7 +94,7 @@ private class QuerySpy: Query {
     var messages: [Message] = []
     var completions: [(SourceModel) -> Void] = []
     
-    func load(_ completion: @escaping (SourceModel) -> Void) {
+    func load(completion: @escaping (SourceModel) -> Void) {
         messages.append(.load)
         completions.append(completion)
     }

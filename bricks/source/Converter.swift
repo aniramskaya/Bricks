@@ -25,7 +25,7 @@ public final class Converter<SourceQuery, Target>: Query where SourceQuery: Quer
     }
     
     /// Loads data using **SourceQuery** and then converts the result to a **Target** type using map closure passed in constructor upon creation
-    public func load(_ completion: @escaping (Target) -> Void) {
+    public func load(completion: @escaping (Target) -> Void) {
         query.load { [weak self] result in
             guard let self else { return }
             completion(self.map(result))

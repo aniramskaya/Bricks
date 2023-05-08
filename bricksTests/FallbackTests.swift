@@ -146,7 +146,7 @@ private class QuerySpy: FailableQuery {
     var messages: [Message] = []
     var completions: [(Result<String, NSError>) -> Void] = []
     
-    func load(_ completion: @escaping (Result<String, NSError>) -> Void) {
+    func load(completion: @escaping (Result<String, NSError>) -> Void) {
         messages.append(.load)
         completions.append(completion)
     }

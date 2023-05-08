@@ -24,7 +24,7 @@ public final class Fallback<Primary: FailableQuery, Secondary: FailableQuery>: F
         self.fallback = fallback
     }
     
-    public func load(_ completion: @escaping (_ result: Result<Success, Failure>) -> Void) {
+    public func load(completion: @escaping (_ result: Result<Success, Failure>) -> Void) {
         primary.load {[weak self] result in
             guard let self else { return }
             switch result {

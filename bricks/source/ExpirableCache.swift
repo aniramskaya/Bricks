@@ -24,7 +24,7 @@ public final class ExpirableCache<Storage: SynchronousStorage>: FailableQuery {
         self.validationPolicy = validationPolicy
     }
     
-    public func load(_ completion: @escaping (Result<Success, Failure>) -> Void) {
+    public func load(completion: @escaping (Result<Success, Failure>) -> Void) {
         switch (validationPolicy.validate(storage.timestamp), storage.load()) {
         case (true, .some(let value)): completion(.success(value))
         case (true, .none): completion(.failure(.empty))

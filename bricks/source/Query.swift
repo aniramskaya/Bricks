@@ -18,7 +18,7 @@ public protocol Query {
     ///
     /// - Parameters:
     ///   - completion: A closure which is called when the loading process has complete.
-    func load(_ completion: @escaping (Result) -> Void)
+    func load(completion: @escaping (Result) -> Void)
 }
 
 /// ``Query`` whose **Result** is `Swift.Result` so it may fail and return an error.

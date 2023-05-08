@@ -101,7 +101,7 @@ private class QuerySpy: FailableQuery, SynchronousStorage {
     var messages: [Message] = []
     var completions: [(Result<String, NSError>) -> Void] = []
     
-    func load(_ completion: @escaping (Result<String, NSError>) -> Void) {
+    func load(completion: @escaping (Result<String, NSError>) -> Void) {
         messages.append(.loadQuery)
         completions.append(completion)
     }
