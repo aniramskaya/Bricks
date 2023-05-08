@@ -10,11 +10,16 @@ import XCTest
 import bricks
 
 protocol TimestampValidationPolicy {
-    func validate(_: Date) -> Bool
+    func validate(_: Date?) -> Bool
 }
 
-class ExpirableCache<Storage: SynchronousStorage, Failure: Error>: FailableQuery {
+class ExpirableCache<Storage: SynchronousStorage>: FailableQuery {
+    enum Error: Swift.Error, Equatable {
+        case empty
+    }
+    
     typealias Success = Storage.Stored
+    typealias Failure = ExpirableCache.Error
     
     var storage: Storage
     var validationPolicy: TimestampValidationPolicy
@@ -25,17 +30,47 @@ class ExpirableCache<Storage: SynchronousStorage, Failure: Error>: FailableQuery
     }
     
     func load(_ completion: @escaping (Result<Success, Failure>) -> Void) {
-        
+        _ = validationPolicy.validate(storage.timestamp)
+        completion(.failure(.empty))
     }
 }
 
 class ExpirableCacheTests: XCTestCase {
-    func test_cache_doesNotMessageUponCreation() {
+    func test_cache_doesNotMessageUponCreation() throws {
         let spy = StorageSpy()
-        let _ = ExpirableCache<StorageSpy, Swift.Error>(storage: spy, validationPolicy: spy)
+        let _ = ExpirableCache<StorageSpy>(storage: spy, validationPolicy: spy)
         
         XCTAssertEqual(spy.messages, [])
     }
+    
+    func test_load_deliversErorOnExpiredCache() throws {
+        let spy = StorageSpy()
+        let sut = ExpirableCache<StorageSpy>(storage: spy, validationPolicy: spy)
+        spy.isValid = false
+        spy.timestamp = Date()
+
+        expect(sut: sut, toCompleteWith: .failure(ExpirableCache.Error.empty))
+        
+        XCTAssertEqual(spy.messages, [.validate(spy.timestamp)])
+    }
+    
+    private func expect(sut: ExpirableCache<StorageSpy>, toCompleteWith expectedResult: Result<String, ExpirableCache<StorageSpy>.Error>, file: StaticString = #filePath, line: UInt = #line) {
+        
+        let exp = expectation(description: "Wait for async query to complete")
+        sut.load { result in
+            switch (result, expectedResult) {
+            case let (.success(received), .success(expected)):
+                XCTAssertEqual(received, expected, file: file, line: line)
+            case let (.failure(received), .failure(expected)):
+                XCTAssertEqual(received, expected, file: file, line: line)
+            default:
+                XCTFail("Expected \(expectedResult) got \(result) instead", file: file, line: line)
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+
 }
 
 private class StorageSpy: SynchronousStorage, TimestampValidationPolicy {
@@ -45,7 +80,7 @@ private class StorageSpy: SynchronousStorage, TimestampValidationPolicy {
         case load
         case save(String)
         case clear
-        case validate(Date)
+        case validate(Date?)
     }
     
     var messages: [Message] = []
@@ -69,7 +104,8 @@ private class StorageSpy: SynchronousStorage, TimestampValidationPolicy {
     }
     
     var isValid = true
-    func validate(_: Date) -> Bool {
+    func validate(_ timestamp: Date?) -> Bool {
+        messages.append(.validate(timestamp))
         return isValid
     }
 }
