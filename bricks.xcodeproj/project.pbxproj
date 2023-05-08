@@ -17,6 +17,7 @@
 		CC7431F12A07E4A8004E0175 /* StoringQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431F02A07E4A8004E0175 /* StoringQuery.swift */; };
 		CC7431F32A07EDF4004E0175 /* Fallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431F22A07EDF4004E0175 /* Fallback.swift */; };
 		CC7431F52A08D9CA004E0175 /* ExpirableCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431F42A08D9CA004E0175 /* ExpirableCache.swift */; };
+		CC7431F72A08E476004E0175 /* TimestampValidationPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431F62A08E476004E0175 /* TimestampValidationPolicy.swift */; };
 		CC86FB202A07A40300416227 /* bricks.docc in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB1F2A07A40300416227 /* bricks.docc */; };
 		CC86FB262A07A40300416227 /* bricks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC86FB1B2A07A40300416227 /* bricks.framework */; };
 		CC86FB2B2A07A40300416227 /* ConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB2A2A07A40300416227 /* ConverterTests.swift */; };
@@ -46,6 +47,7 @@
 		CC7431F02A07E4A8004E0175 /* StoringQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoringQuery.swift; sourceTree = "<group>"; };
 		CC7431F22A07EDF4004E0175 /* Fallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fallback.swift; sourceTree = "<group>"; };
 		CC7431F42A08D9CA004E0175 /* ExpirableCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpirableCache.swift; sourceTree = "<group>"; };
+		CC7431F62A08E476004E0175 /* TimestampValidationPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampValidationPolicy.swift; sourceTree = "<group>"; };
 		CC86FB1B2A07A40300416227 /* bricks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = bricks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC86FB1E2A07A40300416227 /* bricks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bricks.h; sourceTree = "<group>"; };
 		CC86FB1F2A07A40300416227 /* bricks.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = bricks.docc; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				CC7431E22A07CA6B004E0175 /* InMemoryStorage.swift */,
 				CC7431F02A07E4A8004E0175 /* StoringQuery.swift */,
 				CC7431F22A07EDF4004E0175 /* Fallback.swift */,
+				CC7431F62A08E476004E0175 /* TimestampValidationPolicy.swift */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -248,6 +251,7 @@
 				CC86FB382A07A49A00416227 /* Query.swift in Sources */,
 				CC7431E32A07CA6B004E0175 /* InMemoryStorage.swift in Sources */,
 				CC7431DB2A07B7A9004E0175 /* Converter.swift in Sources */,
+				CC7431F72A08E476004E0175 /* TimestampValidationPolicy.swift in Sources */,
 				CC7431F32A07EDF4004E0175 /* Fallback.swift in Sources */,
 				CC7431F12A07E4A8004E0175 /* StoringQuery.swift in Sources */,
 				CC86FB202A07A40300416227 /* bricks.docc in Sources */,

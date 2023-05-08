@@ -9,9 +9,6 @@ import Foundation
 import XCTest
 import bricks
 
-protocol TimestampValidationPolicy {
-    func validate(_: Date?) -> Bool
-}
 
 class ExpirableCache<Storage: SynchronousStorage>: FailableQuery {
     enum Error: Swift.Error, Equatable {
