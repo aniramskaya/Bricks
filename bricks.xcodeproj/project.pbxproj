@@ -16,6 +16,7 @@
 		CC7431EF2A07E37B004E0175 /* FallbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431EE2A07E37B004E0175 /* FallbackTests.swift */; };
 		CC7431F12A07E4A8004E0175 /* StoringQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431F02A07E4A8004E0175 /* StoringQuery.swift */; };
 		CC7431F32A07EDF4004E0175 /* Fallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431F22A07EDF4004E0175 /* Fallback.swift */; };
+		CC7431F52A08D9CA004E0175 /* ExpirableCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431F42A08D9CA004E0175 /* ExpirableCache.swift */; };
 		CC86FB202A07A40300416227 /* bricks.docc in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB1F2A07A40300416227 /* bricks.docc */; };
 		CC86FB262A07A40300416227 /* bricks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC86FB1B2A07A40300416227 /* bricks.framework */; };
 		CC86FB2B2A07A40300416227 /* ConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB2A2A07A40300416227 /* ConverterTests.swift */; };
@@ -44,6 +45,7 @@
 		CC7431EE2A07E37B004E0175 /* FallbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallbackTests.swift; sourceTree = "<group>"; };
 		CC7431F02A07E4A8004E0175 /* StoringQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoringQuery.swift; sourceTree = "<group>"; };
 		CC7431F22A07EDF4004E0175 /* Fallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fallback.swift; sourceTree = "<group>"; };
+		CC7431F42A08D9CA004E0175 /* ExpirableCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpirableCache.swift; sourceTree = "<group>"; };
 		CC86FB1B2A07A40300416227 /* bricks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = bricks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC86FB1E2A07A40300416227 /* bricks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bricks.h; sourceTree = "<group>"; };
 		CC86FB1F2A07A40300416227 /* bricks.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = bricks.docc; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				CC7431E02A07C77B004E0175 /* InMemoryStorageTests.swift */,
 				CC7431E42A07CD88004E0175 /* StoringQueryTests.swift */,
 				CC7431EE2A07E37B004E0175 /* FallbackTests.swift */,
+				CC7431F42A08D9CA004E0175 /* ExpirableCache.swift */,
 			);
 			path = bricksTests;
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 				CC7431EF2A07E37B004E0175 /* FallbackTests.swift in Sources */,
 				CC7431E52A07CD88004E0175 /* StoringQueryTests.swift in Sources */,
 				CC86FB2B2A07A40300416227 /* ConverterTests.swift in Sources */,
+				CC7431F52A08D9CA004E0175 /* ExpirableCache.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
