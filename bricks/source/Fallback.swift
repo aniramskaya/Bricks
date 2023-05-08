@@ -11,11 +11,10 @@ import Foundation
 ///
 /// If the primary query completes with success ``Fallback`` returns success. Otherwise it calls fallback query and returns its result in completion when completed.
 public final class Fallback<Primary: FailableQuery, Secondary: FailableQuery>: FailableQuery
-    where Primary.Success == Secondary.Success,
-        Primary.Failure == Secondary.Failure
+    where Primary.Success == Secondary.Success
 {
-    public typealias Success = Primary.Success
-    public typealias Failure = Primary.Failure
+    public typealias Success = Secondary.Success
+    public typealias Failure = Secondary.Failure
     
     private let primary: Primary
     private let fallback: Secondary
@@ -31,8 +30,8 @@ public final class Fallback<Primary: FailableQuery, Secondary: FailableQuery>: F
             switch result {
             case .failure:
                 self.loadFallback(completion)
-            default:
-                completion(result)
+            case let .success(value):
+                completion(.success(value))
             }
         }
     }
