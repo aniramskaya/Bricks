@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Failable query which stores loaded data in storage on success
+/// ``FailableQuery`` which stores loaded data into a storage on success
 public final class StoringQuery<WrappedQuery: FailableQuery, Storage: SynchronousStorage>: FailableQuery where Storage.Stored == WrappedQuery.Success
 {
     public typealias Success = WrappedQuery.Success
@@ -26,6 +26,10 @@ public final class StoringQuery<WrappedQuery: FailableQuery, Storage: Synchronou
         self.storage = storage
     }
     
+    /// Loads data from `query` passed in initializer and if it succeeded stores it into `storage`
+    /// 
+    /// - Parameters:
+    ///   - completion: A closure which is called when the loading process has complete.
     public func load(completion: @escaping (WrappedQuery.Result) -> Void) {
         query.load { [weak self] result in
             guard let self else { return }

@@ -31,8 +31,9 @@ public protocol Storage {
     /// Saves value
     ///
     /// - Parameters:
+    ///   - value: A data to be stored
     ///   - completion: A closure to be called when the save operation has finished. Any saving error should be passed inside the completion closure.
-    func save(completion: (Error?) -> Void)
+    func save(value: Stored, completion: (Error?) -> Void)
     
     /// Removes stored value, if any
     ///
