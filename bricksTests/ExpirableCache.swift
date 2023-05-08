@@ -15,7 +15,7 @@ protocol TimestampValidationPolicy {
 
 class ExpirableCache<Storage: SynchronousStorage>: FailableQuery {
     enum Error: Swift.Error, Equatable {
-        case empty
+        case expired
     }
     
     typealias Success = Storage.Stored
@@ -33,7 +33,7 @@ class ExpirableCache<Storage: SynchronousStorage>: FailableQuery {
         if validationPolicy.validate(storage.timestamp), let stored = storage.load() {
             completion(.success(stored))
         } else {
-            completion(.failure(.empty))
+            completion(.failure(.expired))
         }
     }
 }
@@ -52,7 +52,7 @@ class ExpirableCacheTests: XCTestCase {
         spy.isValid = false
         spy.timestamp = Date()
 
-        expect(sut: sut, toCompleteWith: .failure(ExpirableCache.Error.empty))
+        expect(sut: sut, toCompleteWith: .failure(ExpirableCache.Error.expired))
         
         XCTAssertEqual(spy.messages, [.validate(spy.timestamp)])
     }
