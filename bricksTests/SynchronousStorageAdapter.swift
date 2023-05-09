@@ -17,7 +17,7 @@ class SynchronousStorageAdapter<WrappedStorage: SynchronousStorage>: Storage {
         self.wrappee = wrappee
     }
     
-    var timestamp: Date?
+    var timestamp: Date? { wrappee.timestamp }
     
     func load(completion: (Result<Stored, Error>) -> Void) {
         
@@ -35,14 +35,25 @@ class SynchronousStorageAdapter<WrappedStorage: SynchronousStorage>: Storage {
 class SynchronousStorageAdapterTests: XCTestCase {
     func test_adapter_doesNotMessageUponCreation() throws {
         let spy = SynchronousStorageSpy()
-        let sut = SynchronousStorageAdapter(wrappee: spy)
+        let _ = SynchronousStorageAdapter(wrappee: spy)
         
         XCTAssertEqual(spy.messages, [])
+    }
+    
+    func test_timestamp_callsWrappeeTimestamp() throws {
+        let spy = SynchronousStorageSpy()
+        let sut = SynchronousStorageAdapter(wrappee: spy)
+
+        let _ = sut.timestamp
+        
+        XCTAssertEqual(spy.messages, [.timestampRead])
     }
 }
 
 class SynchronousStorageSpy: SynchronousStorage {
     enum Message: Equatable {
+        case timestampRead
+        case timestampSave
         case load
         case save(String)
         case clear
@@ -52,7 +63,17 @@ class SynchronousStorageSpy: SynchronousStorage {
     
     typealias Stored = String
     
-    var timestamp: Date?
+    private var privateTimestamp: Date?
+    var timestamp: Date? {
+        get {
+            messages.append(.timestampRead)
+            return privateTimestamp
+        }
+        set {
+            messages.append(.timestampSave)
+            privateTimestamp = newValue
+        }
+    }
     
     var value: Stored?
 
