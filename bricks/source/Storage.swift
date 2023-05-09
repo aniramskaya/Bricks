@@ -26,14 +26,14 @@ public protocol Storage: FailableQuery where Success == Stored, Failure == Error
     /// - Parameters:
     ///   - completion: A closure to be called when loading has completed.
     ///
-    func load(completion: (Result) -> Void)
+    func load(completion: @escaping (Result) -> Void)
     
     /// Saves value
     ///
     /// - Parameters:
     ///   - value: A data to be stored
     ///   - completion: A closure to be called when the save operation has finished. Any saving error should be passed inside the completion closure.
-    func save(value: Stored, completion: (Error?) -> Void)
+    func save(value: Stored, completion: @escaping (Error?) -> Void)
     
     /// Removes stored value, if any
     ///
@@ -41,7 +41,7 @@ public protocol Storage: FailableQuery where Success == Stored, Failure == Error
     ///
     /// - Parameters:
     ///   - completion: A closure to be called when the clean operation has finished. Any error should be passed inside the completion closure.
-    func clear(completion: (Error?) -> Void)
+    func clear(completion: @escaping (Error?) -> Void)
 }
 
 ///  Synchronous storage. Stores a value synchronously on the thread it was called from.
