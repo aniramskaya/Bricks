@@ -9,31 +9,6 @@ import Foundation
 import XCTest
 import bricks
 
-class SynchronousStorageAdapter<WrappedStorage: SynchronousStorage>: Storage {
-    typealias Stored = WrappedStorage.Stored
-    
-    let wrappee: WrappedStorage
-    init(wrappee: WrappedStorage) {
-        self.wrappee = wrappee
-    }
-    
-    var timestamp: Date? { wrappee.timestamp }
-    
-    func load(completion: @escaping (Result<Stored, Error>) -> Void) {
-        completion(wrappee.load().map { .success($0) } ?? .failure(StorageError.empty) )
-    }
-    
-    func save(value: WrappedStorage.Stored, completion: @escaping (Error?) -> Void) {
-        wrappee.save(value)
-        completion(nil)
-    }
-
-    func clear(completion: @escaping (Error?) -> Void) {
-        wrappee.clear()
-        completion(nil)
-    }
-}
-
 class SynchronousStorageAdapterTests: XCTestCase {
     func test_adapter_doesNotMessageUponCreation() throws {
         let (_, spy) = makeSUT()

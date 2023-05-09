@@ -26,6 +26,7 @@
 		CC86FB2C2A07A40300416227 /* bricks.h in Headers */ = {isa = PBXBuildFile; fileRef = CC86FB1E2A07A40300416227 /* bricks.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC86FB382A07A49A00416227 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB372A07A49A00416227 /* Query.swift */; };
 		CCEFA6C92A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6C82A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift */; };
+		CCEFA6CB2A0A466700EC7BFA /* SynchronousStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		CC86FB2A2A07A40300416227 /* ConverterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterTests.swift; sourceTree = "<group>"; };
 		CC86FB372A07A49A00416227 /* Query.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		CCEFA6C82A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronousStorageAdapter.swift; sourceTree = "<group>"; };
+		CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronousStorageAdapter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +146,7 @@
 				CC7431F62A08E476004E0175 /* TimestampValidationPolicy.swift */,
 				CC7431F82A08E4A1004E0175 /* ExpirableCache.swift */,
 				CC7431FA2A09224B004E0175 /* Storage.swift */,
+				CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -264,6 +267,7 @@
 				CC7431F32A07EDF4004E0175 /* Fallback.swift in Sources */,
 				CC7431FB2A09224B004E0175 /* Storage.swift in Sources */,
 				CC7431F12A07E4A8004E0175 /* StoringQuery.swift in Sources */,
+				CCEFA6CB2A0A466700EC7BFA /* SynchronousStorageAdapter.swift in Sources */,
 				CC86FB202A07A40300416227 /* bricks.docc in Sources */,
 				CC7431F92A08E4A1004E0175 /* ExpirableCache.swift in Sources */,
 			);
