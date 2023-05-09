@@ -8,11 +8,14 @@
 import Foundation
 
 public enum ExpirableCacheError: Swift.Error, Equatable {
+    // Raised when cache is expired
     case expired
 }
 
 public final class ExpirableCache<Storage: bricks.Storage>: FailableQuery {
+    /// Type of data to be stored in a cache. This type is the same as ``Storage/Stored``
     public typealias Success = Storage.Stored
+    /// Error type to be passed into completion closure. It is a **Swift.Error** because we cannot predict possible storage errors.
     public typealias Failure = Swift.Error
     
     private var storage: Storage
