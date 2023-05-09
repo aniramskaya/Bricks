@@ -9,10 +9,6 @@ import Foundation
 import XCTest
 import bricks
 
-enum StorageError: Error {
-    case empty
-}
-
 class SynchronousStorageAdapter<WrappedStorage: SynchronousStorage>: Storage {
     typealias Stored = WrappedStorage.Stored
     
@@ -23,16 +19,16 @@ class SynchronousStorageAdapter<WrappedStorage: SynchronousStorage>: Storage {
     
     var timestamp: Date? { wrappee.timestamp }
     
-    func load(completion: (Result<Stored, Error>) -> Void) {
+    func load(completion: @escaping (Result<Stored, Error>) -> Void) {
         completion(wrappee.load().map { .success($0) } ?? .failure(StorageError.empty) )
     }
     
-    func save(value: WrappedStorage.Stored, completion: (Error?) -> Void) {
+    func save(value: WrappedStorage.Stored, completion: @escaping (Error?) -> Void) {
         wrappee.save(value)
         completion(nil)
     }
 
-    func clear(completion: (Error?) -> Void) {
+    func clear(completion: @escaping (Error?) -> Void) {
         wrappee.clear()
         completion(nil)
     }
