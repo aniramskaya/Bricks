@@ -10,16 +10,20 @@ import XCTest
 import bricks
 
 class SynchronousStorageTests: XCTestCase {
-    func test_load_heliversNilFromEmptyStorage() {
+    func test_load_deliversNilFromEmptyStorage() {
         let sut = InMemoryStorage<String>()
         
         XCTAssertNil(sut.load())
+        XCTAssertNil(sut.timestamp)
     }
     
     func test_load_hasNoSideEffectsOnEmptyStorage() {
         let sut = InMemoryStorage<String>()
         
         XCTAssertNil(sut.load())
+        XCTAssertNil(sut.timestamp)
+        XCTAssertNil(sut.load())
+        XCTAssertNil(sut.timestamp)
     }
 
     func test_load_deliversStoredValueFromNonEmptyStorage() {
@@ -29,6 +33,7 @@ class SynchronousStorageTests: XCTestCase {
         sut.save(value)
         
         XCTAssertEqual(sut.load(), value)
+        XCTAssertNotNil(sut.timestamp)
     }
     
     func test_load_hasNoSideEffectsOnNonEmptyStorage() {
@@ -38,7 +43,10 @@ class SynchronousStorageTests: XCTestCase {
         sut.save(value)
         
         XCTAssertEqual(sut.load(), value)
+        let timestamp1 = sut.timestamp
         XCTAssertEqual(sut.load(), value)
+        let timestamp2 = sut.timestamp
+        XCTAssertEqual(timestamp1, timestamp2)
     }
 
     func test_save_replacesPreviousValue() {
@@ -54,7 +62,7 @@ class SynchronousStorageTests: XCTestCase {
         XCTAssertEqual(sut.load(), value2)
     }
 
-    func test_save_storesTimestamp() {
+    func test_save_replacesTimestamp() {
         let sut = InMemoryStorage<String>()
         let value1 = UUID().uuidString
         let value2 = UUID().uuidString
@@ -79,9 +87,11 @@ class SynchronousStorageTests: XCTestCase {
 
         sut.save(value)
         XCTAssertEqual(sut.load(), value)
+        XCTAssertNotNil(sut.timestamp)
 
         
         sut.clear()
         XCTAssertNil(sut.load())
+        XCTAssertNil(sut.timestamp)
     }
 }

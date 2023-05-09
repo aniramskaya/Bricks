@@ -22,5 +22,8 @@ public final class InMemoryStorage<Stored>: SynchronousStorage {
         timestamp = Date()
     }
     
-    public func clear() { stored = nil }
+    public func clear() {
+        stored = nil
+        timestamp = nil
+    }
 }
