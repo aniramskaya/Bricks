@@ -8,10 +8,11 @@
 import Foundation
 
 public enum ExpirableCacheError: Swift.Error, Equatable {
-    // Raised when cache is expired
+    /// Raised when cache is expired
     case expired
 }
 
+/// ``FailableQuery`` which loads data from ``Storage`` when its timestamp is valid according to ``TimestampValidationPolicy``
 public final class ExpirableCache<Storage: bricks.Storage>: FailableQuery {
     /// Type of data to be stored in a cache. This type is the same as ``Storage/Stored``
     public typealias Success = Storage.Stored
@@ -21,11 +22,23 @@ public final class ExpirableCache<Storage: bricks.Storage>: FailableQuery {
     private var storage: Storage
     private var validationPolicy: TimestampValidationPolicy
     
+    /// Designated initializer
+    ///
+    /// - Parameters:
+    ///   - storage: Storage to load data from when its timestamp is considered to be valid
+    ///   - validationPolicy: A policy to validate storage timestamp
     public init(storage: Storage, validationPolicy: TimestampValidationPolicy) {
         self.storage = storage
         self.validationPolicy = validationPolicy
     }
     
+    /// Validates timestamp and loads data from storage
+    ///
+    /// When called, validates storage timestamp using `validationPolicy` and loads data from storage if the timestamp is valid.
+    ///
+    /// Passes ``ExpirableCacheError`` to completion when timestamp is invalid.
+    ///
+    /// Passes storage loading result to completion when timestamp is valid
     public func load(completion: @escaping (Result<Success, Failure>) -> Void) {
         if validationPolicy.validate(storage.timestamp) {
             storage.load(completion: completion)
