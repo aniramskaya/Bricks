@@ -9,20 +9,20 @@ import Foundation
 
 /// Fallback combines two ``FailableQuery`` instances calling the second only in the case when the first has failed.
 ///
-/// If the primary query completes with success ``Fallback`` returns success. Otherwise it calls fallback query and returns its result in completion when completed.
-/// > Impotant: Notice that Fallback only requires equivalence of **Success** types for both queries, and they may have different **Failure** types. As Fallback never returns **Failure** from **primary** (as discussed in ``load(completion:)``) its own **Failure** type is always the same as **Failure** of **fallback**.
-public final class Fallback<Primary: FailableQuery, Fallback: FailableQuery>: FailableQuery
-    where Primary.Success == Fallback.Success
+/// If the primary query completes with success ``Fallback`` returns success. Otherwise it calls secondary query and returns its result in completion when completed.
+/// > Impotant: Notice that Fallback only requires equivalence of **Success** types for both queries, and they may have different **Failure** types. As Fallback never returns **Failure** from **primary** (as discussed in ``load(completion:)``) its own **Failure** type is always the same as **Failure** of **secondary**.
+public final class Fallback<Primary: FailableQuery, Secondary: FailableQuery>: FailableQuery
+    where Primary.Success == Secondary.Success
 {
-    public typealias Success = Fallback.Success
-    public typealias Failure = Fallback.Failure
+    public typealias Success = Secondary.Success
+    public typealias Failure = Secondary.Failure
     
     private let primary: Primary
-    private let fallback: Fallback
+    private let secondary: Secondary
     
-    public init(primary: Primary, fallback: Fallback) {
+    public init(primary: Primary, secondary: Secondary) {
         self.primary = primary
-        self.fallback = fallback
+        self.secondary = secondary
     }
     
     
@@ -48,10 +48,9 @@ public final class Fallback<Primary: FailableQuery, Fallback: FailableQuery>: Fa
     }
     
     private func loadFallback(_ completion: @escaping (_ result: Result<Success, Failure>) -> Void) {
-        fallback.load {[weak self] result in
+        secondary.load {[weak self] result in
             guard self != nil else { return }
             completion(result)
         }
     }
-    
 }

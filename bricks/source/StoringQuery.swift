@@ -17,7 +17,8 @@ public final class StoringQuery<WrappedQuery: FailableQuery, Storage: Synchronou
     private var query: WrappedQuery
     private var storage: Storage
     
-    /// Designated initializer. Creates Fallback with wrappee and Storage
+    /// Designated initializer.
+    ///
     /// - Parameters:
     ///   - query: FailableQuery to wrap
     ///   - storage: Storage to save succesfully loaded data

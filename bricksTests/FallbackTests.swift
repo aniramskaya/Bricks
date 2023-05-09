@@ -12,52 +12,52 @@ import bricks
 class FallbackTests: XCTestCase {
     func test_fallback_doesNotMessageUponCreation() throws {
         let primary = QuerySpy()
-        let fallback = QuerySpy()
+        let secondary = QuerySpy()
         
-        let _ = Fallback(primary: primary, fallback: fallback)
+        let _ = Fallback(primary: primary, secondary: secondary)
         
         XCTAssertEqual(primary.messages, [])
-        XCTAssertEqual(fallback.messages, [])
+        XCTAssertEqual(secondary.messages, [])
     }
     
     func test_load_whenBothFailed_deliversFallbackError() throws {
-        let (sut, primary, fallback) = makeSUT()
+        let (sut, primary, secondary) = makeSUT()
         let primaryError = NSError.any()
-        let fallbackError = NSError.any()
+        let secondaryError = NSError.any()
 
         expect(
             sut: sut,
             when: {
                 primary.completeLoading(with: .failure(primaryError))
-                fallback.completeLoading(with: .failure(fallbackError))
+                secondary.completeLoading(with: .failure(secondaryError))
             },
-            toCompleteWith: .failure(fallbackError)
+            toCompleteWith: .failure(secondaryError)
         )
         
         XCTAssertEqual(primary.messages, [.load])
-        XCTAssertEqual(fallback.messages, [.load])
+        XCTAssertEqual(secondary.messages, [.load])
     }
     
     func test_load_whenPrimaryFailedFallbackSucceed_deliversFallbackSuccess() throws {
-        let (sut, primary, fallback) = makeSUT()
+        let (sut, primary, secondary) = makeSUT()
         let primaryError = NSError.any()
-        let fallbackResult = UUID().uuidString
+        let secondaryResult = UUID().uuidString
 
         expect(
             sut: sut,
             when: {
                 primary.completeLoading(with: .failure(primaryError))
-                fallback.completeLoading(with: .success(fallbackResult))
+                secondary.completeLoading(with: .success(secondaryResult))
             },
-            toCompleteWith: .success(fallbackResult)
+            toCompleteWith: .success(secondaryResult)
         )
 
         XCTAssertEqual(primary.messages, [.load])
-        XCTAssertEqual(fallback.messages, [.load])
+        XCTAssertEqual(secondary.messages, [.load])
     }
 
     func test_load_whenPrimarySucceed_deliversPrimarySuccess() throws {
-        let (sut, primary, fallback) = makeSUT()
+        let (sut, primary, secondary) = makeSUT()
         let primaryResult = UUID().uuidString
 
         expect(
@@ -69,11 +69,11 @@ class FallbackTests: XCTestCase {
         )
         
         XCTAssertEqual(primary.messages, [.load])
-        XCTAssertEqual(fallback.messages, [])
+        XCTAssertEqual(secondary.messages, [])
     }
     
     func test_load_doesNotCallCompletionOnPrimaryWhenDeallocated() {
-        var (sut, spy, fallback): (Fallback<QuerySpy, QuerySpy>?, QuerySpy, _)  = makeSUT()
+        var (sut, spy, secondary): (Fallback<QuerySpy, QuerySpy>?, QuerySpy, _)  = makeSUT()
         
         var completionCallCount = 0
         sut?.load { _ in
@@ -83,12 +83,12 @@ class FallbackTests: XCTestCase {
         spy.completeLoading(with: .success(UUID().uuidString))
         
         XCTAssertEqual(spy.messages, [.load])
-        XCTAssertEqual(fallback.messages, [])
+        XCTAssertEqual(secondary.messages, [])
         XCTAssertEqual(completionCallCount, 0)
     }
 
     func test_load_doesNotCallCompletionOnFallbackWhenDeallocated() {
-        var (sut, primary, fallback): (Fallback<QuerySpy, QuerySpy>?, QuerySpy, QuerySpy)  = makeSUT()
+        var (sut, primary, secondary): (Fallback<QuerySpy, QuerySpy>?, QuerySpy, QuerySpy)  = makeSUT()
         
         var completionCallCount = 0
         sut?.load { _ in
@@ -96,10 +96,10 @@ class FallbackTests: XCTestCase {
         }
         primary.completeLoading(with: .failure(NSError.any()))
         sut = nil
-        fallback.completeLoading(with: .success(UUID().uuidString))
+        secondary.completeLoading(with: .success(UUID().uuidString))
         
         XCTAssertEqual(primary.messages, [.load])
-        XCTAssertEqual(fallback.messages, [.load])
+        XCTAssertEqual(secondary.messages, [.load])
         XCTAssertEqual(completionCallCount, 0)
     }
 
@@ -125,13 +125,13 @@ class FallbackTests: XCTestCase {
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (Fallback<QuerySpy, QuerySpy>, QuerySpy, QuerySpy) {
         let primary = QuerySpy()
-        let fallback = QuerySpy()
-        let sut = Fallback(primary: primary, fallback: fallback)
+        let secondary = QuerySpy()
+        let sut = Fallback(primary: primary, secondary: secondary)
         
         trackForMemoryLeaks(primary, file: file, line: line)
-        trackForMemoryLeaks(fallback, file: file, line: line)
+        trackForMemoryLeaks(secondary, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
-        return (sut, primary, fallback)
+        return (sut, primary, secondary)
     }
 }
 
