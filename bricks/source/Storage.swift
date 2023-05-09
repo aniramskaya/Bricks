@@ -27,7 +27,7 @@ public protocol Storage: FailableQuery where Success == Stored, Failure == Error
     
     /// Retrieves stored value
     ///
-    /// Different implementations may have different rules how to deal with loading errors. The **Swift.Result** which is used in the closure parameter only express the fact that loading may fail. One of possible errors to deliver in completion is ``StorageError`` which may be used when the storage is empty.
+    /// Different implementations may have different rules how to deal with loading errors. The **Swift.Result** which is used in the closure parameter only express the fact that loading may fail. One of possible errors to deliver in completion is ``StorageError/empty`` which may be used when the storage is empty.
     ///
     /// - Parameters:
     ///   - completion: A closure to be called when loading has completed.
