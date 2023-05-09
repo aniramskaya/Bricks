@@ -93,10 +93,12 @@ class SynchronousStorageAdapterTests: XCTestCase {
     }
 
     
-    private func makeSUT() -> (SynchronousStorageAdapter<SynchronousStorageSpy>, SynchronousStorageSpy) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (SynchronousStorageAdapter<SynchronousStorageSpy>, SynchronousStorageSpy) {
         let spy = SynchronousStorageSpy()
         let sut = SynchronousStorageAdapter(wrappee: spy)
         
+        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeaks(spy, file: file, line: line)
         return (sut, spy)
     }
     
