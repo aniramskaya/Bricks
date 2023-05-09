@@ -27,6 +27,7 @@
 		CC86FB382A07A49A00416227 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB372A07A49A00416227 /* Query.swift */; };
 		CCEFA6C92A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6C82A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift */; };
 		CCEFA6CB2A0A466700EC7BFA /* SynchronousStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */; };
+		CCEFA6CE2A0A48C000EC7BFA /* DTOToModelConverterWithCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6CD2A0A48C000EC7BFA /* DTOToModelConverterWithCache.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 		CC86FB372A07A49A00416227 /* Query.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		CCEFA6C82A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronousStorageAdapter.swift; sourceTree = "<group>"; };
 		CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronousStorageAdapter.swift; sourceTree = "<group>"; };
+		CCEFA6CD2A0A48C000EC7BFA /* DTOToModelConverterWithCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTOToModelConverterWithCache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 		CC86FB292A07A40300416227 /* bricksTests */ = {
 			isa = PBXGroup;
 			children = (
+				CCEFA6CC2A0A489D00EC7BFA /* Examples */,
 				CC7431E92A07E215004E0175 /* Helpers */,
 				CC86FB2A2A07A40300416227 /* ConverterTests.swift */,
 				CC7431E02A07C77B004E0175 /* InMemoryStorageTests.swift */,
@@ -149,6 +152,14 @@
 				CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */,
 			);
 			path = source;
+			sourceTree = "<group>";
+		};
+		CCEFA6CC2A0A489D00EC7BFA /* Examples */ = {
+			isa = PBXGroup;
+			children = (
+				CCEFA6CD2A0A48C000EC7BFA /* DTOToModelConverterWithCache.swift */,
+			);
+			path = Examples;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -280,6 +291,7 @@
 				CC7431ED2A07E2AB004E0175 /* NSError+Extensions.swift in Sources */,
 				CC7431EB2A07E22F004E0175 /* XCTestCase+Extensions.swift in Sources */,
 				CC7431E12A07C77B004E0175 /* InMemoryStorageTests.swift in Sources */,
+				CCEFA6CE2A0A48C000EC7BFA /* DTOToModelConverterWithCache.swift in Sources */,
 				CCEFA6C92A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift in Sources */,
 				CC7431EF2A07E37B004E0175 /* FallbackTests.swift in Sources */,
 				CC7431E52A07CD88004E0175 /* StoringQueryTests.swift in Sources */,
