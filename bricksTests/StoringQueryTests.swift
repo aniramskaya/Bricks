@@ -11,64 +11,69 @@ import bricks
 
 class StoringQueryTests: XCTestCase {
     func test_sut_doesNotMessageUponCreation() throws {
-        let (_, spy) = makeSUT()
+        let (_, storageSpy, querySpy) = makeSUT()
         
-        XCTAssertEqual(spy.messages, [])
+        XCTAssertEqual(storageSpy.messages, [])
+        XCTAssertEqual(querySpy.messages, [])
     }
     
     func test_load_deliversErrorOnWrappedQueryError() throws {
-        let (sut, spy) = makeSUT()
+        let (sut, storageSpy, querySpy) = makeSUT()
         let error = NSError.any()
 
         expect(
             sut: sut,
-            when: { spy.completeLoading(with: .failure(error)) },
+            when: { storageSpy.completeLoading(with: .failure(error)) },
             toCompleteWith: .failure(error)
         )
         
-        XCTAssertEqual(spy.messages, [.loadQuery])
+        XCTAssertEqual(storageSpy.messages, [.loadQuery])
+        XCTAssertEqual(querySpy.messages, [])
     }
  
     func test_load_deliversSuccessAndStoresOnWrappedQuerySuccess() throws {
-        let (sut, spy) = makeSUT()
+        let (sut, storageSpy, querySpy) = makeSUT()
         let result = UUID().uuidString
 
         expect(
             sut: sut,
-            when: { spy.completeLoading(with: .success(result)) },
+            when: { storageSpy.completeLoading(with: .success(result)) },
             toCompleteWith: .success(result)
         )
         
-        XCTAssertEqual(spy.messages, [.loadQuery, .saveStorage(result)])
+        XCTAssertEqual(storageSpy.messages, [.loadQuery])
+        XCTAssertEqual(querySpy.messages, [.saveStorage(result)])
     }
     
     func test_load_doesNotCallCompletionWhenDeallocated() {
-        var (sut, spy): (StoringQuery<QuerySpy, QuerySpy>?, QuerySpy)  = makeSUT()
+        var (sut, storageSpy, _): (StoringQuery<QuerySpy, StorageSpy>?, QuerySpy, StorageSpy)  = makeSUT()
         
         var completionCallCount = 0
         sut?.load { _ in
             completionCallCount += 1
         }
         sut = nil
-        spy.completeLoading(with: .failure(NSError.any()))
+        storageSpy.completeLoading(with: .failure(NSError.any()))
         
-        XCTAssertEqual(spy.messages, [.loadQuery,])
+        XCTAssertEqual(storageSpy.messages, [.loadQuery,])
         XCTAssertEqual(completionCallCount, 0)
     }
 
 
     // MARK: Private
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (StoringQuery<QuerySpy, QuerySpy>, QuerySpy) {
-        let spy = QuerySpy()
-        let sut = StoringQuery(query: spy, storage: spy)
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (StoringQuery<QuerySpy, StorageSpy>, QuerySpy, StorageSpy) {
+        let querySpy = QuerySpy()
+        let storageSpy = StorageSpy()
+        let sut = StoringQuery(query: querySpy, storage: storageSpy)
 
-        trackForMemoryLeaks(spy, file: file, line: line)
+        trackForMemoryLeaks(storageSpy, file: file, line: line)
+        trackForMemoryLeaks(querySpy, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
-        return (sut, spy)
+        return (sut, querySpy, storageSpy)
     }
     
-    private func expect(sut: StoringQuery<QuerySpy, QuerySpy>, when action: () -> Void, toCompleteWith expectedResult: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(sut: StoringQuery<QuerySpy, StorageSpy>, when action: () -> Void, toCompleteWith expectedResult: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) {
         
         let exp = expectation(description: "Wait for async query to complete")
         sut.load { result in
@@ -87,15 +92,12 @@ class StoringQueryTests: XCTestCase {
     }
 }
 
-private class QuerySpy: FailableQuery, SynchronousStorage {
+private class QuerySpy: FailableQuery {
     typealias Success = String
     typealias Failure = NSError
     
     enum Message: Equatable {
         case loadQuery
-        case loadStorage
-        case saveStorage(String)
-        case clearStorage
     }
     
     var messages: [Message] = []
@@ -109,19 +111,31 @@ private class QuerySpy: FailableQuery, SynchronousStorage {
     func completeLoading(with result: Result<String, NSError>, at index: Int = 0) {
         completions[index](result)
     }
+}
+
+private class StorageSpy: Storage {
+    enum Message: Equatable {
+        case loadStorage
+        case saveStorage(String)
+        case clearStorage
+    }
     
+    var messages: [Message] = []
+
     var timestamp: Date?
     
-    func load() -> String? {
+    func load(completion: (Result<String, Error>) -> Void) {
         messages.append(.loadStorage)
-        return nil
+        completion(.failure(NSError.any()))
     }
     
-    func save(_ value: String) {
+    func save(value: String, completion: (Error?) -> Void) {
         messages.append(.saveStorage(value))
+        completion(nil)
     }
     
-    func clear() {
+    func clear(completion: (Error?) -> Void) {
         messages.append(.clearStorage)
+        completion(nil)
     }
 }
