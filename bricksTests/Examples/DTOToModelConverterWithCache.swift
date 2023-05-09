@@ -43,7 +43,7 @@ class DTOToModelConverterWithCache: XCTestCase {
         let dto = DTO(value: uuid)
         let model = Model(value: uuid.uuidString)
         let dtoLoader = DTOLoader(dto: dto)
-        let sut = Converter(query: dtoLoader, map: DTO.toModel)
+        let sut = dtoLoader.convert(map: DTO.toModel)
         
         expect(sut: sut, toCompleteWith: .success(model))
     }

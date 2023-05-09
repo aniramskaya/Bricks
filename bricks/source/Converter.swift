@@ -36,3 +36,9 @@ public final class Converter<SourceQuery, Target>: Query where SourceQuery: Quer
         }
     }
 }
+
+public extension Query {
+    func convert<Source, Target>(map: @escaping (Source) -> Target) -> Converter<Self, Target> where Source == Result {
+        Converter(query: self, map: map)
+    }
+}
