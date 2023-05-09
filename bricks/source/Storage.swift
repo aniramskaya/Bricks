@@ -12,7 +12,7 @@ import Foundation
 /// Conform this protocol in your own storage classes to make them seamlessly integrated with ``bricks`` tools.
 ///
 /// As many posible types of storage including a file or a database have asynchronous behavior, this protocol is inherently asynchronous.
-public protocol Storage {
+public protocol Storage: FailableQuery where Success == Stored, Failure == Error {
     /// Type of data to store
     associatedtype Stored
     
@@ -26,7 +26,7 @@ public protocol Storage {
     /// - Parameters:
     ///   - completion: A closure to be called when loading has completed.
     ///
-    func load(completion: (Result<Stored, Error>) -> Void)
+    func load(completion: (Result) -> Void)
     
     /// Saves value
     ///
