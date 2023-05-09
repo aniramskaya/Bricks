@@ -24,8 +24,7 @@ class SynchronousStorageAdapter<WrappedStorage: SynchronousStorage>: Storage {
     var timestamp: Date? { wrappee.timestamp }
     
     func load(completion: (Result<Stored, Error>) -> Void) {
-        let _ = wrappee.load()
-        completion(.failure(StorageError.empty))
+        completion(wrappee.load().map { .success($0) } ?? .failure(StorageError.empty) )
     }
     
     func save(value: WrappedStorage.Stored, completion: (Error?) -> Void) {
@@ -59,6 +58,17 @@ class SynchronousStorageAdapterTests: XCTestCase {
         
         XCTAssertEqual(spy.messages, [.load])
     }
+    
+    func test_load_deliversValueOnNonEmptyCache() throws {
+        let (sut, spy) = makeSUT()
+        let value = UUID().uuidString
+        spy.value = value
+
+        expect(sut: sut, toCompleteWith: .success(value))
+        
+        XCTAssertEqual(spy.messages, [.load])
+    }
+
     
     private func makeSUT() -> (SynchronousStorageAdapter<SynchronousStorageSpy>, SynchronousStorageSpy) {
         let spy = SynchronousStorageSpy()
