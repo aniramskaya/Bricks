@@ -25,6 +25,7 @@
 		CC86FB2B2A07A40300416227 /* ConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB2A2A07A40300416227 /* ConverterTests.swift */; };
 		CC86FB2C2A07A40300416227 /* bricks.h in Headers */ = {isa = PBXBuildFile; fileRef = CC86FB1E2A07A40300416227 /* bricks.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC86FB382A07A49A00416227 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB372A07A49A00416227 /* Query.swift */; };
+		CCEFA6C92A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6C82A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		CC86FB252A07A40300416227 /* bricksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = bricksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC86FB2A2A07A40300416227 /* ConverterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterTests.swift; sourceTree = "<group>"; };
 		CC86FB372A07A49A00416227 /* Query.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
+		CCEFA6C82A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronousStorageAdapter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +128,7 @@
 				CC7431E42A07CD88004E0175 /* StoringQueryTests.swift */,
 				CC7431EE2A07E37B004E0175 /* FallbackTests.swift */,
 				CC7431F42A08D9CA004E0175 /* ExpirableCacheTests.swift */,
+				CCEFA6C82A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift */,
 			);
 			path = bricksTests;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 				CC7431ED2A07E2AB004E0175 /* NSError+Extensions.swift in Sources */,
 				CC7431EB2A07E22F004E0175 /* XCTestCase+Extensions.swift in Sources */,
 				CC7431E12A07C77B004E0175 /* InMemoryStorageTests.swift in Sources */,
+				CCEFA6C92A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift in Sources */,
 				CC7431EF2A07E37B004E0175 /* FallbackTests.swift in Sources */,
 				CC7431E52A07CD88004E0175 /* StoringQueryTests.swift in Sources */,
 				CC86FB2B2A07A40300416227 /* ConverterTests.swift in Sources */,
