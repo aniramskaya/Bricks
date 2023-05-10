@@ -37,14 +37,22 @@ public class Converter<SourceQuery, Target>: Query where SourceQuery: Query
     }
 }
 
+/// ``Converter`` subclass which conforms fo ``FailableQuery``
 public class FailableConverter<SourceQuery, Success, Failure: Error>: Converter<SourceQuery, Result<Success, Failure>>, FailableQuery
 where SourceQuery: Query { }
 
+
 public extension Query {
+    /// Wraps ``Query`` with ``Converter``
+    ///
+    /// This method is useful for chained composition
     func convert<Source, Target>(map: @escaping (Source) -> Target) -> Converter<Self, Target> where Source == Result {
         Converter(query: self, map: map)
     }
     
+    /// Wraps ``Query`` with ``FailableConverter`` if  it matches <doc:/documentation/bricks/Query/Result> type requirements
+    ///
+    /// This method is useful for chained composition
     func convert<Source, Success, Failure: Error>(map: @escaping (Source) -> Swift.Result<Success, Failure>) -> FailableConverter<Self, Success, Failure> where Source == Result  {
         FailableConverter(query: self, map: map)
     }

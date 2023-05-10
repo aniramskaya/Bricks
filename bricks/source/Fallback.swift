@@ -56,6 +56,10 @@ public final class Fallback<Primary: FailableQuery, Secondary: FailableQuery>: F
 }
 
 public extension FailableQuery {
+    /// Creates ``Fallback`` using **self** as the primary query
+    ///
+    /// - Parameters:
+    ///   - secondary: Secondary fallback query
     func fallback<Secondary: FailableQuery>(_ secondary: Secondary) -> Fallback<Self, Secondary> where Secondary.Success == Success {
         Fallback(primary: self, secondary: secondary)
     }
