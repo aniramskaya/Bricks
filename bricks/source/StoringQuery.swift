@@ -46,3 +46,9 @@ public final class StoringQuery<WrappedQuery: FailableQuery, WrappedStorage: Sto
         }
     }
 }
+
+public extension FailableQuery {
+    func storing<WrappedStorage: Storage>(into storage: WrappedStorage) -> StoringQuery<Self, WrappedStorage> where WrappedStorage.Stored == Success {
+        StoringQuery(query: self, storage: storage)
+    }
+}

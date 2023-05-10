@@ -27,3 +27,9 @@ public final class InMemoryStorage<Stored>: SynchronousStorage {
         timestamp = nil
     }
 }
+
+public extension InMemoryStorage {
+    func adapted() -> SynchronousStorageAdapter<InMemoryStorage> {
+        SynchronousStorageAdapter(wrappee: self)
+    }
+}

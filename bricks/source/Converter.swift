@@ -8,7 +8,7 @@
 import Foundation
 
 /// ``Query`` which loads data using another ``Query`` and then converts the result to a **Target** type
-public final class Converter<SourceQuery, Target>: Query where SourceQuery: Query
+public class Converter<SourceQuery, Target>: Query where SourceQuery: Query
 {
     /// A closure which converts ``Query/Result`` to a **Target** type
     public typealias TargetMapper = (SourceQuery.Result) -> Target
@@ -37,8 +37,15 @@ public final class Converter<SourceQuery, Target>: Query where SourceQuery: Quer
     }
 }
 
+public class FailableConverter<SourceQuery, Success, Failure: Error>: Converter<SourceQuery, Result<Success, Failure>>, FailableQuery
+where SourceQuery: Query { }
+
 public extension Query {
     func convert<Source, Target>(map: @escaping (Source) -> Target) -> Converter<Self, Target> where Source == Result {
         Converter(query: self, map: map)
+    }
+    
+    func convert<Source, Success, Failure: Error>(map: @escaping (Source) -> Swift.Result<Success, Failure>) -> FailableConverter<Self, Success, Failure> where Source == Result  {
+        FailableConverter(query: self, map: map)
     }
 }

@@ -39,19 +39,39 @@ class DTOLoader: FailableQuery {
 
 class DTOToModelConverterWithCache: XCTestCase {
     func test_dtoIsConvertedToModel() throws {
-        let uuid = UUID()
-        let dto = DTO(value: uuid)
-        let model = Model(value: uuid.uuidString)
-        let dtoLoader = DTOLoader(dto: dto)
-        let sut = dtoLoader.convert(map: DTO.toModel)
-        
+        let (dto, model) = matchingDTOAndModel()
+        let sut = DTOLoader(dto: dto).convert(map: DTO.toModel)
+
         expect(sut: sut, toCompleteWith: .success(model))
     }
     
-    private func expect(sut: Converter<DTOLoader, Result<Model, Error>>, toCompleteWith expectedResult: Result<Model, Error>, file: StaticString = #filePath, line: UInt = #line) {
+    func test_modelIsStored() throws {
+        let (dto, model) = matchingDTOAndModel()
+        let storage = InMemoryStorage<Model>().adapted()
+        
+        let sut = DTOLoader(dto: dto)
+        .convert(map: DTO.toModel)
+        .storing(into: storage)
+        
+        expect(sut: sut, toCompleteWith: .success(model))
+
+        storage.load { result in
+            XCTAssertEqual(try? result.get(), model)
+        }
+    }
+    
+    private func matchingDTOAndModel() -> (DTO, Model) {
+        let uuid = UUID()
+        let dto = DTO(value: uuid)
+        let model = Model(value: uuid.uuidString)
+
+        return (dto, model)
+    }
+    
+    private func expect<SUT: FailableQuery>(sut: SUT, toCompleteWith expectedResult: Result<Model, Error>, file: StaticString = #filePath, line: UInt = #line) where SUT.Success == Model, SUT.Failure == Error {
         
         let exp = expectation(description: "Wait for async query to complete")
-        sut.load { result in
+        sut.load { (result: Result<Model, Error>) in
             switch (result, expectedResult) {
             case let (.success(received), .success(expected)):
                 XCTAssertEqual(received, expected, file: file, line: line)
@@ -65,4 +85,10 @@ class DTOToModelConverterWithCache: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
 
+}
+
+class TimeIntervalValidationPolicy: TimestampValidationPolicy {
+    func validate(_: Date?) -> Bool {
+        return true
+    }
 }
