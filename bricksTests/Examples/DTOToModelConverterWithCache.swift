@@ -47,7 +47,7 @@ class DTOToModelConverterWithCache: XCTestCase {
     
     func test_modelIsStored() throws {
         let (dto, model) = matchingDTOAndModel()
-        let storage = InMemoryStorage<Model>().adapted()
+        let storage = InMemoryStorage<Model>().async()
         
         let sut = DTOLoader(dto: dto)
         .convert(map: DTO.toModel)

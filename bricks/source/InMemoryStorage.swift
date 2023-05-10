@@ -29,7 +29,7 @@ public final class InMemoryStorage<Stored>: SynchronousStorage {
 }
 
 public extension InMemoryStorage {
-    func adapted() -> SynchronousStorageAdapter<InMemoryStorage> {
+    func async() -> SynchronousStorageAdapter<InMemoryStorage> {
         SynchronousStorageAdapter(wrappee: self)
     }
 }
