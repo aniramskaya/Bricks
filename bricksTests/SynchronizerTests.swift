@@ -48,18 +48,14 @@ class Synchronizer<Query1: Query, Query2: Query>: Query {
 
 class SynchronizerTests: XCTestCase {
     func test_synchronizer_doesNotMessageUponCreation() throws {
-        let spy1 = QuerySpy()
-        let spy2 = QuerySpy()
-        let _ = Synchronizer(spy1, spy2)
+        let (_, spy1, spy2) = makeSUT()
         
         XCTAssertEqual(spy1.messages, [])
         XCTAssertEqual(spy2.messages, [])
     }
     
     func test_load_completesWhenBothQueriesComplete() throws {
-        let spy1 = QuerySpy()
-        let spy2 = QuerySpy()
-        let sut = Synchronizer(spy1, spy2)
+        let (sut, spy1, spy2) = makeSUT()
 
         let result1 = UUID().uuidString
         let result2 = UUID().uuidString
@@ -81,6 +77,14 @@ class SynchronizerTests: XCTestCase {
         XCTAssertEqual(spy1.messages, [.load])
         XCTAssertEqual(spy2.messages, [.load])
         XCTAssertEqual(completionCount, 1)
+    }
+    
+    private func makeSUT() -> (Synchronizer<QuerySpy, QuerySpy>, QuerySpy, QuerySpy) {
+        let spy1 = QuerySpy()
+        let spy2 = QuerySpy()
+        let sut = Synchronizer(spy1, spy2)
+
+        return (sut, spy1, spy2)
     }
 }
 
