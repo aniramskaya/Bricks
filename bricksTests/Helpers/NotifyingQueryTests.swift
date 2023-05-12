@@ -9,37 +9,6 @@ import Foundation
 import XCTest
 import bricks
 
-class NotifyingQuery<WrappedQuery: FailableQuery>: FailableQuery {
-    typealias Success = WrappedQuery.Success
-    typealias Failure = WrappedQuery.Failure
-    
-    let wrappee: WrappedQuery
-    let onSuccess: ((Success) -> Void)?
-    let onFailure: ((Failure) -> Void)?
-    
-    init(
-        wrappee: WrappedQuery,
-        onSuccess: ((Success) -> Void)? = nil,
-        onFailure: ((Failure) -> Void)? = nil
-    ) {
-        self.wrappee = wrappee
-        self.onSuccess = onSuccess
-        self.onFailure = onFailure
-    }
-    
-    func load(completion: @escaping (Result<Success, Failure>) -> Void) {
-        wrappee.load { [weak self] result in
-            guard let self else { return }
-            switch result {
-            case let .success(success):
-                self.onSuccess?(success)
-            case let .failure(error):
-                self.onFailure?(error)
-            }
-            completion(result)
-        }
-    }
-}
 
 class NotifyingQueryTests: XCTestCase {
     func test_doesNotMessageUponCreation() throws {

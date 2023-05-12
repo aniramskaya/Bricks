@@ -32,6 +32,7 @@
 		CCEFA6DD2A0DF32A00EC7BFA /* SecondChance.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6DC2A0DF32A00EC7BFA /* SecondChance.swift */; };
 		CCEFA6DF2A0DF62700EC7BFA /* SecondChanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6DE2A0DF62700EC7BFA /* SecondChanceTests.swift */; };
 		CCEFA6E42A0E478100EC7BFA /* NotifyingQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6E32A0E478100EC7BFA /* NotifyingQueryTests.swift */; };
+		CCEFA6EA2A0E5CD300EC7BFA /* NotifyingQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6E92A0E5CD300EC7BFA /* NotifyingQuery.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		CCEFA6DC2A0DF32A00EC7BFA /* SecondChance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondChance.swift; sourceTree = "<group>"; };
 		CCEFA6DE2A0DF62700EC7BFA /* SecondChanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondChanceTests.swift; sourceTree = "<group>"; };
 		CCEFA6E32A0E478100EC7BFA /* NotifyingQueryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyingQueryTests.swift; sourceTree = "<group>"; };
+		CCEFA6E92A0E5CD300EC7BFA /* NotifyingQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyingQuery.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +164,7 @@
 				CC7431F82A08E4A1004E0175 /* ExpirableCache.swift */,
 				CC7431FA2A09224B004E0175 /* Storage.swift */,
 				CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */,
+				CCEFA6E92A0E5CD300EC7BFA /* NotifyingQuery.swift */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CCEFA6EA2A0E5CD300EC7BFA /* NotifyingQuery.swift in Sources */,
 				CC86FB382A07A49A00416227 /* Query.swift in Sources */,
 				CC7431E32A07CA6B004E0175 /* InMemoryStorage.swift in Sources */,
 				CC7431DB2A07B7A9004E0175 /* Converter.swift in Sources */,
