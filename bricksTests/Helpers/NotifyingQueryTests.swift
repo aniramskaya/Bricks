@@ -35,35 +35,45 @@ class NotifyingQuery<WrappedQuery: FailableQuery>: FailableQuery {
 class NotifyingQueryTests: XCTestCase {
     func test_doesNotMessageUponCreation() throws {
         let stub = QueryStub(result: .success("AnyString"))
-        var onSuccessCallCount = 0
-        var onFailureCallCount = 0
         let _ =  NotifyingQuery(
             wrappee: stub,
-            onSuccess: { _ in onSuccessCallCount += 1},
-            onFailure: { _ in onFailureCallCount += 1}
+            onSuccess: stub.onSuccess,
+            onFailure: stub.onFailure
         )
         
-        XCTAssertEqual(stub.loadCallCount, 0)
-        XCTAssertEqual(onSuccessCallCount, 0)
-        XCTAssertEqual(onFailureCallCount, 0)
+        XCTAssertEqual(stub.messages, [])
     }
     
 }
 
 private class QueryStub: FailableQuery {
     typealias Success = String
-    typealias Failure = Error
-
+    typealias Failure = NSError
+    
+    enum Message: Equatable {
+        case load
+        case success(Success)
+        case failure(Failure)
+    }
+    
+    var messages: [Message] = []
+    
     var result: Result<Success, Failure>
     
     init(result: Result<Success, Failure>) {
         self.result = result
     }
     
-    var loadCallCount = 0
-    
     func load(completion: @escaping (Result<Success, Failure>) -> Void) {
-        loadCallCount += 1
+        messages.append(.load)
         completion(result)
+    }
+    
+    func onSuccess(_ value: Success) {
+        messages.append(.success(value))
+    }
+    
+    func onFailure(_ value: Failure) {
+        messages.append(.failure(value))
     }
 }
