@@ -33,7 +33,8 @@ class NotifyingQuery<WrappedQuery: FailableQuery>: FailableQuery {
             switch result {
             case let .success(success):
                 self.onSuccess?(success)
-            default: ()
+            case let .failure(error):
+                self.onFailure?(error)
             }
             completion(result)
         }
@@ -55,7 +56,16 @@ class NotifyingQueryTests: XCTestCase {
         
         XCTAssertEqual(stub.messages, [.load, .success(anyString)])
     }
-    
+
+    func test_load_callsOnFailureWhenLoadingFailed() throws {
+        let error = NSError.any()
+        let (sut, stub) = makeSUT(result: .failure(error))
+
+        expect(sut: sut, toCompleteWith: .failure(error))
+        
+        XCTAssertEqual(stub.messages, [.load, .failure(error)])
+    }
+
     private func makeSUT(result: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) -> (NotifyingQuery<QueryStub>, QueryStub) {
         let stub = QueryStub(result: result)
         let sut =  NotifyingQuery(
