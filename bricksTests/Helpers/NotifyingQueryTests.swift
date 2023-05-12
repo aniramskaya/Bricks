@@ -43,43 +43,69 @@ class NotifyingQuery<WrappedQuery: FailableQuery>: FailableQuery {
 
 class NotifyingQueryTests: XCTestCase {
     func test_doesNotMessageUponCreation() throws {
-        let (_, stub) = makeSUT(result: .success(UUID().uuidString))
+        let (_, stub) = makeSUT()
         
         XCTAssertEqual(stub.messages, [])
     }
     
     func test_load_callsOnSuccessWhenLoadingSucceded() throws {
         let anyString = UUID().uuidString
-        let (sut, stub) = makeSUT(result: .success(anyString))
+        let (sut, spy) = makeSUT()
 
-        expect(sut: sut, toCompleteWith: .success(anyString))
+        expect(
+            sut: sut,
+            when: { spy.complete(with: .success(anyString))  },
+            toCompleteWith: .success(anyString)
+        )
         
-        XCTAssertEqual(stub.messages, [.load, .success(anyString)])
+        XCTAssertEqual(spy.messages, [.load, .success(anyString)])
     }
 
     func test_load_callsOnFailureWhenLoadingFailed() throws {
         let error = NSError.any()
-        let (sut, stub) = makeSUT(result: .failure(error))
+        let (sut, spy) = makeSUT()
 
-        expect(sut: sut, toCompleteWith: .failure(error))
+        expect(
+            sut: sut,
+            when: { spy.complete(with: .failure(error))},
+            toCompleteWith: .failure(error)
+        )
         
-        XCTAssertEqual(stub.messages, [.load, .failure(error)])
+        XCTAssertEqual(spy.messages, [.load, .failure(error)])
     }
 
-    private func makeSUT(result: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) -> (NotifyingQuery<QueryStub>, QueryStub) {
-        let stub = QueryStub(result: result)
+    func test_load_doesNotCallCompletionWhenDeallocated() throws {
+        let spy = QuerySpy()
+        var onSuccessCallCount = 0
+        var onFailureCallCount = 0
+        var sut: NotifyingQuery<QuerySpy>? =  NotifyingQuery(
+            wrappee: spy,
+            onSuccess: { _ in onSuccessCallCount += 1},
+            onFailure: { _ in onFailureCallCount += 1}
+        )
+        
+        sut?.load{ _ in }
+        sut = nil
+        spy.complete(with: .success(""))
+        
+
+        XCTAssertEqual(spy.messages, [.load])
+    }
+
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (NotifyingQuery<QuerySpy>, QuerySpy) {
+        let spy = QuerySpy()
         let sut =  NotifyingQuery(
-            wrappee: stub,
-            onSuccess: stub.onSuccess,
-            onFailure: stub.onFailure
+            wrappee: spy,
+            onSuccess: spy.onSuccess,
+            onFailure: spy.onFailure
         )
 
         trackForMemoryLeaks(sut, file: file, line: line)
-        trackForMemoryLeaks(stub, file: file, line: line)
-        return (sut, stub)
+        trackForMemoryLeaks(spy, file: file, line: line)
+        return (sut, spy)
     }
     
-    private func expect(sut: NotifyingQuery<QueryStub>, toCompleteWith expectedResult: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(sut: NotifyingQuery<QuerySpy>, when action: () -> Void, toCompleteWith expectedResult: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) {
         
         let exp = expectation(description: "Wait for async query to complete")
         sut.load { result in
@@ -93,12 +119,13 @@ class NotifyingQueryTests: XCTestCase {
             }
             exp.fulfill()
         }
+        action()
         wait(for: [exp], timeout: 1.0)
     }
 
 }
 
-private class QueryStub: FailableQuery {
+private class QuerySpy: FailableQuery {
     typealias Success = String
     typealias Failure = NSError
     
@@ -109,16 +136,15 @@ private class QueryStub: FailableQuery {
     }
     
     var messages: [Message] = []
-    
-    var result: Result<Success, Failure>
-    
-    init(result: Result<Success, Failure>) {
-        self.result = result
-    }
+    var completions: [(Result<Success, Failure>) -> Void] = []
     
     func load(completion: @escaping (Result<Success, Failure>) -> Void) {
         messages.append(.load)
-        completion(result)
+        completions.append(completion)
+    }
+    
+    func complete(with result: Result<Success, Failure>, at index: Int = 0) {
+        completions[index](result)
     }
     
     func onSuccess(_ value: Success) {
