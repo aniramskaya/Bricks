@@ -28,7 +28,15 @@ class NotifyingQuery<WrappedQuery: FailableQuery>: FailableQuery {
     }
     
     func load(completion: @escaping (Result<Success, Failure>) -> Void) {
-        
+        wrappee.load { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case let .success(success):
+                self.onSuccess?(success)
+            default: ()
+            }
+            completion(result)
+        }
     }
 }
 
@@ -37,6 +45,15 @@ class NotifyingQueryTests: XCTestCase {
         let (_, stub) = makeSUT(result: .success(UUID().uuidString))
         
         XCTAssertEqual(stub.messages, [])
+    }
+    
+    func test_load_callsOnSuccessWhenLoadingSucceded() throws {
+        let anyString = UUID().uuidString
+        let (sut, stub) = makeSUT(result: .success(anyString))
+
+        expect(sut: sut, toCompleteWith: .success(anyString))
+        
+        XCTAssertEqual(stub.messages, [.load, .success(anyString)])
     }
     
     private func makeSUT(result: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) -> (NotifyingQuery<QueryStub>, QueryStub) {
@@ -51,6 +68,24 @@ class NotifyingQueryTests: XCTestCase {
         trackForMemoryLeaks(stub, file: file, line: line)
         return (sut, stub)
     }
+    
+    private func expect(sut: NotifyingQuery<QueryStub>, toCompleteWith expectedResult: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) {
+        
+        let exp = expectation(description: "Wait for async query to complete")
+        sut.load { result in
+            switch (result, expectedResult) {
+            case let (.success(received), .success(expected)):
+                XCTAssertEqual(received, expected, file: file, line: line)
+            case let (.failure(received), .failure(expected)):
+                XCTAssertEqual(received, expected, file: file, line: line)
+            default:
+                XCTFail("Expected \(expectedResult) got \(result) instead", file: file, line: line)
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+
 }
 
 private class QueryStub: FailableQuery {
