@@ -143,6 +143,24 @@ class CompositionHelpersTests: XCTestCase {
         expect(sut: sut, toCompleteWith: .failure(StorageError.empty))
     }
 
+    func test_notifyingCache() throws {
+        let storage = InMemoryStorage<Model>().asQuery()
+
+        var onSuccessCount = 0
+        var onFailureCount = 0
+        let sut = storage.notify(onSuccess: { _ in onSuccessCount += 1}, onFailure: { _ in onFailureCount += 1})
+        
+        expect(sut: sut, toCompleteWith: .failure(StorageError.empty))
+        XCTAssertEqual(onSuccessCount, 0)
+        XCTAssertEqual(onFailureCount, 1)
+        
+        let string = UUID().uuidString
+        storage.save(value: .init(value: string), completion: { _ in })
+        expect(sut: sut, toCompleteWith: .success(.init(value: string)))
+        XCTAssertEqual(onSuccessCount, 1)
+        XCTAssertEqual(onFailureCount, 1)
+    }
+
     
     private func matchingDTOAndModel() -> (DTO, Model) {
         let uuid = UUID()

@@ -7,6 +7,9 @@
 
 import Foundation
 
+/// ``FailableQuery`` which is able to notify sucscribers about successfull or failed load
+///
+/// Sometimes you may need to make some entity informed about query loading result. Use this decorator to make any failable query
 public class NotifyingQuery<WrappedQuery: FailableQuery>: FailableQuery {
     public typealias Success = WrappedQuery.Success
     public typealias Failure = WrappedQuery.Failure
@@ -36,5 +39,11 @@ public class NotifyingQuery<WrappedQuery: FailableQuery>: FailableQuery {
             }
             completion(result)
         }
+    }
+}
+
+extension FailableQuery {
+    public func notify(onSuccess: ((Success) -> Void)?, onFailure: ((Failure) -> Void)?) -> NotifyingQuery<Self> {
+        NotifyingQuery(wrappee: self, onSuccess: onSuccess, onFailure: onFailure)
     }
 }
