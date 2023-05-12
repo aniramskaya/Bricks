@@ -31,7 +31,8 @@ class Synchronizer<Query1: Query, Query2: Query>: Query {
         dispatchGroup.enter()
         dispatchGroup.enter()
         
-        dispatchGroup.notify(queue: queue, work: DispatchWorkItem(block: {
+        dispatchGroup.notify(queue: queue, work: DispatchWorkItem(block: { [weak self] in
+            guard self != nil else { return }
             completion((result1!, result2!))
         }))
         
@@ -77,6 +78,25 @@ class SynchronizerTests: XCTestCase {
         XCTAssertEqual(spy1.messages, [.load])
         XCTAssertEqual(spy2.messages, [.load])
         XCTAssertEqual(completionCount, 1)
+    }
+    
+    func test_load_doesNotCallCompletionWhenSUTIsDeallocated() {
+        let spy1 = QuerySpy()
+        let spy2 = QuerySpy()
+        var sut: Synchronizer<QuerySpy, QuerySpy>? = Synchronizer(spy1, spy2)
+
+        var completionCallCount = 0
+        sut?.load { _ in
+            completionCallCount += 1
+        }
+        
+        sut = nil
+        spy1.complete(with: "qwe")
+        spy2.complete(with: "asd")
+        
+        RunLoop.main.run(until: Date())
+        
+        XCTAssertEqual(completionCallCount, 0)
     }
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (Synchronizer<QuerySpy, QuerySpy>, QuerySpy, QuerySpy) {
