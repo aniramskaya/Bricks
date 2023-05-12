@@ -34,16 +34,21 @@ class NotifyingQuery<WrappedQuery: FailableQuery>: FailableQuery {
 
 class NotifyingQueryTests: XCTestCase {
     func test_doesNotMessageUponCreation() throws {
-        let stub = QueryStub(result: .success("AnyString"))
-        let _ =  NotifyingQuery(
-            wrappee: stub,
-            onSuccess: stub.onSuccess,
-            onFailure: stub.onFailure
-        )
+        let (_, stub) = makeSUT(result: .success(UUID().uuidString))
         
         XCTAssertEqual(stub.messages, [])
     }
     
+    private func makeSUT(result: Result<String, NSError>) -> (NotifyingQuery<QueryStub>, QueryStub) {
+        let stub = QueryStub(result: result)
+        let sut =  NotifyingQuery(
+            wrappee: stub,
+            onSuccess: stub.onSuccess,
+            onFailure: stub.onFailure
+        )
+
+        return (sut, stub)
+    }
 }
 
 private class QueryStub: FailableQuery {
