@@ -33,6 +33,7 @@
 		CCEFA6DF2A0DF62700EC7BFA /* SecondChanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6DE2A0DF62700EC7BFA /* SecondChanceTests.swift */; };
 		CCEFA6E42A0E478100EC7BFA /* NotifyingQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6E32A0E478100EC7BFA /* NotifyingQueryTests.swift */; };
 		CCEFA6EA2A0E5CD300EC7BFA /* NotifyingQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6E92A0E5CD300EC7BFA /* NotifyingQuery.swift */; };
+		CCEFA6EC2A0E68CD00EC7BFA /* SynchronizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6EB2A0E68CD00EC7BFA /* SynchronizerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		CCEFA6DE2A0DF62700EC7BFA /* SecondChanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondChanceTests.swift; sourceTree = "<group>"; };
 		CCEFA6E32A0E478100EC7BFA /* NotifyingQueryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyingQueryTests.swift; sourceTree = "<group>"; };
 		CCEFA6E92A0E5CD300EC7BFA /* NotifyingQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyingQuery.swift; sourceTree = "<group>"; };
+		CCEFA6EB2A0E68CD00EC7BFA /* SynchronizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronizerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,7 +102,6 @@
 			children = (
 				CC7431EA2A07E22F004E0175 /* XCTestCase+Extensions.swift */,
 				CC7431EC2A07E2AB004E0175 /* NSError+Extensions.swift */,
-				CCEFA6E32A0E478100EC7BFA /* NotifyingQueryTests.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -147,6 +148,8 @@
 				CC7431F42A08D9CA004E0175 /* ExpirableCacheTests.swift */,
 				CCEFA6C82A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift */,
 				CCEFA6CD2A0A48C000EC7BFA /* CompositionHelpersTests.swift */,
+				CCEFA6E32A0E478100EC7BFA /* NotifyingQueryTests.swift */,
+				CCEFA6EB2A0E68CD00EC7BFA /* SynchronizerTests.swift */,
 			);
 			path = bricksTests;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 				CCEFA6C92A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift in Sources */,
 				CCEFA6DF2A0DF62700EC7BFA /* SecondChanceTests.swift in Sources */,
 				CC7431EF2A07E37B004E0175 /* FallbackTests.swift in Sources */,
+				CCEFA6EC2A0E68CD00EC7BFA /* SynchronizerTests.swift in Sources */,
 				CC7431E52A07CD88004E0175 /* StoringQueryTests.swift in Sources */,
 				CC86FB2B2A07A40300416227 /* ConverterTests.swift in Sources */,
 				CCEFA6DB2A0DF0BA00EC7BFA /* Examples.swift in Sources */,
