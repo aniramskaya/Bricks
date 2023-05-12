@@ -58,18 +58,18 @@ class DTOLoaderNonfailable: Query {
 class CompositionHelpersTests: XCTestCase {
     func test_dtoIsConvertedToModel() throws {
         let (dto, model) = matchingDTOAndModel()
-        let sut = DTOLoader(dto: dto).convert(map: DTO.toModel)
+        let sut = DTOLoader(dto: dto).map(with: DTO.toModel)
 
         expect(sut: sut, toCompleteWith: .success(model))
     }
     
     func test_modelIsStored() throws {
         let (dto, model) = matchingDTOAndModel()
-        let storage = InMemoryStorage<Model>().async()
+        let storage = InMemoryStorage<Model>().asQuery()
         
         let sut = DTOLoader(dto: dto)
-        .convert(map: DTO.toModel)
-        .storing(into: storage)
+        .map(with: DTO.toModel)
+        .store(into: storage)
         
         expect(sut: sut, toCompleteWith: .success(model))
 
@@ -92,7 +92,7 @@ class CompositionHelpersTests: XCTestCase {
         let model2 = Model(value: UUID().uuidString)
 
         let storage = InMemoryStorage<Model>()
-        let sut = storage.async()
+        let sut = storage.asQuery()
         
         sut.save(value: model1, completion: { _ in })
         XCTAssertEqual(storage.load(), model1)
@@ -106,8 +106,8 @@ class CompositionHelpersTests: XCTestCase {
     
     func test_fallback() throws {
         let model = Model(value: UUID().uuidString)
-        let storage1 = InMemoryStorage<Model>().async()
-        let storage2 = InMemoryStorage<Model>().async()
+        let storage1 = InMemoryStorage<Model>().asQuery()
+        let storage2 = InMemoryStorage<Model>().asQuery()
         storage2.save(value: model, completion: { _ in })
         
         let sut = storage1.fallback(storage2)
@@ -120,7 +120,7 @@ class CompositionHelpersTests: XCTestCase {
         let model2 = Model(value: UUID().uuidString)
 
         let storage = InMemoryStorage<Model>()
-        let sut = storage.async().expirableCache(validationPolicy: TimeIntervalValidationPolicy())
+        let sut = storage.asQuery().expirable(validationPolicy: TimeIntervalValidationPolicy())
         
         storage.save(model1)
         expect(sut: sut, toCompleteWith: .success(model1))

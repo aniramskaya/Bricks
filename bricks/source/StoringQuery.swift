@@ -52,7 +52,7 @@ public extension FailableQuery {
     ///
     /// - Parameters:
     ///   - into: Storage to use in created ``StoringQuery``
-    func storing<WrappedStorage: Storage>(into storage: WrappedStorage) -> StoringQuery<Self, WrappedStorage> where WrappedStorage.Stored == Success {
+    func store<WrappedStorage: Storage>(into storage: WrappedStorage) -> StoringQuery<Self, WrappedStorage> where WrappedStorage.Stored == Success {
         StoringQuery(query: self, storage: storage)
     }
 }

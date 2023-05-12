@@ -53,7 +53,7 @@ public extension Query {
     /// Wraps ``Query`` with ``FailableConverter`` if  it matches <doc:/documentation/bricks/Query/Result> type requirements
     ///
     /// This method is useful for chained composition
-    func convert<Source, Success, Failure: Error>(map: @escaping (Source) -> Swift.Result<Success, Failure>) -> FailableConverter<Self, Success, Failure> where Source == Result  {
+    func map<Source, Success, Failure: Error>(with map: @escaping (Source) -> Swift.Result<Success, Failure>) -> FailableConverter<Self, Success, Failure> where Source == Result  {
         FailableConverter(query: self, map: map)
     }
 }

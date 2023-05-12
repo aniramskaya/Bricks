@@ -47,7 +47,7 @@ public class SynchronousStorageAdapter<WrappedStorage: SynchronousStorage>: Stor
 }
 
 public extension Storage {
-    func expirableCache(validationPolicy: TimestampValidationPolicy) -> ExpirableCache<Self> {
+    func expirable(validationPolicy: TimestampValidationPolicy) -> ExpirableCache<Self> {
         return ExpirableCache(storage: self, validationPolicy: validationPolicy)
     }
 }

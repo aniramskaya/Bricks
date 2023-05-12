@@ -28,6 +28,7 @@
 		CCEFA6C92A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6C82A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift */; };
 		CCEFA6CB2A0A466700EC7BFA /* SynchronousStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */; };
 		CCEFA6CE2A0A48C000EC7BFA /* CompositionHelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6CD2A0A48C000EC7BFA /* CompositionHelpersTests.swift */; };
+		CCEFA6DB2A0DF0BA00EC7BFA /* Examples.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6DA2A0DF0BA00EC7BFA /* Examples.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,7 @@
 		CCEFA6C82A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronousStorageAdapter.swift; sourceTree = "<group>"; };
 		CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronousStorageAdapter.swift; sourceTree = "<group>"; };
 		CCEFA6CD2A0A48C000EC7BFA /* CompositionHelpersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionHelpersTests.swift; sourceTree = "<group>"; };
+		CCEFA6DA2A0DF0BA00EC7BFA /* Examples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Examples.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +160,7 @@
 		CCEFA6CC2A0A489D00EC7BFA /* Examples */ = {
 			isa = PBXGroup;
 			children = (
+				CCEFA6DA2A0DF0BA00EC7BFA /* Examples.swift */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -296,6 +299,7 @@
 				CC7431EF2A07E37B004E0175 /* FallbackTests.swift in Sources */,
 				CC7431E52A07CD88004E0175 /* StoringQueryTests.swift in Sources */,
 				CC86FB2B2A07A40300416227 /* ConverterTests.swift in Sources */,
+				CCEFA6DB2A0DF0BA00EC7BFA /* Examples.swift in Sources */,
 				CC7431F52A08D9CA004E0175 /* ExpirableCacheTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
