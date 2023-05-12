@@ -17,6 +17,10 @@ extension DTO {
     static func toModel(_ result: Result<DTO, Error>) -> Result<Model, Error> {
         result.map { Model(value: $0.value.uuidString) }
     }
+    
+    static func model(_ dto: DTO) -> Model {
+        Model(value: dto.value.uuidString)
+    }
 }
 
 struct Model: Equatable {
@@ -36,6 +40,20 @@ class DTOLoader: FailableQuery {
         completion(.success(dto))
     }
 }
+
+class DTOLoaderNonfailable: Query {
+    typealias Result = DTO
+    
+    let dto: DTO
+    init(dto: DTO) {
+        self.dto = dto
+    }
+    
+    func load(completion: @escaping (DTO) -> Void) {
+        completion(dto)
+    }
+}
+
 
 class DTOToModelConverterWithCache: XCTestCase {
     func test_dtoIsConvertedToModel() throws {
@@ -57,6 +75,15 @@ class DTOToModelConverterWithCache: XCTestCase {
 
         storage.load { result in
             XCTAssertEqual(try? result.get(), model)
+        }
+    }
+    
+    func test_nonFailableQueryConvert() throws {
+        let (dto, model) = matchingDTOAndModel()
+        let sut = DTOLoaderNonfailable(dto: dto).convert(map: DTO.model)
+        
+        sut.load { result in
+            XCTAssertEqual(result, model)
         }
     }
     
