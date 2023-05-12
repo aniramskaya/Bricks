@@ -27,4 +27,19 @@ enum Examples {
             .store(into: storage)
         )
     }
+    
+    static func onceLoadedAlwaysStaysInMind() -> any FailableQuery {
+        let dto = DTO(value: UUID())
+        
+        let storage = InMemoryStorage<Model>().asQuery()
+        
+        return storage
+        .expirable(validationPolicy: TimeIntervalValidationPolicy())
+        .fallback(
+            DTOLoader(dto: dto)
+            .map(with: DTO.toModel)
+            .store(into: storage)
+            .secondChance(storage)
+        )
+    }
 }
