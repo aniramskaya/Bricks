@@ -115,6 +115,17 @@ class CompositionHelpersTests: XCTestCase {
         expect(sut: sut, toCompleteWith: .success(model))
     }
     
+    func test_secondChance() throws {
+        let model = Model(value: UUID().uuidString)
+        let storage1 = InMemoryStorage<Model>().asQuery()
+        let storage2 = InMemoryStorage<Model>().asQuery()
+        storage2.save(value: model, completion: { _ in })
+        
+        let sut = storage1.secondChance(storage2)
+        
+        expect(sut: sut, toCompleteWith: .success(model))
+    }
+    
     func test_expirableCache() throws {
         let model1 = Model(value: UUID().uuidString)
         let model2 = Model(value: UUID().uuidString)

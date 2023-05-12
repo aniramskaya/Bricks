@@ -29,6 +29,8 @@
 		CCEFA6CB2A0A466700EC7BFA /* SynchronousStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */; };
 		CCEFA6CE2A0A48C000EC7BFA /* CompositionHelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6CD2A0A48C000EC7BFA /* CompositionHelpersTests.swift */; };
 		CCEFA6DB2A0DF0BA00EC7BFA /* Examples.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6DA2A0DF0BA00EC7BFA /* Examples.swift */; };
+		CCEFA6DD2A0DF32A00EC7BFA /* SecondChance.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6DC2A0DF32A00EC7BFA /* SecondChance.swift */; };
+		CCEFA6DF2A0DF62700EC7BFA /* SecondChanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6DE2A0DF62700EC7BFA /* SecondChanceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +68,8 @@
 		CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronousStorageAdapter.swift; sourceTree = "<group>"; };
 		CCEFA6CD2A0A48C000EC7BFA /* CompositionHelpersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionHelpersTests.swift; sourceTree = "<group>"; };
 		CCEFA6DA2A0DF0BA00EC7BFA /* Examples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Examples.swift; sourceTree = "<group>"; };
+		CCEFA6DC2A0DF32A00EC7BFA /* SecondChance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondChance.swift; sourceTree = "<group>"; };
+		CCEFA6DE2A0DF62700EC7BFA /* SecondChanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondChanceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +138,7 @@
 				CC7431E02A07C77B004E0175 /* InMemoryStorageTests.swift */,
 				CC7431E42A07CD88004E0175 /* StoringQueryTests.swift */,
 				CC7431EE2A07E37B004E0175 /* FallbackTests.swift */,
+				CCEFA6DE2A0DF62700EC7BFA /* SecondChanceTests.swift */,
 				CC7431F42A08D9CA004E0175 /* ExpirableCacheTests.swift */,
 				CCEFA6C82A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift */,
 				CCEFA6CD2A0A48C000EC7BFA /* CompositionHelpersTests.swift */,
@@ -149,6 +154,7 @@
 				CC7431E22A07CA6B004E0175 /* InMemoryStorage.swift */,
 				CC7431F02A07E4A8004E0175 /* StoringQuery.swift */,
 				CC7431F22A07EDF4004E0175 /* Fallback.swift */,
+				CCEFA6DC2A0DF32A00EC7BFA /* SecondChance.swift */,
 				CC7431F62A08E476004E0175 /* TimestampValidationPolicy.swift */,
 				CC7431F82A08E4A1004E0175 /* ExpirableCache.swift */,
 				CC7431FA2A09224B004E0175 /* Storage.swift */,
@@ -283,6 +289,7 @@
 				CC7431F12A07E4A8004E0175 /* StoringQuery.swift in Sources */,
 				CCEFA6CB2A0A466700EC7BFA /* SynchronousStorageAdapter.swift in Sources */,
 				CC86FB202A07A40300416227 /* bricks.docc in Sources */,
+				CCEFA6DD2A0DF32A00EC7BFA /* SecondChance.swift in Sources */,
 				CC7431F92A08E4A1004E0175 /* ExpirableCache.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -296,6 +303,7 @@
 				CC7431E12A07C77B004E0175 /* InMemoryStorageTests.swift in Sources */,
 				CCEFA6CE2A0A48C000EC7BFA /* CompositionHelpersTests.swift in Sources */,
 				CCEFA6C92A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift in Sources */,
+				CCEFA6DF2A0DF62700EC7BFA /* SecondChanceTests.swift in Sources */,
 				CC7431EF2A07E37B004E0175 /* FallbackTests.swift in Sources */,
 				CC7431E52A07CD88004E0175 /* StoringQueryTests.swift in Sources */,
 				CC86FB2B2A07A40300416227 /* ConverterTests.swift in Sources */,

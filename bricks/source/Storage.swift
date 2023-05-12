@@ -22,7 +22,7 @@ public protocol Storage: FailableQuery where Success == Stored, Failure == Error
     /// Type of data to store
     associatedtype Stored
     
-    /// The date of the last successful ``save(completion:)`` operation
+    /// The date of the last successful ``save(value:completion:)`` operation
     var timestamp: Date? { get }
     
     /// Retrieves stored value
