@@ -57,6 +57,7 @@ class NotifyingQueryTests: XCTestCase {
         sut = nil
         spy.complete(with: .success(""))
         
+        RunLoop.main.run(until: Date())
 
         XCTAssertEqual(spy.messages, [.load])
     }

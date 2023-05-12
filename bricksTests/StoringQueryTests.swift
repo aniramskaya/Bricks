@@ -55,6 +55,8 @@ class StoringQueryTests: XCTestCase {
         sut = nil
         storageSpy.completeLoading(with: .failure(NSError.any()))
         
+        RunLoop.main.run(until: Date())
+
         XCTAssertEqual(storageSpy.messages, [.loadQuery,])
         XCTAssertEqual(completionCallCount, 0)
     }

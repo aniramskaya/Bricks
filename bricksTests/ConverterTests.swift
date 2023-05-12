@@ -50,6 +50,8 @@ final class ConverterTests: XCTestCase {
         sut = nil
         spy.completeLoading(with: SourceModel.any())
         
+        RunLoop.main.run(until: Date())
+
         XCTAssertEqual(spy.messages, [.load,])
         XCTAssertEqual(completionCallCount, 0)
     }

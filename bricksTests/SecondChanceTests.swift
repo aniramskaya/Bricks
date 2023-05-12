@@ -82,6 +82,8 @@ class SecondChanceTests: XCTestCase {
         sut = nil
         spy.completeLoading(with: .success(UUID().uuidString))
         
+        RunLoop.main.run(until: Date())
+
         XCTAssertEqual(spy.messages, [.load])
         XCTAssertEqual(secondary.messages, [])
         XCTAssertEqual(completionCallCount, 0)
@@ -98,6 +100,8 @@ class SecondChanceTests: XCTestCase {
         sut = nil
         secondary.completeLoading(with: .success(UUID().uuidString))
         
+        RunLoop.main.run(until: Date())
+
         XCTAssertEqual(primary.messages, [.load])
         XCTAssertEqual(secondary.messages, [.load])
         XCTAssertEqual(completionCallCount, 0)
