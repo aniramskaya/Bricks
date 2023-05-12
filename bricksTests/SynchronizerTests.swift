@@ -79,10 +79,14 @@ class SynchronizerTests: XCTestCase {
         XCTAssertEqual(completionCount, 1)
     }
     
-    private func makeSUT() -> (Synchronizer<QuerySpy, QuerySpy>, QuerySpy, QuerySpy) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (Synchronizer<QuerySpy, QuerySpy>, QuerySpy, QuerySpy) {
         let spy1 = QuerySpy()
         let spy2 = QuerySpy()
         let sut = Synchronizer(spy1, spy2)
+
+        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeaks(spy1, file: file, line: line)
+        trackForMemoryLeaks(spy2, file: file, line: line)
 
         return (sut, spy1, spy2)
     }
