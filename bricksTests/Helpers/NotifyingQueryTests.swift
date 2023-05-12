@@ -39,7 +39,7 @@ class NotifyingQueryTests: XCTestCase {
         XCTAssertEqual(stub.messages, [])
     }
     
-    private func makeSUT(result: Result<String, NSError>) -> (NotifyingQuery<QueryStub>, QueryStub) {
+    private func makeSUT(result: Result<String, NSError>, file: StaticString = #filePath, line: UInt = #line) -> (NotifyingQuery<QueryStub>, QueryStub) {
         let stub = QueryStub(result: result)
         let sut =  NotifyingQuery(
             wrappee: stub,
@@ -47,6 +47,8 @@ class NotifyingQueryTests: XCTestCase {
             onFailure: stub.onFailure
         )
 
+        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeaks(stub, file: file, line: line)
         return (sut, stub)
     }
 }
