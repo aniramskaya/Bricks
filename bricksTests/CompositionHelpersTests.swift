@@ -1,5 +1,5 @@
 //
-//  DTOToModelConverterWithCache.swift
+//  CompositionHelpersTests.swift
 //  bricksTests
 //
 //  Created by Марина Чемезова on 09.05.2023.
@@ -55,7 +55,7 @@ class DTOLoaderNonfailable: Query {
 }
 
 
-class DTOToModelConverterWithCache: XCTestCase {
+class CompositionHelpersTests: XCTestCase {
     func test_dtoIsConvertedToModel() throws {
         let (dto, model) = matchingDTOAndModel()
         let sut = DTOLoader(dto: dto).convert(map: DTO.toModel)
@@ -86,6 +86,52 @@ class DTOToModelConverterWithCache: XCTestCase {
             XCTAssertEqual(result, model)
         }
     }
+    
+    func test_synchronousStorageAdapter() throws {
+        let model1 = Model(value: UUID().uuidString)
+        let model2 = Model(value: UUID().uuidString)
+
+        let storage = InMemoryStorage<Model>()
+        let sut = storage.async()
+        
+        sut.save(value: model1, completion: { _ in })
+        XCTAssertEqual(storage.load(), model1)
+        
+        storage.save(model2)
+        expect(sut: sut, toCompleteWith: .success(model2))
+        
+        sut.clear(completion: { _ in })
+        expect(sut: sut, toCompleteWith: .failure(StorageError.empty))
+    }
+    
+    func test_fallback() throws {
+        let model = Model(value: UUID().uuidString)
+        let storage1 = InMemoryStorage<Model>().async()
+        let storage2 = InMemoryStorage<Model>().async()
+        storage2.save(value: model, completion: { _ in })
+        
+        let sut = storage1.fallback(storage2)
+        
+        expect(sut: sut, toCompleteWith: .success(model))
+    }
+    
+    func test_expirableCache() throws {
+        let model1 = Model(value: UUID().uuidString)
+        let model2 = Model(value: UUID().uuidString)
+
+        let storage = InMemoryStorage<Model>()
+        let sut = storage.async().expirableCache(validationPolicy: TimeIntervalValidationPolicy())
+        
+        storage.save(model1)
+        expect(sut: sut, toCompleteWith: .success(model1))
+
+        storage.save(model2)
+        expect(sut: sut, toCompleteWith: .success(model2))
+        
+        storage.clear()
+        expect(sut: sut, toCompleteWith: .failure(StorageError.empty))
+    }
+
     
     private func matchingDTOAndModel() -> (DTO, Model) {
         let uuid = UUID()
