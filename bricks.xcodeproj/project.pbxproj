@@ -31,6 +31,7 @@
 		CCEFA6DB2A0DF0BA00EC7BFA /* Examples.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6DA2A0DF0BA00EC7BFA /* Examples.swift */; };
 		CCEFA6DD2A0DF32A00EC7BFA /* SecondChance.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6DC2A0DF32A00EC7BFA /* SecondChance.swift */; };
 		CCEFA6DF2A0DF62700EC7BFA /* SecondChanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6DE2A0DF62700EC7BFA /* SecondChanceTests.swift */; };
+		CCEFA6E42A0E478100EC7BFA /* NotifyingQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6E32A0E478100EC7BFA /* NotifyingQueryTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		CCEFA6DA2A0DF0BA00EC7BFA /* Examples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Examples.swift; sourceTree = "<group>"; };
 		CCEFA6DC2A0DF32A00EC7BFA /* SecondChance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondChance.swift; sourceTree = "<group>"; };
 		CCEFA6DE2A0DF62700EC7BFA /* SecondChanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondChanceTests.swift; sourceTree = "<group>"; };
+		CCEFA6E32A0E478100EC7BFA /* NotifyingQueryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyingQueryTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 			children = (
 				CC7431EA2A07E22F004E0175 /* XCTestCase+Extensions.swift */,
 				CC7431EC2A07E2AB004E0175 /* NSError+Extensions.swift */,
+				CCEFA6E32A0E478100EC7BFA /* NotifyingQueryTests.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 				CC7431EB2A07E22F004E0175 /* XCTestCase+Extensions.swift in Sources */,
 				CC7431E12A07C77B004E0175 /* InMemoryStorageTests.swift in Sources */,
 				CCEFA6CE2A0A48C000EC7BFA /* CompositionHelpersTests.swift in Sources */,
+				CCEFA6E42A0E478100EC7BFA /* NotifyingQueryTests.swift in Sources */,
 				CCEFA6C92A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift in Sources */,
 				CCEFA6DF2A0DF62700EC7BFA /* SecondChanceTests.swift in Sources */,
 				CC7431EF2A07E37B004E0175 /* FallbackTests.swift in Sources */,
