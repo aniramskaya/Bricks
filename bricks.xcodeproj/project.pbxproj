@@ -25,6 +25,7 @@
 		CC86FB2B2A07A40300416227 /* ConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB2A2A07A40300416227 /* ConverterTests.swift */; };
 		CC86FB2C2A07A40300416227 /* bricks.h in Headers */ = {isa = PBXBuildFile; fileRef = CC86FB1E2A07A40300416227 /* bricks.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC86FB382A07A49A00416227 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB372A07A49A00416227 /* Query.swift */; };
+		CC93E1E62A1253FB00003525 /* Synchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC93E1E52A1253FB00003525 /* Synchronizer.swift */; };
 		CCEFA6C92A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6C82A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift */; };
 		CCEFA6CB2A0A466700EC7BFA /* SynchronousStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */; };
 		CCEFA6CE2A0A48C000EC7BFA /* CompositionHelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6CD2A0A48C000EC7BFA /* CompositionHelpersTests.swift */; };
@@ -67,6 +68,7 @@
 		CC86FB252A07A40300416227 /* bricksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = bricksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC86FB2A2A07A40300416227 /* ConverterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterTests.swift; sourceTree = "<group>"; };
 		CC86FB372A07A49A00416227 /* Query.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
+		CC93E1E52A1253FB00003525 /* Synchronizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Synchronizer.swift; sourceTree = "<group>"; };
 		CCEFA6C82A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronousStorageAdapter.swift; sourceTree = "<group>"; };
 		CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronousStorageAdapter.swift; sourceTree = "<group>"; };
 		CCEFA6CD2A0A48C000EC7BFA /* CompositionHelpersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionHelpersTests.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 				CC7431FA2A09224B004E0175 /* Storage.swift */,
 				CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */,
 				CCEFA6E92A0E5CD300EC7BFA /* NotifyingQuery.swift */,
+				CC93E1E52A1253FB00003525 /* Synchronizer.swift */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 				CC7431E32A07CA6B004E0175 /* InMemoryStorage.swift in Sources */,
 				CC7431DB2A07B7A9004E0175 /* Converter.swift in Sources */,
 				CC7431F72A08E476004E0175 /* TimestampValidationPolicy.swift in Sources */,
+				CC93E1E62A1253FB00003525 /* Synchronizer.swift in Sources */,
 				CC7431F32A07EDF4004E0175 /* Fallback.swift in Sources */,
 				CC7431FB2A09224B004E0175 /* Storage.swift in Sources */,
 				CC7431F12A07E4A8004E0175 /* StoringQuery.swift in Sources */,
