@@ -48,3 +48,9 @@ public class Synchronizer<Query1: Query, Query2: Query>: Query {
         }
     }
 }
+
+public extension Query {
+    func synchronize<Another: Query>(with another: Another) -> Synchronizer<Self, Another> {
+        Synchronizer(self, another)
+    }
+}

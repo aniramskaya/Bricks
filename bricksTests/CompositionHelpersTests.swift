@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 import bricks
 
-struct DTO: Encodable {
+struct DTO: Encodable, Equatable {
     let value: UUID
 }
 
@@ -159,6 +159,20 @@ class CompositionHelpersTests: XCTestCase {
         expect(sut: sut, toCompleteWith: .success(.init(value: string)))
         XCTAssertEqual(onSuccessCount, 1)
         XCTAssertEqual(onFailureCount, 1)
+    }
+    
+    func test_synchronize() throws {
+        let dto1 = DTO(value: UUID())
+        let query1 = DTOLoaderNonfailable(dto: dto1)
+
+        let dto2 = DTO(value: UUID())
+        let query2 = DTOLoaderNonfailable(dto: dto2)
+        
+        let synchronizer = query1.synchronize(with: query2)
+        synchronizer.load { (result1, result2) in
+            XCTAssertEqual(result1, dto1)
+            XCTAssertEqual(result2, dto2)
+        }
     }
 
     
