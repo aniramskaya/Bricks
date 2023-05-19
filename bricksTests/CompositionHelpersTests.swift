@@ -131,7 +131,7 @@ class CompositionHelpersTests: XCTestCase {
         let model2 = Model(value: UUID().uuidString)
 
         let storage = InMemoryStorage<Model>()
-        let sut = storage.asQuery().expirable(validationPolicy: TimeIntervalValidationPolicy())
+        let sut = storage.asQuery().expiring(validationPolicy: TimeIntervalValidationPolicy())
         
         storage.save(model1)
         expect(sut: sut, toCompleteWith: .success(model1))

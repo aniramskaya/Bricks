@@ -13,7 +13,7 @@ public enum ExpirableCacheError: Swift.Error, Equatable {
 }
 
 /// ``FailableQuery`` which loads data from ``Storage`` when its timestamp is valid according to ``TimestampValidationPolicy``
-public final class ExpirableCache<Storage: bricks.Storage>: FailableQuery {
+public final class ExpiringCache<Storage: bricks.Storage>: FailableQuery {
     /// Type of data to be stored in a cache. This type is the same as ``Storage/Stored``
     public typealias Success = Storage.Stored
     /// Error type to be passed into completion closure. It is a **Swift.Error** because we cannot predict possible storage errors.
@@ -45,5 +45,12 @@ public final class ExpirableCache<Storage: bricks.Storage>: FailableQuery {
         } else {
             completion(.failure(ExpirableCacheError.expired))
         }
+    }
+}
+
+public extension Storage {
+    /// Decorates storage whth ``ExpiringCache`` using applied ``TimestampValidationPolicy``
+    func expiring(validationPolicy: TimestampValidationPolicy) -> ExpiringCache<Self> {
+        return ExpiringCache(storage: self, validationPolicy: validationPolicy)
     }
 }

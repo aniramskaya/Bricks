@@ -48,16 +48,16 @@ class ExpirableCacheTests: XCTestCase {
         XCTAssertEqual(spy.messages, [.validate(spy.timestamp), .load])
     }
     
-    private func makeSUT() -> (ExpirableCache<StorageSpy>, StorageSpy) {
+    private func makeSUT() -> (ExpiringCache<StorageSpy>, StorageSpy) {
         let spy = StorageSpy()
-        let sut = ExpirableCache<StorageSpy>(storage: spy, validationPolicy: spy)
+        let sut = ExpiringCache<StorageSpy>(storage: spy, validationPolicy: spy)
 
         trackForMemoryLeaks(spy)
         trackForMemoryLeaks(sut)
         return (sut, spy)
     }
 
-    private func expect(sut: ExpirableCache<StorageSpy>, toCompleteWith expectedResult: Result<String, Swift.Error>, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(sut: ExpiringCache<StorageSpy>, toCompleteWith expectedResult: Result<String, Swift.Error>, file: StaticString = #filePath, line: UInt = #line) {
         
         let exp = expectation(description: "Wait for async query to complete")
         sut.load { result in

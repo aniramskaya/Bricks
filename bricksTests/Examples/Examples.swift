@@ -20,7 +20,7 @@ enum Examples {
         let storage = InMemoryStorage<Model>().asQuery()
         
         return storage
-        .expirable(validationPolicy: TimeIntervalValidationPolicy())
+        .expiring(validationPolicy: TimeIntervalValidationPolicy())
         .fallback(
             DTOLoader(dto: dto)
             .map(with: DTO.toModel)
@@ -34,7 +34,7 @@ enum Examples {
         let storage = InMemoryStorage<Model>().asQuery()
         
         return storage
-        .expirable(validationPolicy: TimeIntervalValidationPolicy())
+        .expiring(validationPolicy: TimeIntervalValidationPolicy())
         .fallback(
             DTOLoader(dto: dto)
             .map(with: DTO.toModel)

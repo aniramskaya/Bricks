@@ -18,7 +18,7 @@
 		CC7431F32A07EDF4004E0175 /* Fallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431F22A07EDF4004E0175 /* Fallback.swift */; };
 		CC7431F52A08D9CA004E0175 /* ExpirableCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431F42A08D9CA004E0175 /* ExpirableCacheTests.swift */; };
 		CC7431F72A08E476004E0175 /* TimestampValidationPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431F62A08E476004E0175 /* TimestampValidationPolicy.swift */; };
-		CC7431F92A08E4A1004E0175 /* ExpirableCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431F82A08E4A1004E0175 /* ExpirableCache.swift */; };
+		CC7431F92A08E4A1004E0175 /* ExpiringCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431F82A08E4A1004E0175 /* ExpiringCache.swift */; };
 		CC7431FB2A09224B004E0175 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431FA2A09224B004E0175 /* Storage.swift */; };
 		CC86FB202A07A40300416227 /* bricks.docc in Sources */ = {isa = PBXBuildFile; fileRef = CC86FB1F2A07A40300416227 /* bricks.docc */; };
 		CC86FB262A07A40300416227 /* bricks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC86FB1B2A07A40300416227 /* bricks.framework */; };
@@ -60,7 +60,7 @@
 		CC7431F22A07EDF4004E0175 /* Fallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fallback.swift; sourceTree = "<group>"; };
 		CC7431F42A08D9CA004E0175 /* ExpirableCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpirableCacheTests.swift; sourceTree = "<group>"; };
 		CC7431F62A08E476004E0175 /* TimestampValidationPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampValidationPolicy.swift; sourceTree = "<group>"; };
-		CC7431F82A08E4A1004E0175 /* ExpirableCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpirableCache.swift; sourceTree = "<group>"; };
+		CC7431F82A08E4A1004E0175 /* ExpiringCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiringCache.swift; sourceTree = "<group>"; };
 		CC7431FA2A09224B004E0175 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		CC86FB1B2A07A40300416227 /* bricks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = bricks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC86FB1E2A07A40300416227 /* bricks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bricks.h; sourceTree = "<group>"; };
@@ -166,7 +166,7 @@
 				CC7431F22A07EDF4004E0175 /* Fallback.swift */,
 				CCEFA6DC2A0DF32A00EC7BFA /* SecondChance.swift */,
 				CC7431F62A08E476004E0175 /* TimestampValidationPolicy.swift */,
-				CC7431F82A08E4A1004E0175 /* ExpirableCache.swift */,
+				CC7431F82A08E4A1004E0175 /* ExpiringCache.swift */,
 				CC7431FA2A09224B004E0175 /* Storage.swift */,
 				CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */,
 				CCEFA6E92A0E5CD300EC7BFA /* NotifyingQuery.swift */,
@@ -304,7 +304,7 @@
 				CCEFA6CB2A0A466700EC7BFA /* SynchronousStorageAdapter.swift in Sources */,
 				CC86FB202A07A40300416227 /* bricks.docc in Sources */,
 				CCEFA6DD2A0DF32A00EC7BFA /* SecondChance.swift in Sources */,
-				CC7431F92A08E4A1004E0175 /* ExpirableCache.swift in Sources */,
+				CC7431F92A08E4A1004E0175 /* ExpiringCache.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

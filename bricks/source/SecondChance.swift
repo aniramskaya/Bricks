@@ -13,7 +13,7 @@ import Foundation
 ///
 /// > Impotant: Notice that Fallback only requires equivalence of **Success** types for both queries, and they may have different **Failure** types. As Fallback never returns **Failure** from **secondary** (as discussed in ``load(completion:)``) its own **Failure** type is always the same as **Failure** of **primary**.
 ///
-/// > Warning: Don't be confused with ``Fallback`` and ``SecondChance``. They work in the same approach and the only difference is that in when both queries failed ``Fallback`` returns second query error but ``SecondChance`` returns first query error.
+/// > Warning: Don't be confused with ``Fallback`` and ``SecondChance``. They work in the same approach and the only difference is that when both queries failed ``Fallback`` returns second query error but ``SecondChance`` returns first query error.
 public final class SecondChance<Primary: FailableQuery, Secondary: FailableQuery>: FailableQuery
     where Primary.Success == Secondary.Success
 {

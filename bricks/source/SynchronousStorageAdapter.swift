@@ -45,9 +45,3 @@ public class SynchronousStorageAdapter<WrappedStorage: SynchronousStorage>: Stor
         completion(nil)
     }
 }
-
-public extension Storage {
-    func expirable(validationPolicy: TimestampValidationPolicy) -> ExpirableCache<Self> {
-        return ExpirableCache(storage: self, validationPolicy: validationPolicy)
-    }
-}
