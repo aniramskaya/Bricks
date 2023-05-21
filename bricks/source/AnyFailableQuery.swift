@@ -37,7 +37,7 @@ public struct AnyFailableQuery<Success, Failure: Error>: FailableQuery {
     }
 }
 
-extension FailableQuery {
+public extension FailableQuery {
     func erased() -> AnyFailableQuery<Self.Success, Self.Failure> {
         AnyFailableQuery(self)
     }
