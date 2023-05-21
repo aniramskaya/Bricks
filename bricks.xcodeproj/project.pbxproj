@@ -36,6 +36,8 @@
 		CCEFA6EA2A0E5CD300EC7BFA /* NotifyingQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6E92A0E5CD300EC7BFA /* NotifyingQuery.swift */; };
 		CCEFA6EC2A0E68CD00EC7BFA /* SynchronizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA6EB2A0E68CD00EC7BFA /* SynchronizerTests.swift */; };
 		CCFD06042A19F2100069B7A2 /* FailableQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD06032A19F2100069B7A2 /* FailableQuery.swift */; };
+		CCFD06062A19F24D0069B7A2 /* AnyQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD06052A19F24D0069B7A2 /* AnyQuery.swift */; };
+		CCFD06082A19F95E0069B7A2 /* AnyFailableQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD06072A19F95E0069B7A2 /* AnyFailableQuery.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +82,8 @@
 		CCEFA6E92A0E5CD300EC7BFA /* NotifyingQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyingQuery.swift; sourceTree = "<group>"; };
 		CCEFA6EB2A0E68CD00EC7BFA /* SynchronizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronizerTests.swift; sourceTree = "<group>"; };
 		CCFD06032A19F2100069B7A2 /* FailableQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailableQuery.swift; sourceTree = "<group>"; };
+		CCFD06052A19F24D0069B7A2 /* AnyQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyQuery.swift; sourceTree = "<group>"; };
+		CCFD06072A19F95E0069B7A2 /* AnyFailableQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyFailableQuery.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,7 +166,9 @@
 			isa = PBXGroup;
 			children = (
 				CC86FB372A07A49A00416227 /* Query.swift */,
+				CCFD06052A19F24D0069B7A2 /* AnyQuery.swift */,
 				CCFD06032A19F2100069B7A2 /* FailableQuery.swift */,
+				CCFD06072A19F95E0069B7A2 /* AnyFailableQuery.swift */,
 				CC7431DA2A07B7A9004E0175 /* Converter.swift */,
 				CC7431E22A07CA6B004E0175 /* InMemoryStorage.swift */,
 				CC7431F02A07E4A8004E0175 /* StoringQuery.swift */,
@@ -303,12 +309,14 @@
 				CC93E1E62A1253FB00003525 /* Synchronizer.swift in Sources */,
 				CC7431F32A07EDF4004E0175 /* Fallback.swift in Sources */,
 				CC7431FB2A09224B004E0175 /* Storage.swift in Sources */,
+				CCFD06062A19F24D0069B7A2 /* AnyQuery.swift in Sources */,
 				CC7431F12A07E4A8004E0175 /* StoringQuery.swift in Sources */,
 				CCEFA6CB2A0A466700EC7BFA /* SynchronousStorageAdapter.swift in Sources */,
 				CCFD06042A19F2100069B7A2 /* FailableQuery.swift in Sources */,
 				CC86FB202A07A40300416227 /* bricks.docc in Sources */,
 				CCEFA6DD2A0DF32A00EC7BFA /* SecondChance.swift in Sources */,
 				CC7431F92A08E4A1004E0175 /* ExpiringCache.swift in Sources */,
+				CCFD06082A19F95E0069B7A2 /* AnyFailableQuery.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

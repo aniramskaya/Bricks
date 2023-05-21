@@ -53,12 +53,3 @@ enum Examples {
 //        return DTOLoader(dto: dto).convert(map: DTO.toModel) as! ModelLoader
 //    }
 }
-
-
-//class CompositionTests: XCTestCase {
-//    func test_modelLoader() {
-//        let dto = DTO(value: UUID())
-//        let loader = DTOLoader(dto: dto).map(with: DTO.toModel) as? ModelLoader
-//        XCTAssertNotNil(loader)
-//    }
-//}
