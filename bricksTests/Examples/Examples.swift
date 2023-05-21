@@ -7,6 +7,11 @@
 
 import Foundation
 import bricks
+import XCTest
+
+protocol ModelLoader {
+    func load(completion: @escaping (Result<Model, Error>) -> Void)
+}
 
 enum Examples {
     static func simpleModelLoader() -> any FailableQuery {
@@ -42,4 +47,18 @@ enum Examples {
             .secondChance(storage)
         )
     }
+    
+//    static func modelLoader() -> ModelLoader {
+//        let dto = DTO(value: UUID())
+//        return DTOLoader(dto: dto).convert(map: DTO.toModel) as! ModelLoader
+//    }
 }
+
+
+//class CompositionTests: XCTestCase {
+//    func test_modelLoader() {
+//        let dto = DTO(value: UUID())
+//        let loader = DTOLoader(dto: dto).map(with: DTO.toModel) as? ModelLoader
+//        XCTAssertNotNil(loader)
+//    }
+//}
