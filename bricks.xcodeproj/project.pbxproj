@@ -38,6 +38,7 @@
 		CCFD06042A19F2100069B7A2 /* FailableQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD06032A19F2100069B7A2 /* FailableQuery.swift */; };
 		CCFD06062A19F24D0069B7A2 /* AnyQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD06052A19F24D0069B7A2 /* AnyQuery.swift */; };
 		CCFD06082A19F95E0069B7A2 /* AnyFailableQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD06072A19F95E0069B7A2 /* AnyFailableQuery.swift */; };
+		CCFD06122A1A14200069B7A2 /* DemultiplyerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD06112A1A14200069B7A2 /* DemultiplyerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +85,7 @@
 		CCFD06032A19F2100069B7A2 /* FailableQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailableQuery.swift; sourceTree = "<group>"; };
 		CCFD06052A19F24D0069B7A2 /* AnyQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyQuery.swift; sourceTree = "<group>"; };
 		CCFD06072A19F95E0069B7A2 /* AnyFailableQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyFailableQuery.swift; sourceTree = "<group>"; };
+		CCFD06112A1A14200069B7A2 /* DemultiplyerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemultiplyerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +160,7 @@
 				CCEFA6CD2A0A48C000EC7BFA /* CompositionHelpersTests.swift */,
 				CCEFA6E32A0E478100EC7BFA /* NotifyingQueryTests.swift */,
 				CCEFA6EB2A0E68CD00EC7BFA /* SynchronizerTests.swift */,
+				CCFD06112A1A14200069B7A2 /* DemultiplyerTests.swift */,
 			);
 			path = bricksTests;
 			sourceTree = "<group>";
@@ -327,6 +330,7 @@
 				CC7431ED2A07E2AB004E0175 /* NSError+Extensions.swift in Sources */,
 				CC7431EB2A07E22F004E0175 /* XCTestCase+Extensions.swift in Sources */,
 				CC7431E12A07C77B004E0175 /* InMemoryStorageTests.swift in Sources */,
+				CCFD06122A1A14200069B7A2 /* DemultiplyerTests.swift in Sources */,
 				CCEFA6CE2A0A48C000EC7BFA /* CompositionHelpersTests.swift in Sources */,
 				CCEFA6E42A0E478100EC7BFA /* NotifyingQueryTests.swift in Sources */,
 				CCEFA6C92A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift in Sources */,
