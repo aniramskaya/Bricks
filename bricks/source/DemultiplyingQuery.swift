@@ -7,9 +7,9 @@
 
 import Foundation
 
-/// ``Query`` which guarantees that only single loading operation is performed over WrappedQuery at any point in time.
+/// ``Query`` which guarantees that only single loading operation is performed over `WrappedQuery` at any point in time.
 ///
-/// ``DemultiplyingQuery`` calls ``WrappedQuery.load`` only if it is not running at the moment. Otherwise it stores completion closure and calls it when loading has finished. This class is thread safe.
+/// ``DemultiplyingQuery`` calls `WrappedQuery.load` only if it is not running at the moment. Otherwise it stores completion closure and calls it when loading has finished. This class is thread safe.
 public final class DemultiplyingQuery<WrappedQuery: Query>: Query
 {
     public typealias Result = WrappedQuery.Result
@@ -27,9 +27,9 @@ public final class DemultiplyingQuery<WrappedQuery: Query>: Query
         self.query = query
     }
     
-    /// Loads data from `query`
+    /// Loads data from `query` aggregating duplicate calls into a single loading operation
     ///
-    /// This method calls query if there is no running query at the moment. Otherwise it stores completion block which is called when loading has completed.
+    /// This method calls `query.load` if there is no running query at the moment. Otherwise it stores completion block which is called when loading has completed.
     ///
     /// - Parameters:
     ///   - completion: A closure which is called when the loading process has complete.
@@ -59,5 +59,11 @@ public final class DemultiplyingQuery<WrappedQuery: Query>: Query
         for item in captured {
             item(result)
         }
+    }
+}
+
+public extension Query {
+    func serial() -> DemultiplyingQuery<Self> {
+        return DemultiplyingQuery(query: self)
     }
 }

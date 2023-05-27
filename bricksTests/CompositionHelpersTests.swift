@@ -54,6 +54,25 @@ class DTOLoaderNonfailable: Query {
     }
 }
 
+private class DTOLoaderSpy: Query {
+    typealias Result = DTO
+    
+    enum Message: Equatable {
+        case load
+    }
+    
+    var messages: [Message] = []
+    var completions: [(Result) -> Void] = []
+    
+    func load(completion: @escaping (Result) -> Void) {
+        messages.append(.load)
+        completions.append(completion)
+    }
+    
+    func complete(with result: Result, at index: Int = 0) {
+        completions[index](result)
+    }
+}
 
 class CompositionHelpersTests: XCTestCase {
     func test_dtoIsConvertedToModel() throws {
@@ -173,6 +192,34 @@ class CompositionHelpersTests: XCTestCase {
             XCTAssertEqual(result1, dto1)
             XCTAssertEqual(result2, dto2)
         }
+    }
+
+    func test_demultiplyer() throws {
+        let dto = DTO(value: UUID())
+        let query = DTOLoaderSpy()
+        
+        let sut = query.serial()
+        
+        let exp = expectation(description: "Wait for loading to complete")
+        exp.expectedFulfillmentCount = 2
+        let expectedResult = dto
+        DispatchQueue.global(qos: .background).async {
+            sut.load { result in
+                XCTAssertEqual(result, expectedResult)
+            }
+            exp.fulfill()
+        }
+        DispatchQueue.global(qos: .background).async {
+            sut.load { result in
+                XCTAssertEqual(result, expectedResult)
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+        query.complete(with: dto)
+        
+        XCTAssertEqual(query.messages, [.load])
+
     }
 
     
