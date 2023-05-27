@@ -39,6 +39,7 @@
 		CCFD06062A19F24D0069B7A2 /* AnyQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD06052A19F24D0069B7A2 /* AnyQuery.swift */; };
 		CCFD06082A19F95E0069B7A2 /* AnyFailableQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD06072A19F95E0069B7A2 /* AnyFailableQuery.swift */; };
 		CCFD06122A1A14200069B7A2 /* DemultiplyerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD06112A1A14200069B7A2 /* DemultiplyerTests.swift */; };
+		CCFD06C72A21D20F0069B7A2 /* DemultiplyingQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD06C62A21D20F0069B7A2 /* DemultiplyingQuery.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +87,7 @@
 		CCFD06052A19F24D0069B7A2 /* AnyQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyQuery.swift; sourceTree = "<group>"; };
 		CCFD06072A19F95E0069B7A2 /* AnyFailableQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyFailableQuery.swift; sourceTree = "<group>"; };
 		CCFD06112A1A14200069B7A2 /* DemultiplyerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemultiplyerTests.swift; sourceTree = "<group>"; };
+		CCFD06C62A21D20F0069B7A2 /* DemultiplyingQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemultiplyingQuery.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +185,7 @@
 				CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */,
 				CCEFA6E92A0E5CD300EC7BFA /* NotifyingQuery.swift */,
 				CC93E1E52A1253FB00003525 /* Synchronizer.swift */,
+				CCFD06C62A21D20F0069B7A2 /* DemultiplyingQuery.swift */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 				CC7431F32A07EDF4004E0175 /* Fallback.swift in Sources */,
 				CC7431FB2A09224B004E0175 /* Storage.swift in Sources */,
 				CCFD06062A19F24D0069B7A2 /* AnyQuery.swift in Sources */,
+				CCFD06C72A21D20F0069B7A2 /* DemultiplyingQuery.swift in Sources */,
 				CC7431F12A07E4A8004E0175 /* StoringQuery.swift in Sources */,
 				CCEFA6CB2A0A466700EC7BFA /* SynchronousStorageAdapter.swift in Sources */,
 				CCFD06042A19F2100069B7A2 /* FailableQuery.swift in Sources */,

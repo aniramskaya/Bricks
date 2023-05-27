@@ -9,58 +9,6 @@ import Foundation
 import XCTest
 import bricks
 
-/// ``FailableQuery`` which aggregates multiple loads calls during loading and calls all completions when loading finished
-public final class DemultiplyingQuery<WrappedQuery: Query>: Query
-{
-    public typealias Result = WrappedQuery.Result
-    
-    private var query: WrappedQuery
-    private var completions: [(WrappedQuery.Result) -> Void] = []
-    private var completionsLock = NSRecursiveLock()
-    
-    
-    /// Designated initializer.
-    ///
-    /// - Parameters:
-    ///   - query: Query to wrap
-    public init(query: WrappedQuery) {
-        self.query = query
-    }
-    
-    /// Loads data from `query` passed in initializer and if it succeeded saves it into `storage`
-    ///
-    /// > Impotant: Method does not care about waiting for saving result and checking it. All saving errors are discarded.
-    /// - Parameters:
-    ///   - completion: A closure which is called when the loading process has complete.
-    public func load(completion: @escaping (Result) -> Void) {
-        if add(completion) {
-            query.load { [weak self] result in
-                self?.completeAll(with: result)
-            }
-        }
-    }
-    
-    // MARK: - Private
-
-    private func add(_ completion: @escaping (Result) -> Void) -> Bool {
-        completionsLock.lock()
-        let isFirstCompletion = completions.isEmpty
-        completions.append(completion)
-        completionsLock.unlock()
-        return isFirstCompletion
-    }
-    
-    private func completeAll(with result: Result) {
-        completionsLock.lock()
-        let captured = completions
-        completions = []
-        completionsLock.unlock()
-        for item in captured {
-            item(result)
-        }
-    }
-}
-
 class DemultiplyerTests: XCTestCase {
     func test_synchronizer_doesNotMessageUponCreation() throws {
         let (_, spy) = makeSUT()
