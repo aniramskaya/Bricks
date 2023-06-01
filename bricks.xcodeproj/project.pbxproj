@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CC4771472A28BAA2005AAE39 /* PaginatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4771462A28BAA2005AAE39 /* PaginatorTests.swift */; };
+		CC7141792A2721A3005DBA5F /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7141782A2721A3005DBA5F /* Command.swift */; };
+		CC71417B2A2723C1005DBA5F /* CommandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC71417A2A2723C1005DBA5F /* CommandTests.swift */; };
 		CC7431DB2A07B7A9004E0175 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431DA2A07B7A9004E0175 /* Converter.swift */; };
 		CC7431E12A07C77B004E0175 /* InMemoryStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431E02A07C77B004E0175 /* InMemoryStorageTests.swift */; };
 		CC7431E32A07CA6B004E0175 /* InMemoryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431E22A07CA6B004E0175 /* InMemoryStorage.swift */; };
@@ -53,6 +56,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CC4771462A28BAA2005AAE39 /* PaginatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatorTests.swift; sourceTree = "<group>"; };
+		CC7141782A2721A3005DBA5F /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
+		CC71417A2A2723C1005DBA5F /* CommandTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandTests.swift; sourceTree = "<group>"; };
 		CC7431D92A07B568004E0175 /* bricks.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = bricks.xctestplan; path = bricks.xcodeproj/bricks.xctestplan; sourceTree = "<group>"; };
 		CC7431DA2A07B7A9004E0175 /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
 		CC7431E02A07C77B004E0175 /* InMemoryStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryStorageTests.swift; sourceTree = "<group>"; };
@@ -163,6 +169,8 @@
 				CCEFA6E32A0E478100EC7BFA /* NotifyingQueryTests.swift */,
 				CCEFA6EB2A0E68CD00EC7BFA /* SynchronizerTests.swift */,
 				CCFD06112A1A14200069B7A2 /* DemultiplyerTests.swift */,
+				CC71417A2A2723C1005DBA5F /* CommandTests.swift */,
+				CC4771462A28BAA2005AAE39 /* PaginatorTests.swift */,
 			);
 			path = bricksTests;
 			sourceTree = "<group>";
@@ -186,6 +194,7 @@
 				CCEFA6E92A0E5CD300EC7BFA /* NotifyingQuery.swift */,
 				CC93E1E52A1253FB00003525 /* Synchronizer.swift */,
 				CCFD06C62A21D20F0069B7A2 /* DemultiplyingQuery.swift */,
+				CC7141782A2721A3005DBA5F /* Command.swift */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -312,6 +321,7 @@
 				CC7431E32A07CA6B004E0175 /* InMemoryStorage.swift in Sources */,
 				CC7431DB2A07B7A9004E0175 /* Converter.swift in Sources */,
 				CC7431F72A08E476004E0175 /* TimestampValidationPolicy.swift in Sources */,
+				CC7141792A2721A3005DBA5F /* Command.swift in Sources */,
 				CC93E1E62A1253FB00003525 /* Synchronizer.swift in Sources */,
 				CC7431F32A07EDF4004E0175 /* Fallback.swift in Sources */,
 				CC7431FB2A09224B004E0175 /* Storage.swift in Sources */,
@@ -337,6 +347,8 @@
 				CCFD06122A1A14200069B7A2 /* DemultiplyerTests.swift in Sources */,
 				CCEFA6CE2A0A48C000EC7BFA /* CompositionHelpersTests.swift in Sources */,
 				CCEFA6E42A0E478100EC7BFA /* NotifyingQueryTests.swift in Sources */,
+				CC71417B2A2723C1005DBA5F /* CommandTests.swift in Sources */,
+				CC4771472A28BAA2005AAE39 /* PaginatorTests.swift in Sources */,
 				CCEFA6C92A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift in Sources */,
 				CCEFA6DF2A0DF62700EC7BFA /* SecondChanceTests.swift in Sources */,
 				CC7431EF2A07E37B004E0175 /* FallbackTests.swift in Sources */,
