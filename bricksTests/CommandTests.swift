@@ -10,8 +10,8 @@ import XCTest
 import bricks
 
 class CommandQuerySpy: FailableQuery {
-    typealias Success = String
-    typealias Failure = Swift.Error
+    typealias Success = Int
+    typealias Failure = NSError
 
     let param: UUID
     init(value: UUID) {
@@ -19,6 +19,7 @@ class CommandQuerySpy: FailableQuery {
     }
     
     var completions: [(Result<Success, Failure>) -> Void] = []
+    
     var loadCallCount = 0
     func load(completion: @escaping (Result<Success, Failure>) -> Void) {
         loadCallCount += 1
@@ -47,27 +48,46 @@ class CommandTests: XCTestCase {
         let sut = Command{ (param: UUID) in
             buildQueryCallCount += 1
             spy = CommandQuerySpy(value: param)
-            return spy!
+            return spy!.map { $0.map { "\($0)" } }
         }
         
-        let param = UUID()
-        let expectedResult = "qwe"
+
+        let commandParam = UUID()
+        let spyLoadingResult = Result<Int, NSError>.success(87678)
+
+        var commandLoadedResult: Result<String, NSError>?
+        let commandExpectedResult = Result<String, NSError>.success("87678")
 
         let exp = expectation(description: "wait for async to complete")
-        sut.execute(param) { result in
-            switch result {
-            case let .success(loadedResult):
-                XCTAssertEqual(loadedResult, expectedResult, "Expected \(expectedResult) loaded \(loadedResult) instead")
-            default:
-                XCTFail("Expected .success loaded \(result) instead")
-            }
+        sut.execute(commandParam) { result in
+            commandLoadedResult = result
             exp.fulfill()
         }
-        spy?.complete(with: .success("qwe"))
+        spy?.complete(with: spyLoadingResult)
         wait(for: [exp], timeout: 1.0)
         
+        XCTAssertEqual(spy?.param, commandParam)
         XCTAssertEqual(buildQueryCallCount, 1)
         XCTAssertEqual(spy?.loadCallCount, 1)
+        XCTAssertEqual(commandLoadedResult, commandExpectedResult, "Expected \(commandExpectedResult) loaded \(String(describing: commandLoadedResult)) instead")
+    }
+    
+    func test_execute_DoesNotCallCompletionWhenSutDeallocated () throws {
+        var spy: CommandQuerySpy?
+        var sut: Command<UUID, FailableConverter<CommandQuerySpy, String, CommandQuerySpy.Failure>>? = Command{ (param: UUID) in
+            spy = CommandQuerySpy(value: param)
+            return spy!.map { $0.map { "\($0)" } }
+        }
+        
+        
+        let commandParam = UUID()
+        let spyLoadingResult = Result<Int, NSError>.success(87678)
+        
+        sut?.execute(commandParam) { result in
+            XCTFail("Completion should not be called")
+        }
+        sut = nil
+        spy?.complete(with: spyLoadingResult)
     }
     
 }

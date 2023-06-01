@@ -32,6 +32,26 @@ public class Command<Param, CommandQuery> where CommandQuery: FailableQuery {
     ///   - completion: Completion to be called when command execution has finished
     public func execute(_ param: Param, completion: @escaping (CommandQuery.Result) -> Void) {
         let query = buildQuery(param)
-        query.load(completion: completion)
+        let id = UUID()
+        addQuery(query, id: id)
+        query.load { [weak self] result in
+            completion(result)
+            self?.removeQuery(id: id)
+        }
+    }
+    
+    private var executingQueries: [UUID: CommandQuery] = [:]
+    private var executingQueriesLock = NSRecursiveLock()
+    
+    private func addQuery(_ query: CommandQuery, id: UUID) {
+        executingQueriesLock.lock()
+        executingQueries[id] = query
+        executingQueriesLock.unlock()
+    }
+    
+    private func removeQuery(id: UUID) {
+        executingQueriesLock.lock()
+        executingQueries[id] = nil
+        executingQueriesLock.unlock()
     }
 }
