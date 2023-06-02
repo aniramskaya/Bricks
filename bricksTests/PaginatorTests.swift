@@ -32,7 +32,7 @@ import bricks
  Then: deletes loaded data
  
  */
-class Paginator<PageQuery: FailableQuery> {
+class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection {
     let queryBuilder: () -> PageQuery
     
     init(queryBuilder: @escaping () -> PageQuery) {
@@ -44,7 +44,7 @@ class PaginatorTests: XCTestCase {
     func test_init_doesNotSendAnyMessage() {
         var queryBuilderCallCount = 0
         let spy = PagesLoaderSpy()
-        let sut = Paginator(queryBuilder: {
+        let _ = Paginator(queryBuilder: {
             queryBuilderCallCount += 1
             return spy
         })
@@ -55,7 +55,7 @@ class PaginatorTests: XCTestCase {
 }
 
 class PagesLoaderSpy: FailableQuery {
-    typealias Success = String
+    typealias Success = [String]
     typealias Failure = Swift.Error
     
     var loadCallCount = 0
