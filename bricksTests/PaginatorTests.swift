@@ -135,6 +135,8 @@ class PaginatorTests: XCTestCase {
         }
     }
     
+    // MARK: - Private
+    
     private func makeSUT<PageQuery: FailableQuery>(queryBuilder: @escaping (PagesLoaderSpy) -> PageQuery) -> (Paginator<PageQuery>, PagesLoaderSpy) {
         let spy = PagesLoaderSpy()
         let sut = Paginator(queryBuilder: { queryBuilder(spy) })
