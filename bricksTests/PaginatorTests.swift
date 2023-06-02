@@ -31,8 +31,9 @@ import bricks
  When: reset is called
  Then: deletes loaded data
  
- Test that query created with builder does not disappear on leaving load method
- Test that paginator demultiplies multiple calls
+ [✅] Test that paginator does not call completion when destroyed while loading
+ [] Test that query created with builder does not disappear on leaving load method
+ [] Test that paginator demultiplies multiple calls
  
  */
 class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection {
@@ -44,7 +45,10 @@ class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection {
     
     func load(_ completion: @escaping (Result<PageQuery.Success, PageQuery.Failure>) -> Void) {
         let query = queryBuilder()
-        query.load(completion: completion)
+        query.load { [weak self] result in
+            guard self != nil else { return }
+            completion(result)
+        }
     }
 }
 
@@ -73,6 +77,17 @@ class PaginatorTests: XCTestCase {
         
         XCTAssertEqual(queryBuilderCallCount, 1)
         XCTAssertEqual(spy.loadCallCount, 1)
+    }
+    
+    func test_load_doesNotCallCompletionWhenSutIsDeallocated() {
+        let spy = PagesLoaderSpy()
+        var sut: Paginator<PagesLoaderSpy>? = Paginator { spy }
+
+        sut?.load { _ in
+            XCTFail("Paginator completion should not be called when Paginator is deallocated while loading")
+        }
+        sut = nil
+        spy.complete(with: .success([UUID().uuidString]))
     }
 }
 
