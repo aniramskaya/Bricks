@@ -89,23 +89,21 @@ class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection & 
 class PaginatorTests: XCTestCase {
     func test_init_doesNotSendAnyMessage() {
         var queryBuilderCallCount = 0
-        let spy = PagesLoaderSpy()
-        let _ = Paginator(queryBuilder: {
+        let (_, spy) = makeSUT { spy in
             queryBuilderCallCount += 1
             return spy
-        })
-        
+        }
+
         XCTAssertEqual(queryBuilderCallCount, 0)
         XCTAssertEqual(spy.loadCallCount, 0)
     }
     
     func test_load_callsQueryBuilderAndQueryLoad() {
         var queryBuilderCallCount = 0
-        let spy = PagesLoaderSpy()
-        let sut = Paginator(queryBuilder: {
+        let (sut, spy) = makeSUT { spy in
             queryBuilderCallCount += 1
             return spy
-        })
+        }
 
         sut.load { _ in }
         
@@ -125,10 +123,9 @@ class PaginatorTests: XCTestCase {
     }
     
     func test_load_guaranteesThatQueryDoesNotDestroyedUntilFinished() {
-        let spy = PagesLoaderSpy()
-        let sut = Paginator(queryBuilder: {
-            return spy.map(with: { $0 })
-        })
+        let (sut, spy) = makeSUT { spy in
+            spy.map(with: { $0 })
+        }
 
         let passedResult = PagesLoaderSpy.Result.success([UUID().uuidString])
         let expectedResult = passedResult
@@ -136,6 +133,13 @@ class PaginatorTests: XCTestCase {
         expect(sut, toCompleteWith: expectedResult) {
             spy.complete(with: passedResult)
         }
+    }
+    
+    private func makeSUT<PageQuery: FailableQuery>(queryBuilder: @escaping (PagesLoaderSpy) -> PageQuery) -> (Paginator<PageQuery>, PagesLoaderSpy) {
+        let spy = PagesLoaderSpy()
+        let sut = Paginator(queryBuilder: { queryBuilder(spy) })
+
+        return (sut, spy)
     }
     
     private func expect<PageQuery: FailableQuery>(
