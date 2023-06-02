@@ -62,11 +62,11 @@ import bricks
  Then: deletes loaded data
  
  [✅] Test that paginator does not call completion when destroyed while loading
- [] Test that query created with builder does not disappear on leaving load method
+ [✅] Test that query created with builder does not disappear on leaving load method
  [] Test that paginator demultiplies multiple calls
  
  */
-class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection {
+class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection & Equatable {
     let queryBuilder: () -> PageQuery
     
     init(queryBuilder: @escaping () -> PageQuery) {
@@ -133,6 +133,16 @@ class PaginatorTests: XCTestCase {
         let passedResult = PagesLoaderSpy.Result.success([UUID().uuidString])
         let expectedResult = passedResult
         
+        expect(sut, toCompleteWith: expectedResult) {
+            spy.complete(with: passedResult)
+        }
+    }
+    
+    private func expect<PageQuery: FailableQuery>(
+        _ sut: Paginator<PageQuery>,
+        toCompleteWith expectedResult: PageQuery.Result,
+        when action: () -> Void
+    ) {
         let exp = expectation(description: "Wait for async to be loaded")
         sut.load { result in
             switch (result, expectedResult) {
@@ -145,7 +155,7 @@ class PaginatorTests: XCTestCase {
             }
             exp.fulfill()
         }
-        spy.complete(with: passedResult)
+        action()
         wait(for: [exp], timeout: 1.0)
     }
 }
