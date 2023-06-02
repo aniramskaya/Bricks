@@ -31,12 +31,20 @@ import bricks
  When: reset is called
  Then: deletes loaded data
  
+ Test that query created with builder does not disappear on leaving load method
+ Test that paginator demultiplies multiple calls
+ 
  */
 class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection {
     let queryBuilder: () -> PageQuery
     
     init(queryBuilder: @escaping () -> PageQuery) {
         self.queryBuilder = queryBuilder
+    }
+    
+    func load(_ completion: @escaping (Result<PageQuery.Success, PageQuery.Failure>) -> Void) {
+        let query = queryBuilder()
+        query.load(completion: completion)
     }
 }
 
@@ -51,6 +59,20 @@ class PaginatorTests: XCTestCase {
         
         XCTAssertEqual(queryBuilderCallCount, 0)
         XCTAssertEqual(spy.loadCallCount, 0)
+    }
+    
+    func test_load_callsQueryBuilderAndQueryLoad() {
+        var queryBuilderCallCount = 0
+        let spy = PagesLoaderSpy()
+        let sut = Paginator(queryBuilder: {
+            queryBuilderCallCount += 1
+            return spy
+        })
+
+        sut.load { _ in }
+        
+        XCTAssertEqual(queryBuilderCallCount, 1)
+        XCTAssertEqual(spy.loadCallCount, 1)
     }
 }
 
