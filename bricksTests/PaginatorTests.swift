@@ -10,6 +10,36 @@ import XCTest
 import bricks
 
 /*
+ 
+ Пагинатор
+ 
+ Загружает список объектов постранично
+ 
+ Имеет три метода: load, loadMore и reset
+ Имеет состояние: уже загруженные страницы и флажок hasMore, показывающий что есть еще страницы
+ 
+ Логика:
+ 
+ Если загруженных данных нет, при вызове load или loadMore загружает первую страницу
+ Если загруженные данные есть, при вызове load просто возвращает уже имеющиеся в памяти страницы
+ Если загруженные данные есть, при вызове loadMore загружает следующую страницу, добавляет ее в конец уже имеющихся в памяти даных и возвращает обновленный вариант списка
+ 
+ Вместе с данными всегда возвращает признак hasMore
+ hasMore изначально имеет значение true и устанавливается в false если при загрузке страницы был получен пустой список
+
+ Если есть загруженные данные, вызов reset удаляет сохраненные данные и сбрасывает hasMore в true
+
+ При ошибке загрузки любой страницы возвращает ошибку
+ 
+ Корнер кейсы (спорные, нужна помощь):
+ 
+ Если вызван load или loadMore во время загрузки предыдущего вызова load или loadMore - не запускает выполнения нового запроса, а сохраняет completion и после завершения загрузки предыдущего вызова вызывает его, передавая полученные данные. Другими словами - повторные вызовы методов не влияют на уже выполняющуюся загрузку и завершаются с теми данными, которые были ею загружены.
+ 
+ Если вызван reset во время выполнения вызова load или loadMore - отменяет текущую загрузку не вызывая completion.
+ 
+ 
+ 
+ 
  Paginator needs some query to load data
  It might be created each time when load or loadMore is called
  
@@ -43,10 +73,14 @@ class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection {
         self.queryBuilder = queryBuilder
     }
     
+    private var inProgress: PageQuery?
+    
     func load(_ completion: @escaping (Result<PageQuery.Success, PageQuery.Failure>) -> Void) {
-        let query = queryBuilder()
+        let query = inProgress ?? queryBuilder()
+        inProgress = query
         query.load { [weak self] result in
-            guard self != nil else { return }
+            guard let self else { return }
+            self.inProgress = nil
             completion(result)
         }
     }
@@ -88,6 +122,31 @@ class PaginatorTests: XCTestCase {
         }
         sut = nil
         spy.complete(with: .success([UUID().uuidString]))
+    }
+    
+    func test_load_guaranteesThatQueryDoesNotDestroyedUntilFinished() {
+        let spy = PagesLoaderSpy()
+        let sut = Paginator(queryBuilder: {
+            return spy.map(with: { $0 })
+        })
+
+        let passedResult = PagesLoaderSpy.Result.success([UUID().uuidString])
+        let expectedResult = passedResult
+        
+        let exp = expectation(description: "Wait for async to be loaded")
+        sut.load { result in
+            switch (result, expectedResult) {
+            case let (.success(loaded), .success(expected)):
+                XCTAssertEqual(loaded, expected, "Expected to load \(expected) got \(loaded) instead")
+            case let (.failure(loaded), .failure(expected)):
+                XCTAssertEqual(loaded as NSError, expected as NSError, "Expected to load \(expected) got \(loaded) instead")
+            default:
+                XCTFail("Expected to load \(expectedResult) got \(result) instead")
+            }
+            exp.fulfill()
+        }
+        spy.complete(with: passedResult)
+        wait(for: [exp], timeout: 1.0)
     }
 }
 
