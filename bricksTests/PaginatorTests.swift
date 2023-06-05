@@ -168,6 +168,20 @@ class PaginatorTests: XCTestCase {
         XCTAssertEqual(spy.loadCallCount, 1)
     }
 
+    
+    func test_load_deliversFailureOnFailure() {
+        let (sut, spy) = makeSUT { $0 }
+
+        let passedResult = PagesLoaderSpy.Result.failure(NSError.any())
+        let expectedResult = passedResult
+        
+        expect(sut, toCompleteWith: expectedResult) {
+            spy.complete(with: passedResult)
+        }
+        
+        XCTAssertEqual(spy.loadCallCount, 1)
+    }
+
     // MARK: - Private
     
     private func makeSUT<PageQuery: FailableQuery>(queryBuilder: @escaping (PagesLoaderSpy) -> PageQuery) -> (Paginator<PageQuery>, PagesLoaderSpy) {
