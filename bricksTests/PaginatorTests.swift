@@ -76,6 +76,10 @@ class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection & 
     
     
     func load(_ completion: @escaping (Paginator.Result) -> Void) {
+        if let loadedData {
+            completion(.success(loadedData))
+            return
+        }
         completionsLock.lock()
         completions.append(completion)
         if inProgress == nil {
@@ -94,6 +98,7 @@ class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection & 
     private var inProgress: PageQuery?
     private var completions: [(Paginator.Result) -> Void] = []
     private var completionsLock = NSRecursiveLock()
+    private var loadedData: (PageQuery.Success, Bool)?
 
     private func completeAll(with loadedResult: PageQuery.Result) {
         completionsLock.lock()
@@ -102,6 +107,7 @@ class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection & 
         inProgress = nil
         completionsLock.unlock()
         let result = loadedResult.map { ($0, !$0.isEmpty) }
+        loadedData = try? result.get()
         for item in captured {
             item(result)
         }
@@ -192,12 +198,15 @@ class PaginatorTests: XCTestCase {
     func test_pageLoading() {
         let (sut, spy) = makeSUT { $0 }
 
-        let items = [UUID().uuidString]
-        let page1Passed = PagesLoaderSpy.Result.success(items)
-        let page1Expected = PaginatorResult.success((items, true))
+        let page1Items = [UUID().uuidString]
         
-        expect(sut, toCompleteWith: page1Expected) {
-            spy.complete(with: page1Passed)
+        // Loads page 1
+        expect(sut, toCompleteWith: .success((page1Items, true))) {
+            spy.complete(with: .success(page1Items))
+        }
+
+        // Retrieves loaded data without extra page loading
+        expect(sut, toCompleteWith: .success((page1Items, true))) {
         }
         
         XCTAssertEqual(spy.loadCallCount, 1)
