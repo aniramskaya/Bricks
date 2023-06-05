@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		CC4771472A28BAA2005AAE39 /* PaginatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4771462A28BAA2005AAE39 /* PaginatorTests.swift */; };
 		CC5CB3C92A2E0C4B00DCE080 /* Paginator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5CB3C82A2E0C4B00DCE080 /* Paginator.swift */; };
+		CC5CB3CB2A2E108700DCE080 /* Paginator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5CB3CA2A2E108700DCE080 /* Paginator.swift */; };
 		CC7141792A2721A3005DBA5F /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7141782A2721A3005DBA5F /* Command.swift */; };
 		CC71417B2A2723C1005DBA5F /* CommandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC71417A2A2723C1005DBA5F /* CommandTests.swift */; };
 		CC7431DB2A07B7A9004E0175 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431DA2A07B7A9004E0175 /* Converter.swift */; };
@@ -59,6 +60,7 @@
 /* Begin PBXFileReference section */
 		CC4771462A28BAA2005AAE39 /* PaginatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatorTests.swift; sourceTree = "<group>"; };
 		CC5CB3C82A2E0C4B00DCE080 /* Paginator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paginator.swift; sourceTree = "<group>"; };
+		CC5CB3CA2A2E108700DCE080 /* Paginator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paginator.swift; sourceTree = "<group>"; };
 		CC7141782A2721A3005DBA5F /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
 		CC71417A2A2723C1005DBA5F /* CommandTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandTests.swift; sourceTree = "<group>"; };
 		CC7431D92A07B568004E0175 /* bricks.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = bricks.xctestplan; path = bricks.xcodeproj/bricks.xctestplan; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 				CC93E1E52A1253FB00003525 /* Synchronizer.swift */,
 				CCFD06C62A21D20F0069B7A2 /* DemultiplyingQuery.swift */,
 				CC7141782A2721A3005DBA5F /* Command.swift */,
+				CC5CB3CA2A2E108700DCE080 /* Paginator.swift */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -321,6 +324,7 @@
 			files = (
 				CCEFA6EA2A0E5CD300EC7BFA /* NotifyingQuery.swift in Sources */,
 				CC86FB382A07A49A00416227 /* Query.swift in Sources */,
+				CC5CB3CB2A2E108700DCE080 /* Paginator.swift in Sources */,
 				CC7431E32A07CA6B004E0175 /* InMemoryStorage.swift in Sources */,
 				CC7431DB2A07B7A9004E0175 /* Converter.swift in Sources */,
 				CC7431F72A08E476004E0175 /* TimestampValidationPolicy.swift in Sources */,
