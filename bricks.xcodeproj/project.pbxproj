@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		CC4771472A28BAA2005AAE39 /* PaginatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4771462A28BAA2005AAE39 /* PaginatorTests.swift */; };
+		CC5CB3C92A2E0C4B00DCE080 /* Paginator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5CB3C82A2E0C4B00DCE080 /* Paginator.swift */; };
 		CC7141792A2721A3005DBA5F /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7141782A2721A3005DBA5F /* Command.swift */; };
 		CC71417B2A2723C1005DBA5F /* CommandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC71417A2A2723C1005DBA5F /* CommandTests.swift */; };
 		CC7431DB2A07B7A9004E0175 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7431DA2A07B7A9004E0175 /* Converter.swift */; };
@@ -57,6 +58,7 @@
 
 /* Begin PBXFileReference section */
 		CC4771462A28BAA2005AAE39 /* PaginatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatorTests.swift; sourceTree = "<group>"; };
+		CC5CB3C82A2E0C4B00DCE080 /* Paginator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paginator.swift; sourceTree = "<group>"; };
 		CC7141782A2721A3005DBA5F /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
 		CC71417A2A2723C1005DBA5F /* CommandTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandTests.swift; sourceTree = "<group>"; };
 		CC7431D92A07B568004E0175 /* bricks.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = bricks.xctestplan; path = bricks.xcodeproj/bricks.xctestplan; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 			isa = PBXGroup;
 			children = (
 				CCEFA6DA2A0DF0BA00EC7BFA /* Examples.swift */,
+				CC5CB3C82A2E0C4B00DCE080 /* Paginator.swift */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -354,6 +357,7 @@
 				CC7431EF2A07E37B004E0175 /* FallbackTests.swift in Sources */,
 				CCEFA6EC2A0E68CD00EC7BFA /* SynchronizerTests.swift in Sources */,
 				CC7431E52A07CD88004E0175 /* StoringQueryTests.swift in Sources */,
+				CC5CB3C92A2E0C4B00DCE080 /* Paginator.swift in Sources */,
 				CC86FB2B2A07A40300416227 /* ConverterTests.swift in Sources */,
 				CCEFA6DB2A0DF0BA00EC7BFA /* Examples.swift in Sources */,
 				CC7431F52A08D9CA004E0175 /* ExpirableCacheTests.swift in Sources */,

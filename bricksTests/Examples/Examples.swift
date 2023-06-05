@@ -47,9 +47,4 @@ enum Examples {
             .secondChance(storage)
         )
     }
-    
-//    static func modelLoader() -> ModelLoader {
-//        let dto = DTO(value: UUID())
-//        return DTOLoader(dto: dto).convert(map: DTO.toModel) as! ModelLoader
-//    }
 }
