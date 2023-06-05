@@ -143,9 +143,7 @@ class PaginatorTests: XCTestCase {
     }
     
     func test_load_guaranteesThatQueryDoesNotDestroyedUntilFinished() {
-        let (sut, spy) = makeSUT { spy in
-            spy.map(with: { $0 })
-        }
+        let (sut, spy) = makeSUT { $0 }
 
         let passedResult = PagesLoaderSpy.Result.success([UUID().uuidString])
         let expectedResult = passedResult
@@ -156,9 +154,7 @@ class PaginatorTests: XCTestCase {
     }
     
     func test_load_demultipliesSerialCalls() {
-        let (sut, spy) = makeSUT { spy in
-            spy.map(with: { $0 })
-        }
+        let (sut, spy) = makeSUT { $0 }
 
         let passedResult = PagesLoaderSpy.Result.success([UUID().uuidString])
         let expectedResult = passedResult
