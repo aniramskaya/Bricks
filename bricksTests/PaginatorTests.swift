@@ -47,15 +47,15 @@ import bricks
  
  Given: no data has been loaded yet
  When: load is called
- Then: loads first page data returning items and hasMore flag on success of error on failure
+ ✅ Then: loads first page data returning items and hasMore flag on success or error on failure
 
  Given: data has been loaded
  When: load is called
- Then: returns items from memory
+ ✅ Then: returns items from memory
  
  Given: data has been loaded
  When: loadMore is called
- Then: loads next page data returning items and hasMore flag on success of error on failure
+ ✅ Then: loads next page data returning items and hasMore flag on success or error on failure
  
  Given: data has been loaded
  When: reset is called
@@ -105,6 +105,15 @@ class Paginator<PageQuery: ListFailableQuery> {
         completionsLock.unlock()
     }
     
+    func reset() {
+        completionsLock.lock()
+        completions = []
+        inProgress = nil
+        loadedData = nil
+        pageNumber = firstPageNumber
+        completionsLock.unlock()
+    }
+    
     // MARK: - Private
 
     private var inProgress: PageQuery?
@@ -118,9 +127,12 @@ class Paginator<PageQuery: ListFailableQuery> {
         let captured = completions
         completions = []
         inProgress = nil
-        completionsLock.unlock()
         let result = loadedResult.map { ( (loadedData?.0 ?? []) + $0, !$0.isEmpty) }
-        self.loadedData = try? result.get()
+        if let newData = try? result.get() {
+            loadedData = newData
+            pageNumber += 1
+        }
+        completionsLock.unlock()
         for item in captured {
             item(result)
         }
@@ -132,7 +144,7 @@ class PaginatorTests: XCTestCase {
     
     func test_init_doesNotSendAnyMessage() {
         var queryBuilderCallCount = 0
-        let (_, spy) = makeSUT { spy in
+        let (_, spy) = makeSUT { spy, _ in
             queryBuilderCallCount += 1
             return spy
         }
@@ -143,7 +155,7 @@ class PaginatorTests: XCTestCase {
     
     func test_load_callsQueryBuilderAndQueryLoad() {
         var queryBuilderCallCount = 0
-        let (sut, spy) = makeSUT { spy in
+        let (sut, spy) = makeSUT { spy, _ in
             queryBuilderCallCount += 1
             return spy
         }
@@ -166,7 +178,7 @@ class PaginatorTests: XCTestCase {
     }
     
     func test_load_guaranteesThatQueryDoesNotDestroyedUntilFinished() {
-        let (sut, spy) = makeSUT { $0 }
+        let (sut, spy) = makeSUT { spy, _ in return spy }
 
         let items = [UUID().uuidString]
         let passedResult = PagesLoaderSpy.Result.success(items)
@@ -178,7 +190,7 @@ class PaginatorTests: XCTestCase {
     }
     
     func test_load_demultipliesSerialCalls() {
-        let (sut, spy) = makeSUT { $0 }
+        let (sut, spy) = makeSUT { spy, _ in return spy }
 
         let items = [UUID().uuidString]
         let passedResult = PagesLoaderSpy.Result.success(items)
@@ -195,7 +207,7 @@ class PaginatorTests: XCTestCase {
 
     
     func test_load_deliversFailureOnFailure() {
-        let (sut, spy) = makeSUT { $0 }
+        let (sut, spy) = makeSUT { spy, _ in return spy }
 
         let error = NSError.any()
         let passedResult = PagesLoaderSpy.Result.failure(error)
@@ -209,37 +221,68 @@ class PaginatorTests: XCTestCase {
     }
 
     func test_pageLoading() {
-        let (sut, spy) = makeSUT { $0 }
+        var requestedPages: [Int] = []
+        
+        // sut = System Under Test = Paginator
+        // spy = Data loader test mock
+        let (sut, spy) = makeSUT { spy, pageNumber in
+            requestedPages.append(pageNumber)
+            return spy
+        }
 
         let page1Items = [UUID().uuidString]
         
-        // Loads page 1
+        // Loads page 1 - returns page 1 with hasMore = true
         expect(sut, toLoadWith: .success((page1Items, true))) {
             spy.complete(with: .success(page1Items))
         }
+        
+        XCTAssertEqual(requestedPages, [1])
 
-        // Retrieves loaded data without extra page loading
+        // Retrieves in-memoкy data without any page loading
         expect(sut, toLoadWith: .success((page1Items, true))) {
         }
         
         let page2Items = [UUID().uuidString]
         
-        // Loads page 2
+        // Loads page 2 - returns page 1 and page2 with hasMore = true
         expect(sut, toLoadMoreWith: .success((page1Items + page2Items, true))) {
             spy.complete(with: .success(page2Items), at: 1)
         }
 
-        // Loads page 3 (empty one)
-        expect(sut, toLoadMoreWith: .success((page1Items + page2Items, false))) {
-            spy.complete(with: .success([]), at: 2)
+        XCTAssertEqual(requestedPages, [1, 2])
+
+        // Fails to load page 3 - returns error
+        let page3Error = NSError.any()
+        expect(sut, toLoadMoreWith: .failure(page3Error)) {
+            spy.complete(with: .failure(page3Error), at: 2)
         }
+
+        XCTAssertEqual(requestedPages, [1, 2, 3])
+
+        // Loads page 3 (empty one) - returns page 1 and page2 with hasMore = false
+        expect(sut, toLoadMoreWith: .success((page1Items + page2Items, false))) {
+            spy.complete(with: .success([]), at: 3)
+        }
+
+        XCTAssertEqual(requestedPages, [1, 2, 3, 3])
+
+        sut.reset()
+        
+        // Loads page 1 again
+        // We also ensure that load and loadMore are equivalent for the first page
+        expect(sut, toLoadMoreWith: .success((page1Items, true))) {
+            spy.complete(with: .success(page1Items))
+        }
+        
+        XCTAssertEqual(requestedPages, [1, 2, 3, 3, 1])
     }
 
     // MARK: - Private
     
-    private func makeSUT<PageQuery: FailableQuery>(queryBuilder: @escaping (PagesLoaderSpy) -> PageQuery) -> (Paginator<PageQuery>, PagesLoaderSpy) {
+    private func makeSUT<PageQuery: FailableQuery>(queryBuilder: @escaping (PagesLoaderSpy, Int) -> PageQuery) -> (Paginator<PageQuery>, PagesLoaderSpy) {
         let spy = PagesLoaderSpy()
-        let sut = Paginator(queryBuilder: { _ in queryBuilder(spy) })
+        let sut = Paginator(queryBuilder: { pageNumber in queryBuilder(spy, pageNumber) }, firstPageNumber: 1)
 
         return (sut, spy)
     }
