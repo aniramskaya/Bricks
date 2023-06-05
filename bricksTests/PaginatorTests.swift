@@ -36,11 +36,9 @@ import bricks
  Если вызван load или loadMore во время загрузки предыдущего вызова load или loadMore - не запускает выполнения нового запроса, а сохраняет completion и после завершения загрузки предыдущего вызова вызывает его, передавая полученные данные. Другими словами - повторные вызовы методов не влияют на уже выполняющуюся загрузку и завершаются с теми данными, которые были ею загружены.
  
  Если вызван reset во время выполнения вызова load или loadMore - отменяет текущую загрузку не вызывая completion.
+
  
- 
- 
- 
- Paginator needs some query to load data
+ Paginator needs a query to load data
  It might be created each time when load or loadMore is called
  
  Paginator scenarios
@@ -59,7 +57,7 @@ import bricks
  
  Given: data has been loaded
  When: reset is called
- Then: deletes loaded data
+ ✅ Then: deletes loaded data
  
  [✅] Test that paginator does not call completion when destroyed while loading
  [✅] Test that query created with builder does not disappear on leaving load method
