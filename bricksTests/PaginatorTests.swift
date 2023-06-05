@@ -63,7 +63,7 @@ import bricks
  
  [✅] Test that paginator does not call completion when destroyed while loading
  [✅] Test that query created with builder does not disappear on leaving load method
- [] Test that paginator demultiplies multiple calls
+ [✅] Test that paginator demultiplies multiple calls
  
  */
 class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection & Equatable {
@@ -73,15 +73,35 @@ class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection & 
         self.queryBuilder = queryBuilder
     }
     
-    private var inProgress: PageQuery?
     
     func load(_ completion: @escaping (Result<PageQuery.Success, PageQuery.Failure>) -> Void) {
-        let query = inProgress ?? queryBuilder()
-        inProgress = query
-        query.load { [weak self] result in
-            guard let self else { return }
-            self.inProgress = nil
-            completion(result)
+        completionsLock.lock()
+        completions.append(completion)
+        if inProgress == nil {
+            let query = queryBuilder()
+            inProgress = query
+            query.load { [weak self] result in
+                guard let self else { return }
+                self.completeAll(with: result)
+            }
+        }
+        completionsLock.unlock()
+    }
+    
+    // MARK: - Private
+
+    private var inProgress: PageQuery?
+    private var completions: [(PageQuery.Result) -> Void] = []
+    private var completionsLock = NSRecursiveLock()
+
+    private func completeAll(with result: PageQuery.Result) {
+        completionsLock.lock()
+        let captured = completions
+        completions = []
+        inProgress = nil
+        completionsLock.unlock()
+        for item in captured {
+            item(result)
         }
     }
 }
@@ -135,6 +155,23 @@ class PaginatorTests: XCTestCase {
         }
     }
     
+    func test_load_demultipliesSerialCalls() {
+        let (sut, spy) = makeSUT { spy in
+            spy.map(with: { $0 })
+        }
+
+        let passedResult = PagesLoaderSpy.Result.success([UUID().uuidString])
+        let expectedResult = passedResult
+        
+        expect(sut, toCompleteWith: expectedResult) {
+            expect(sut, toCompleteWith: expectedResult) {
+                spy.complete(with: passedResult)
+            }
+        }
+        
+        XCTAssertEqual(spy.loadCallCount, 1)
+    }
+
     // MARK: - Private
     
     private func makeSUT<PageQuery: FailableQuery>(queryBuilder: @escaping (PagesLoaderSpy) -> PageQuery) -> (Paginator<PageQuery>, PagesLoaderSpy) {
@@ -147,22 +184,34 @@ class PaginatorTests: XCTestCase {
     private func expect<PageQuery: FailableQuery>(
         _ sut: Paginator<PageQuery>,
         toCompleteWith expectedResult: PageQuery.Result,
-        when action: () -> Void
+        when action: () -> Void,
+        file: StaticString = #filePath,
+        line: UInt = #line
     ) {
         let exp = expectation(description: "Wait for async to be loaded")
-        sut.load { result in
-            switch (result, expectedResult) {
-            case let (.success(loaded), .success(expected)):
-                XCTAssertEqual(loaded, expected, "Expected to load \(expected) got \(loaded) instead")
-            case let (.failure(loaded), .failure(expected)):
-                XCTAssertEqual(loaded as NSError, expected as NSError, "Expected to load \(expected) got \(loaded) instead")
-            default:
-                XCTFail("Expected to load \(expectedResult) got \(result) instead")
-            }
+        sut.load { [weak self] result in
+            self?.assertResultEqual(loaded: result, expected: expectedResult, file: file, line: line)
             exp.fulfill()
         }
         action()
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    private func assertResultEqual<Success, Failure>(
+        loaded: Result<Success, Failure>,
+        expected: Result<Success, Failure>,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) where Success: Equatable, Failure: Error {
+        switch (loaded, expected) {
+        case let (.success(loaded), .success(expected)):
+            XCTAssertEqual(loaded, expected, "Expected to load \(expected) got \(loaded) instead", file: file, line: line)
+        case let (.failure(loaded), .failure(expected)):
+            XCTAssertEqual(loaded as NSError, expected as NSError, "Expected to load \(expected) got \(loaded) instead", file: file, line: line)
+        default:
+            XCTFail("Expected to load \(expected) got \(loaded) instead", file: file, line: line)
+        }
+
     }
 }
 
