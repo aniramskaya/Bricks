@@ -66,24 +66,36 @@ import bricks
  [✅] Test that paginator demultiplies multiple calls
  
  */
-class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection & Equatable {
+
+protocol ListFailableQuery: FailableQuery where Success == Array<Element> {
+    associatedtype Element: Hashable
+}
+
+class Paginator<PageQuery: ListFailableQuery> {
     typealias Result = Swift.Result<(PageQuery.Success, Bool), PageQuery.Failure>
-    let queryBuilder: () -> PageQuery
     
-    init(queryBuilder: @escaping () -> PageQuery) {
+    let queryBuilder: (Int) -> PageQuery
+    let firstPageNumber: Int
+    
+    init(queryBuilder: @escaping (Int) -> PageQuery, firstPageNumber: Int = 0) {
         self.queryBuilder = queryBuilder
+        self.firstPageNumber = firstPageNumber
+        self.pageNumber = firstPageNumber
     }
-    
     
     func load(_ completion: @escaping (Paginator.Result) -> Void) {
         if let loadedData {
             completion(.success(loadedData))
             return
         }
+        loadMore(completion)
+    }
+    
+    func loadMore(_ completion: @escaping (Paginator.Result) -> Void) {
         completionsLock.lock()
         completions.append(completion)
         if inProgress == nil {
-            let query = queryBuilder()
+            let query = queryBuilder(pageNumber)
             inProgress = query
             query.load { [weak self] result in
                 guard let self else { return }
@@ -99,6 +111,7 @@ class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection & 
     private var completions: [(Paginator.Result) -> Void] = []
     private var completionsLock = NSRecursiveLock()
     private var loadedData: (PageQuery.Success, Bool)?
+    private var pageNumber: Int
 
     private func completeAll(with loadedResult: PageQuery.Result) {
         completionsLock.lock()
@@ -106,8 +119,8 @@ class Paginator<PageQuery: FailableQuery> where PageQuery.Success: Collection & 
         completions = []
         inProgress = nil
         completionsLock.unlock()
-        let result = loadedResult.map { ($0, !$0.isEmpty) }
-        loadedData = try? result.get()
+        let result = loadedResult.map { ( (loadedData?.0 ?? []) + $0, !$0.isEmpty) }
+        self.loadedData = try? result.get()
         for item in captured {
             item(result)
         }
@@ -143,7 +156,7 @@ class PaginatorTests: XCTestCase {
     
     func test_load_doesNotCallCompletionWhenSutIsDeallocated() {
         let spy = PagesLoaderSpy()
-        var sut: Paginator<PagesLoaderSpy>? = Paginator { spy }
+        var sut: Paginator<PagesLoaderSpy>? = Paginator { _ in spy }
 
         sut?.load { _ in
             XCTFail("Paginator completion should not be called when Paginator is deallocated while loading")
@@ -159,7 +172,7 @@ class PaginatorTests: XCTestCase {
         let passedResult = PagesLoaderSpy.Result.success(items)
         let expectedResult = PaginatorResult.success((items, true))
         
-        expect(sut, toCompleteWith: expectedResult) {
+        expect(sut, toLoadWith: expectedResult) {
             spy.complete(with: passedResult)
         }
     }
@@ -171,8 +184,8 @@ class PaginatorTests: XCTestCase {
         let passedResult = PagesLoaderSpy.Result.success(items)
         let expectedResult = PaginatorResult.success((items, true))
 
-        expect(sut, toCompleteWith: expectedResult) {
-            expect(sut, toCompleteWith: expectedResult) {
+        expect(sut, toLoadWith: expectedResult) {
+            expect(sut, toLoadWith: expectedResult) {
                 spy.complete(with: passedResult)
             }
         }
@@ -188,7 +201,7 @@ class PaginatorTests: XCTestCase {
         let passedResult = PagesLoaderSpy.Result.failure(error)
         let expectedResult = PaginatorResult.failure(error)
         
-        expect(sut, toCompleteWith: expectedResult) {
+        expect(sut, toLoadWith: expectedResult) {
             spy.complete(with: passedResult)
         }
         
@@ -201,29 +214,39 @@ class PaginatorTests: XCTestCase {
         let page1Items = [UUID().uuidString]
         
         // Loads page 1
-        expect(sut, toCompleteWith: .success((page1Items, true))) {
+        expect(sut, toLoadWith: .success((page1Items, true))) {
             spy.complete(with: .success(page1Items))
         }
 
         // Retrieves loaded data without extra page loading
-        expect(sut, toCompleteWith: .success((page1Items, true))) {
+        expect(sut, toLoadWith: .success((page1Items, true))) {
         }
         
-        XCTAssertEqual(spy.loadCallCount, 1)
+        let page2Items = [UUID().uuidString]
+        
+        // Loads page 2
+        expect(sut, toLoadMoreWith: .success((page1Items + page2Items, true))) {
+            spy.complete(with: .success(page2Items), at: 1)
+        }
+
+        // Loads page 3 (empty one)
+        expect(sut, toLoadMoreWith: .success((page1Items + page2Items, false))) {
+            spy.complete(with: .success([]), at: 2)
+        }
     }
 
     // MARK: - Private
     
     private func makeSUT<PageQuery: FailableQuery>(queryBuilder: @escaping (PagesLoaderSpy) -> PageQuery) -> (Paginator<PageQuery>, PagesLoaderSpy) {
         let spy = PagesLoaderSpy()
-        let sut = Paginator(queryBuilder: { queryBuilder(spy) })
+        let sut = Paginator(queryBuilder: { _ in queryBuilder(spy) })
 
         return (sut, spy)
     }
     
     private func expect<PageQuery: FailableQuery>(
         _ sut: Paginator<PageQuery>,
-        toCompleteWith expectedResult: Paginator<PageQuery>.Result,
+        toLoadWith expectedResult: Paginator<PageQuery>.Result,
         when action: () -> Void,
         file: StaticString = #filePath,
         line: UInt = #line
@@ -236,7 +259,23 @@ class PaginatorTests: XCTestCase {
         action()
         wait(for: [exp], timeout: 1.0)
     }
-    
+
+    private func expect<PageQuery: FailableQuery>(
+        _ sut: Paginator<PageQuery>,
+        toLoadMoreWith expectedResult: Paginator<PageQuery>.Result,
+        when action: () -> Void,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let exp = expectation(description: "Wait for async to be loaded")
+        sut.loadMore { [weak self] result in
+            self?.assertResultEqual(loaded: result, expected: expectedResult, file: file, line: line)
+            exp.fulfill()
+        }
+        action()
+        wait(for: [exp], timeout: 1.0)
+    }
+
     private func assertResultEqual<Success, Failure>(
         loaded: Result<(Success, Bool), Failure>,
         expected: Result<(Success, Bool), Failure>,
@@ -256,8 +295,8 @@ class PaginatorTests: XCTestCase {
     }
 }
 
-class PagesLoaderSpy: FailableQuery {
-    typealias Success = [String]
+class PagesLoaderSpy: ListFailableQuery {
+    typealias Element = String
     typealias Failure = Swift.Error
     
     var loadCallCount = 0
