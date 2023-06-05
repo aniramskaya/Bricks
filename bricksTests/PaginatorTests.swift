@@ -280,10 +280,16 @@ class PaginatorTests: XCTestCase {
 
     // MARK: - Private
     
-    private func makeSUT<PageQuery: FailableQuery>(queryBuilder: @escaping (PagesLoaderSpy, Int) -> PageQuery) -> (Paginator<PageQuery>, PagesLoaderSpy) {
+    private func makeSUT<PageQuery: FailableQuery>(
+        queryBuilder: @escaping (PagesLoaderSpy, Int) -> PageQuery,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> (Paginator<PageQuery>, PagesLoaderSpy) {
         let spy = PagesLoaderSpy()
         let sut = Paginator(queryBuilder: { pageNumber in queryBuilder(spy, pageNumber) }, firstPageNumber: 1)
 
+        trackForMemoryLeaks(spy, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, spy)
     }
     
