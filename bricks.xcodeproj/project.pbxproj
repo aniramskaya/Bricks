@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CC27C1502A3887E600AF020E /* ParallelPriorityLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27C14D2A3887E600AF020E /* ParallelPriorityLoader.swift */; };
+		CC27C1512A3887E600AF020E /* PriorityLoadingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27C14E2A3887E600AF020E /* PriorityLoadingItem.swift */; };
+		CC27C1522A3887E600AF020E /* ParallelPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27C14F2A3887E600AF020E /* ParallelPriority.swift */; };
+		CC27C1542A38880A00AF020E /* ParallelPriorityLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC27C1532A38880A00AF020E /* ParallelPriorityLoaderTests.swift */; };
 		CC4771472A28BAA2005AAE39 /* PaginatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4771462A28BAA2005AAE39 /* PaginatorTests.swift */; };
 		CC5CB3C92A2E0C4B00DCE080 /* Paginator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5CB3C82A2E0C4B00DCE080 /* Paginator.swift */; };
 		CC5CB3CB2A2E108700DCE080 /* Paginator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5CB3CA2A2E108700DCE080 /* Paginator.swift */; };
@@ -58,6 +62,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CC27C14D2A3887E600AF020E /* ParallelPriorityLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParallelPriorityLoader.swift; sourceTree = "<group>"; };
+		CC27C14E2A3887E600AF020E /* PriorityLoadingItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriorityLoadingItem.swift; sourceTree = "<group>"; };
+		CC27C14F2A3887E600AF020E /* ParallelPriority.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParallelPriority.swift; sourceTree = "<group>"; };
+		CC27C1532A38880A00AF020E /* ParallelPriorityLoaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParallelPriorityLoaderTests.swift; sourceTree = "<group>"; };
 		CC4771462A28BAA2005AAE39 /* PaginatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatorTests.swift; sourceTree = "<group>"; };
 		CC5CB3C82A2E0C4B00DCE080 /* Paginator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paginator.swift; sourceTree = "<group>"; };
 		CC5CB3CA2A2E108700DCE080 /* Paginator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paginator.swift; sourceTree = "<group>"; };
@@ -175,6 +183,7 @@
 				CCFD06112A1A14200069B7A2 /* DemultiplyerTests.swift */,
 				CC71417A2A2723C1005DBA5F /* CommandTests.swift */,
 				CC4771462A28BAA2005AAE39 /* PaginatorTests.swift */,
+				CC27C1532A38880A00AF020E /* ParallelPriorityLoaderTests.swift */,
 			);
 			path = bricksTests;
 			sourceTree = "<group>";
@@ -182,6 +191,9 @@
 		CC86FB362A07A48D00416227 /* source */ = {
 			isa = PBXGroup;
 			children = (
+				CC27C14F2A3887E600AF020E /* ParallelPriority.swift */,
+				CC27C14D2A3887E600AF020E /* ParallelPriorityLoader.swift */,
+				CC27C14E2A3887E600AF020E /* PriorityLoadingItem.swift */,
 				CC86FB372A07A49A00416227 /* Query.swift */,
 				CCFD06052A19F24D0069B7A2 /* AnyQuery.swift */,
 				CCFD06032A19F2100069B7A2 /* FailableQuery.swift */,
@@ -331,6 +343,7 @@
 				CC7141792A2721A3005DBA5F /* Command.swift in Sources */,
 				CC93E1E62A1253FB00003525 /* Synchronizer.swift in Sources */,
 				CC7431F32A07EDF4004E0175 /* Fallback.swift in Sources */,
+				CC27C1512A3887E600AF020E /* PriorityLoadingItem.swift in Sources */,
 				CC7431FB2A09224B004E0175 /* Storage.swift in Sources */,
 				CCFD06062A19F24D0069B7A2 /* AnyQuery.swift in Sources */,
 				CCFD06C72A21D20F0069B7A2 /* DemultiplyingQuery.swift in Sources */,
@@ -339,7 +352,9 @@
 				CCFD06042A19F2100069B7A2 /* FailableQuery.swift in Sources */,
 				CC86FB202A07A40300416227 /* bricks.docc in Sources */,
 				CCEFA6DD2A0DF32A00EC7BFA /* SecondChance.swift in Sources */,
+				CC27C1502A3887E600AF020E /* ParallelPriorityLoader.swift in Sources */,
 				CC7431F92A08E4A1004E0175 /* ExpiringCache.swift in Sources */,
+				CC27C1522A3887E600AF020E /* ParallelPriority.swift in Sources */,
 				CCFD06082A19F95E0069B7A2 /* AnyFailableQuery.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -357,6 +372,7 @@
 				CC71417B2A2723C1005DBA5F /* CommandTests.swift in Sources */,
 				CC4771472A28BAA2005AAE39 /* PaginatorTests.swift in Sources */,
 				CCEFA6C92A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift in Sources */,
+				CC27C1542A38880A00AF020E /* ParallelPriorityLoaderTests.swift in Sources */,
 				CCEFA6DF2A0DF62700EC7BFA /* SecondChanceTests.swift in Sources */,
 				CC7431EF2A07E37B004E0175 /* FallbackTests.swift in Sources */,
 				CCEFA6EC2A0E68CD00EC7BFA /* SynchronizerTests.swift in Sources */,
