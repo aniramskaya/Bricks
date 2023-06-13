@@ -10,22 +10,41 @@ import Foundation
 public enum ParallelizedLoaderError: Error {
     case requredLoadingFailed
     case timeoutExpired
+    case loadingFailed(Error)
 }
 
-public class ParallelPriorityLoader<Success> {
+public class ParallelPriorityLoader<Success, WrappedQuery> where WrappedQuery: FailableQuery, WrappedQuery.Success == [AnyPriorityLoadingItem<Success, Swift.Error>] {
     public typealias Failure = ParallelizedLoaderError
     public typealias Element = AnyPriorityLoadingItem<Success, Swift.Error>
     
+    private let wrappee: WrappedQuery
     private let mandatoryPriority: ParallelPriority
     private let timeout: () -> TimeInterval
     
-    public init(mandatoryPriority: ParallelPriority, timeout: @escaping () -> TimeInterval) {
+    public init(wrappee: WrappedQuery, mandatoryPriority: ParallelPriority, timeout: @escaping () -> TimeInterval) {
+        self.wrappee = wrappee
         self.mandatoryPriority = mandatoryPriority
         self.timeout = timeout
     }
     
     public func load(
-        items: [Element],
+        completion: @escaping (Result<[Success?], Failure>) -> Void
+    ) {
+        wrappee.load { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case let .success(items):
+                self.loadItems(items, completion: completion)
+            case let .failure(error):
+                completion(.failure(.loadingFailed(error)))
+            }
+        }
+    }
+    
+    // MARK: - Private
+    
+    private func loadItems(
+        _ items: [Element],
         completion: @escaping (Result<[Success?], Failure>) -> Void
     ) {
         let id = UUID()
@@ -36,9 +55,7 @@ public class ParallelPriorityLoader<Success> {
         addLoader(loader, id: id)
         loader.load()
     }
-    
-    // MARK: - Private
-    
+
     private var executingLoaders: [UUID: InternalPriorityLoader<Success>] = [:]
     private var executingLoadersLock = NSRecursiveLock()
     
