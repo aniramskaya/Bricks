@@ -37,8 +37,8 @@ public struct AnyQuery<Result>: Query {
     }
 }
 
-public extension FailableQuery {
-    func erased() -> AnyQuery<Self.Result> {
+public extension Query {
+    func erasedToAnyQuery() -> AnyQuery<Self.Result> {
         AnyQuery(self)
     }
 }

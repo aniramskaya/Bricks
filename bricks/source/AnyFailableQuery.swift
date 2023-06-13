@@ -8,7 +8,7 @@
 import Foundation
 
 // Type erasing wrapper for FailableQuery
-_public struct AnyFailableQuery<Success, Failure: Error>: FailableQuery {
+public struct AnyFailableQuery<Success, Failure: Error>: FailableQuery {
     private class _AnyFailableQueryBox<Success, Failure: Error>: FailableQuery {
         func load(completion: @escaping (Swift.Result<Success, Failure>) -> Void) {
             fatalError("This method is abstract")
@@ -38,7 +38,7 @@ _public struct AnyFailableQuery<Success, Failure: Error>: FailableQuery {
 }
 
 public extension FailableQuery {
-    func erased() -> AnyFailableQuery<Self.Success, Self.Failure> {
+    func erasedToAnyFailableQuery() -> AnyFailableQuery<Self.Success, Self.Failure> {
         AnyFailableQuery(self)
     }
 }
