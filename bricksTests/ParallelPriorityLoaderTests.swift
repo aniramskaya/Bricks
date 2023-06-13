@@ -31,7 +31,7 @@ class ParallelPriorityLoaderTests: XCTestCase {
     
     func test_load_deliversRequiredLoadingErrorWhenOverMandatoryFails() {
         let (high, med, low) = makeItems()
-        let sut = ParallelPriorityLoader<UUID>()
+        let sut = makeSUT()
 
         expect(
             sut: sut,
@@ -44,7 +44,7 @@ class ParallelPriorityLoaderTests: XCTestCase {
     
     func test_load_deliversRequiredLoadingErrorWhenMandatoryFails() {
         let (high, med, low) = makeItems()
-        let sut = ParallelPriorityLoader<UUID>()
+        let sut = makeSUT()
 
         expect(
             sut: sut,
@@ -57,7 +57,7 @@ class ParallelPriorityLoaderTests: XCTestCase {
 
     func test_load_deliversTimeoutErrorWhenAtLeaseOneMandatoryTimedOut() {
         let (high, med, low) = makeItems()
-        let sut = ParallelPriorityLoader<UUID>()
+        let sut = makeSUT()
 
         expect(
             sut: sut,
@@ -73,7 +73,7 @@ class ParallelPriorityLoaderTests: XCTestCase {
 
     func test_load_deliversSuccessWhenMandatorySucceeded() {
         let (high, med, low) = makeItems()
-        let sut = ParallelPriorityLoader<UUID>()
+        let sut = makeSUT()
 
         let highSuccess = UUID()
         let medSuccess = UUID()
@@ -90,7 +90,7 @@ class ParallelPriorityLoaderTests: XCTestCase {
     }
 
     func test_loadTwice_deliversDistinctResults() {
-        let sut = ParallelPriorityLoader<UUID>()
+        let sut = makeSUT()
 
         let (high1, med1, low1) = makeItems()
         let (high2, med2, low2) = makeItems()
@@ -99,12 +99,12 @@ class ParallelPriorityLoaderTests: XCTestCase {
         exp.expectedFulfillmentCount = 2
         
         var load1Result: Result<[UUID?], ParallelizedLoaderError>?
-        sut.load(items: [high1, med1, low1].erased, mandatoryPriority: .custom(Constants.mandtoryPriority), timeout: 0.5) { result in
+        sut.load(items: [high1, med1, low1].erased) { result in
             load1Result = result
             exp.fulfill()
         }
         var load2Result: Result<[UUID?], ParallelizedLoaderError>?
-        sut.load(items: [high2, med2, low2].erased, mandatoryPriority: .custom(Constants.mandtoryPriority), timeout: 0.5) { result in
+        sut.load(items: [high2, med2, low2].erased) { result in
             load2Result = result
             exp.fulfill()
         }
@@ -121,12 +121,12 @@ class ParallelPriorityLoaderTests: XCTestCase {
     }
     
     func test_load_doesNotCallCompleteWhenSUTDeallocated() {
-        var sut: ParallelPriorityLoader<UUID>? = ParallelPriorityLoader<UUID>()
+        var sut: ParallelPriorityLoader<UUID>? = ParallelPriorityLoader<UUID>(mandatoryPriority: .custom(Constants.mandtoryPriority), timeout: { 0.5 })
         
         let (high, med, low) = makeItems()
         
         var completionCallCount = 0
-        sut!.load(items: [high, med, low].erased, mandatoryPriority: .custom(Constants.mandtoryPriority), timeout: 0.5) { result in
+        sut!.load(items: [high, med, low].erased) { result in
             completionCallCount += 1
         }
         sut = nil
@@ -134,6 +134,10 @@ class ParallelPriorityLoaderTests: XCTestCase {
         high.complete(with: .success(UUID()))
         
         XCTAssertEqual(completionCallCount, 0)
+    }
+    
+    private func makeSUT() -> ParallelPriorityLoader<UUID> {
+        ParallelPriorityLoader<UUID>(mandatoryPriority: .custom(Constants.mandtoryPriority), timeout: { 0.5 })
     }
 
     private func makeItems() -> (ParallelPriorityItemSpy, ParallelPriorityItemSpy, ParallelPriorityItemSpy) {
@@ -147,9 +151,7 @@ class ParallelPriorityLoaderTests: XCTestCase {
     private func expect(sut: ParallelPriorityLoader<UUID>, loads items: [AnyPriorityLoadingItem<UUID, Error>], timeout: TimeInterval, when action: () -> Void, toCompleteWith expectedResult: Result<[UUID?], ParallelizedLoaderError>) {
         let exp = expectation(description: "Wait for loading to complete")
         sut.load(
-            items: items,
-            mandatoryPriority: .custom(Constants.mandtoryPriority),
-            timeout: timeout
+            items: items
         ) { [weak self] result in
             self?.assertEqual(result: result, expected: expectedResult)
             exp.fulfill()

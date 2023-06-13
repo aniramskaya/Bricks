@@ -16,16 +16,20 @@ public class ParallelPriorityLoader<Success> {
     public typealias Failure = ParallelizedLoaderError
     public typealias Element = AnyPriorityLoadingItem<Success, Swift.Error>
     
-    public init () {}
+    private let mandatoryPriority: ParallelPriority
+    private let timeout: () -> TimeInterval
+    
+    public init(mandatoryPriority: ParallelPriority, timeout: @escaping () -> TimeInterval) {
+        self.mandatoryPriority = mandatoryPriority
+        self.timeout = timeout
+    }
     
     public func load(
         items: [Element],
-        mandatoryPriority: ParallelPriority,
-        timeout: TimeInterval,
         completion: @escaping (Result<[Success?], Failure>) -> Void
     ) {
         let id = UUID()
-        let loader = InternalPriorityLoader(items: items, mandatoryPriority: mandatoryPriority, timeout: timeout) { [weak self] result in
+        let loader = InternalPriorityLoader(items: items, mandatoryPriority: mandatoryPriority, timeout: timeout()) { [weak self] result in
             completion(result)
             self?.removeLoader(id: id)
         }
