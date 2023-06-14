@@ -13,7 +13,8 @@ public enum ParallelizedLoaderError: Error {
     case loadingFailed(Error)
 }
 
-public class ParallelPriorityLoader<ItemType, WrappedQuery> where WrappedQuery: FailableQuery, WrappedQuery.Success == [AnyPriorityLoadingItem<ItemType, Swift.Error>] {
+public class ParallelPriorityLoader<ItemType, WrappedQuery>: FailableQuery where WrappedQuery: FailableQuery, WrappedQuery.Success == [AnyPriorityLoadingItem<ItemType, Swift.Error>] {
+    public typealias Success = [ItemType?]
     public typealias Failure = ParallelizedLoaderError
     
     private let wrappee: WrappedQuery
@@ -73,16 +74,15 @@ public class ParallelPriorityLoader<ItemType, WrappedQuery> where WrappedQuery: 
 
 private class InternalPriorityLoader<Success> {
     typealias Failure = ParallelizedLoaderError
-    typealias Element = AnyPriorityLoadingItem<Success, Swift.Error>
     
-    private let items: [Element]
+    private let items: [AnyPriorityLoadingItem<Success, Swift.Error>]
     private var results: [Success?]
     private let mandatoryPriority: ParallelPriority
     private let completion: (Result<[Success?], Failure>) -> Void
     private let timer: Timer
 
     init(
-        items: [Element],
+        items: [AnyPriorityLoadingItem<Success, Swift.Error>],
         mandatoryPriority: ParallelPriority,
         timeout: TimeInterval,
         completion: @escaping (Result<[Success?], Failure>) -> Void
