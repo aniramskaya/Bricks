@@ -135,3 +135,12 @@ private class InternalPriorityLoader<Success> {
         }
     }
 }
+
+public extension FailableQuery {
+    func loadMandatory<ItemType>(
+        mandatoryPriority: ParallelPriority,
+        timeout: @escaping () -> TimeInterval
+    ) -> ParallelPriorityLoader<ItemType, Self> where Success == [AnyPriorityLoadingItem<ItemType, Swift.Error>] {
+        ParallelPriorityLoader(wrappee: self, mandatoryPriority: mandatoryPriority, timeout: timeout)
+    }
+}

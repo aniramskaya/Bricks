@@ -165,6 +165,28 @@ class ParallelPriorityLoaderTests: XCTestCase {
         
         XCTAssertEqual(completionCallCount, 0)
     }
+    
+    func test_loadMandatory() throws {
+        let spy = ItemsLoaderSpy()
+        let sut = spy
+        .loadMandatory(
+            mandatoryPriority: .custom(Constants.mandtoryPriority),
+            timeout: { 0.5 }
+        )
+        let (high, med, low) = makeItems()
+
+        let highSuccess = UUID()
+        let medSuccess = UUID()
+        expect(
+            sut: sut,
+            when: {
+                spy.complete(with: .success([high, med, low].erased))
+                high.complete(with: .success(highSuccess))
+                med.complete(with: .success(medSuccess))
+            },
+            toCompleteWith: .success([highSuccess, medSuccess, nil])
+        )
+    }
 
     private func makeSUT() -> (ParallelPriorityLoader<UUID, ItemsLoaderSpy>, ItemsLoaderSpy) {
         let spy = ItemsLoaderSpy()

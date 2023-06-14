@@ -221,7 +221,6 @@ class CompositionHelpersTests: XCTestCase {
         XCTAssertEqual(query.messages, [.load])
 
     }
-
     
     private func matchingDTOAndModel() -> (DTO, Model) {
         let uuid = UUID()
