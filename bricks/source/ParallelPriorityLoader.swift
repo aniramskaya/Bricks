@@ -13,9 +13,8 @@ public enum ParallelizedLoaderError: Error {
     case loadingFailed(Error)
 }
 
-public class ParallelPriorityLoader<Success, WrappedQuery> where WrappedQuery: FailableQuery, WrappedQuery.Success == [AnyPriorityLoadingItem<Success, Swift.Error>] {
+public class ParallelPriorityLoader<ItemType, WrappedQuery> where WrappedQuery: FailableQuery, WrappedQuery.Success == [AnyPriorityLoadingItem<ItemType, Swift.Error>] {
     public typealias Failure = ParallelizedLoaderError
-    public typealias Element = AnyPriorityLoadingItem<Success, Swift.Error>
     
     private let wrappee: WrappedQuery
     private let mandatoryPriority: ParallelPriority
@@ -28,7 +27,7 @@ public class ParallelPriorityLoader<Success, WrappedQuery> where WrappedQuery: F
     }
     
     public func load(
-        completion: @escaping (Result<[Success?], Failure>) -> Void
+        completion: @escaping (Result<[ItemType?], Failure>) -> Void
     ) {
         wrappee.load { [weak self] result in
             guard let self else { return }
@@ -44,8 +43,8 @@ public class ParallelPriorityLoader<Success, WrappedQuery> where WrappedQuery: F
     // MARK: - Private
     
     private func loadItems(
-        _ items: [Element],
-        completion: @escaping (Result<[Success?], Failure>) -> Void
+        _ items: WrappedQuery.Success,
+        completion: @escaping (Result<[ItemType?], Failure>) -> Void
     ) {
         let id = UUID()
         let loader = InternalPriorityLoader(items: items, mandatoryPriority: mandatoryPriority, timeout: timeout()) { [weak self] result in
@@ -56,10 +55,10 @@ public class ParallelPriorityLoader<Success, WrappedQuery> where WrappedQuery: F
         loader.load()
     }
 
-    private var executingLoaders: [UUID: InternalPriorityLoader<Success>] = [:]
+    private var executingLoaders: [UUID: InternalPriorityLoader<ItemType>] = [:]
     private var executingLoadersLock = NSRecursiveLock()
     
-    private func addLoader(_ loader: InternalPriorityLoader<Success>, id: UUID) {
+    private func addLoader(_ loader: InternalPriorityLoader<ItemType>, id: UUID) {
         executingLoadersLock.lock()
         executingLoaders[id] = loader
         executingLoadersLock.unlock()
