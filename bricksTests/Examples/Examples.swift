@@ -48,3 +48,5 @@ enum Examples {
         )
     }
 }
+
+//Test Github CI action
