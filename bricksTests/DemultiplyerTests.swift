@@ -23,20 +23,16 @@ class DemultiplyerTests: XCTestCase {
 
         let exp = expectation(description: "Wait for loading to complete")
         exp.expectedFulfillmentCount = 2
-        DispatchQueue.global(qos: .background).async {
-            sut.load { result in
-                XCTAssertEqual(result, expectedResult)
-            }
+        sut.load { result in
+            XCTAssertEqual(result, expectedResult)
             exp.fulfill()
         }
-        DispatchQueue.global(qos: .background).async {
-            sut.load { result in
-                XCTAssertEqual(result, expectedResult)
-            }
+        sut.load { result in
+            XCTAssertEqual(result, expectedResult)
             exp.fulfill()
         }
-        wait(for: [exp], timeout: 1.0)
         spy.complete(with: expectedResult)
+        wait(for: [exp], timeout: 1.0)
         
         XCTAssertEqual(spy.messages, [.load])
     }
