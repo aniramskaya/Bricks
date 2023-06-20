@@ -63,11 +63,7 @@ import Foundation
  
  */
 
-public protocol ListFailableQuery: FailableQuery where Success == Array<Element> {
-    associatedtype Element: Hashable
-}
-
-public final class Paginator<PageQuery: ListFailableQuery> {
+public final class Paginator<Element: Hashable, PageQuery: FailableQuery> where PageQuery.Success == [Element] {
     public typealias Result = Swift.Result<(PageQuery.Success, Bool), PageQuery.Failure>
     
     private let queryBuilder: (Int) -> PageQuery

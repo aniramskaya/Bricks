@@ -10,7 +10,7 @@ import XCTest
 import bricks
 
 class PaginatorTests: XCTestCase {
-    private typealias PaginatorResult = Paginator<PagesLoaderSpy>.Result
+    private typealias PaginatorResult = Paginator<String, PagesLoaderSpy>.Result
     
     func test_init_doesNotSendAnyMessage() {
         var queryBuilderCallCount = 0
@@ -38,7 +38,7 @@ class PaginatorTests: XCTestCase {
     
     func test_load_doesNotCallCompletionWhenSutIsDeallocated() {
         let spy = PagesLoaderSpy()
-        var sut: Paginator<PagesLoaderSpy>? = Paginator { _ in spy }
+        var sut: Paginator<String, PagesLoaderSpy>? = Paginator { _ in spy }
 
         sut?.load { _ in
             XCTFail("Paginator completion should not be called when Paginator is deallocated while loading")
@@ -154,7 +154,7 @@ class PaginatorTests: XCTestCase {
         queryBuilder: @escaping (PagesLoaderSpy, Int) -> PageQuery,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) -> (Paginator<PageQuery>, PagesLoaderSpy) {
+    ) -> (Paginator<String, PageQuery>, PagesLoaderSpy) {
         let spy = PagesLoaderSpy()
         let sut = Paginator(queryBuilder: { pageNumber in queryBuilder(spy, pageNumber) }, firstPageNumber: 1)
 
@@ -164,8 +164,8 @@ class PaginatorTests: XCTestCase {
     }
     
     private func expect<PageQuery: FailableQuery>(
-        _ sut: Paginator<PageQuery>,
-        toLoadWith expectedResult: Paginator<PageQuery>.Result,
+        _ sut: Paginator<String, PageQuery>,
+        toLoadWith expectedResult: Paginator<String, PageQuery>.Result,
         when action: () -> Void,
         file: StaticString = #filePath,
         line: UInt = #line
@@ -180,8 +180,8 @@ class PaginatorTests: XCTestCase {
     }
 
     private func expect<PageQuery: FailableQuery>(
-        _ sut: Paginator<PageQuery>,
-        toLoadMoreWith expectedResult: Paginator<PageQuery>.Result,
+        _ sut: Paginator<String, PageQuery>,
+        toLoadMoreWith expectedResult: Paginator<String, PageQuery>.Result,
         when action: () -> Void,
         file: StaticString = #filePath,
         line: UInt = #line
@@ -214,8 +214,8 @@ class PaginatorTests: XCTestCase {
     }
 }
 
-class PagesLoaderSpy: ListFailableQuery {
-    typealias Element = String
+class PagesLoaderSpy: FailableQuery {
+    typealias Success = [String]
     typealias Failure = Swift.Error
     
     var loadCallCount = 0
