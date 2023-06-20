@@ -14,8 +14,8 @@ struct ListItem: Hashable {
     let value: UUID
 }
 
-class ListLoader: ListFailableQuery {
-    typealias Element = ListItem
+class ListLoader: FailableQuery {
+    typealias Success = [ListItem]
     typealias Failure = Swift.Error
     
     var page: Int
@@ -28,23 +28,23 @@ class ListLoader: ListFailableQuery {
         self.shouldFail = shouldFail
     }
     
-    func load(completion: @escaping (Result<[Element], Failure>) -> Void) {
+    func load(completion: @escaping (Result<Success, Failure>) -> Void) {
         if shouldFail {
             completion(.failure(NSError.any()))
         } else {
-            completion(.success([Element(sort: sort, page: page, value: .init())]))
+            completion(.success([ListItem(sort: sort, page: page, value: .init())]))
         }
     }
 }
 
 extension ListLoader {
-    static func paginated(sortOrder: String) -> Paginator<ListLoader> {
+    static func paginated(sortOrder: String) -> Paginator<ListItem, ListLoader> {
         return Paginator { pageNumber in
             return ListLoader(page: pageNumber, sort: sortOrder)
         }
     }
     
-    static func failingPaginated(sortOrder: String) -> Paginator<ListLoader> {
+    static func failingPaginated(sortOrder: String) -> Paginator<ListItem, ListLoader> {
         return Paginator { pageNumber in
             return ListLoader(page: pageNumber, sort: sortOrder, shouldFail: true)
         }
@@ -60,7 +60,7 @@ class ListInteractor {
     let sortOrders = ["A-Z", "Z-A"]
     let presenter: ListPresenter
 
-    var currentLoader: Paginator<ListLoader>
+    var currentLoader: Paginator<ListItem, ListLoader>
     
     init(presenter: ListPresenter) {
         self.presenter = presenter
