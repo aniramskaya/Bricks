@@ -92,6 +92,7 @@
 		CC86FB2A2A07A40300416227 /* ConverterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterTests.swift; sourceTree = "<group>"; };
 		CC86FB372A07A49A00416227 /* Query.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		CC93E1E52A1253FB00003525 /* Synchronizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Synchronizer.swift; sourceTree = "<group>"; };
+		CC97021B2A417BA000918FC0 /* Bricks.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Bricks.podspec; sourceTree = "<group>"; };
 		CCEFA6C82A0A3B8A00EC7BFA /* SynchronousStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronousStorageAdapter.swift; sourceTree = "<group>"; };
 		CCEFA6CA2A0A466700EC7BFA /* SynchronousStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronousStorageAdapter.swift; sourceTree = "<group>"; };
 		CCEFA6CD2A0A48C000EC7BFA /* CompositionHelpersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionHelpersTests.swift; sourceTree = "<group>"; };
@@ -139,6 +140,7 @@
 		CC86FB112A07A40300416227 = {
 			isa = PBXGroup;
 			children = (
+				CC97021B2A417BA000918FC0 /* Bricks.podspec */,
 				CC7431D92A07B568004E0175 /* bricks.xctestplan */,
 				CC86FB1D2A07A40300416227 /* bricks */,
 				CC86FB292A07A40300416227 /* bricksTests */,
@@ -519,7 +521,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.1;
+				CURRENT_PROJECT_VERSION = 1.0.2;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = HKP7SH4B7B;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -533,7 +535,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aniramskaya.bricks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -547,7 +549,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.1;
+				CURRENT_PROJECT_VERSION = 1.0.2;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = HKP7SH4B7B;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -561,7 +563,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aniramskaya.bricks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
